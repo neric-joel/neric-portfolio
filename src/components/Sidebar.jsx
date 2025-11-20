@@ -1,57 +1,82 @@
-import React from 'react';
-import { Home, User, Code, Briefcase, BookOpen, Mail, FileText } from 'lucide-react';
+import React, { useState } from 'react';
+import { Home, User, Code, Briefcase, BookOpen, Mail, FileText, Award } from 'lucide-react';
 
 const Sidebar = ({ toggleResume, showResume }) => {
-    const scrollToSection = (id) => {
+    const [isHovered, setIsHovered] = useState(false);
+
+    const handleNavigation = (id) => {
         if (showResume) {
             toggleResume();
             setTimeout(() => {
-                const element = document.getElementById(id);
-                if (element) element.scrollIntoView({ behavior: 'smooth' });
+                if (id === 'hero') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    const element = document.getElementById(id);
+                    if (element) element.scrollIntoView({ behavior: 'smooth' });
+                }
             }, 100);
         } else {
-            const element = document.getElementById(id);
-            if (element) element.scrollIntoView({ behavior: 'smooth' });
+            if (id === 'hero') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                const element = document.getElementById(id);
+                if (element) element.scrollIntoView({ behavior: 'smooth' });
+            }
         }
     };
 
     const navItems = [
         { id: 'hero', icon: Home, label: 'Home' },
         { id: 'about', icon: User, label: 'About' },
+        { id: 'experience', icon: Award, label: 'Experience' },
         { id: 'skills', icon: Code, label: 'Skills' },
         { id: 'projects', icon: Briefcase, label: 'Projects' },
+        { id: 'achievements', icon: Award, label: 'Achievements' },
         { id: 'publications', icon: BookOpen, label: 'Publications' },
         { id: 'contact', icon: Mail, label: 'Contact' },
     ];
 
+    // Show only first 4 items if not hovered, otherwise show all
+    const visibleItems = isHovered ? navItems : navItems.slice(0, 4);
+
     return (
-        <nav className="fixed left-4 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col gap-6">
-            {navItems.map((item) => (
+        <nav
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className={`fixed left-4 top-1/2 -translate-y-1/2 z-[60] hidden md:flex flex-col gap-3 p-2 rounded-2xl bg-black/80 backdrop-blur-2xl border border-white/10 transition-all duration-500 overflow-hidden group shadow-[0_0_30px_rgba(0,0,0,0.5)] ${isHovered ? 'w-48' : 'w-14'}`}
+        >
+            {visibleItems.map((item) => (
                 <button
                     key={item.id}
-                    onClick={() => item.id === 'hero' ? window.scrollTo({ top: 0, behavior: 'smooth' }) : scrollToSection(item.id)}
-                    className="group relative w-12 h-12 flex items-center justify-center rounded-2xl bg-glass-bg backdrop-blur-md border border-white/10 hover:border-electric-blue hover:shadow-[0_0_15px_rgba(0,255,255,0.3)] transition-all duration-300"
-                    aria-label={item.label}
+                    onClick={() => handleNavigation(item.id)}
+                    className="flex items-center gap-3 p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-all whitespace-nowrap"
                 >
-                    <item.icon size={20} className="text-gray-400 group-hover:text-electric-blue transition-colors" />
-                    <span className="absolute left-full ml-4 px-3 py-1 bg-glass-bg backdrop-blur-md border border-white/10 rounded-lg text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                    <div className="min-w-[20px] flex justify-center">
+                        <item.icon size={20} />
+                    </div>
+                    <span className={`transition-opacity duration-300 text-xs font-medium tracking-wide ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
                         {item.label}
                     </span>
                 </button>
             ))}
 
-            <div className="w-8 h-px bg-white/10 mx-auto my-2"></div>
+            {isHovered && (
+                <>
+                    <div className="w-full h-px bg-white/10 my-1 animate-fade-up"></div>
 
-            <button
-                onClick={toggleResume}
-                className="group relative w-12 h-12 flex items-center justify-center rounded-2xl bg-glass-bg backdrop-blur-md border border-white/10 hover:border-neon-green hover:shadow-[0_0_15px_rgba(0,255,0,0.3)] transition-all duration-300"
-                aria-label="Resume"
-            >
-                <FileText size={20} className="text-neon-green" />
-                <span className="absolute left-full ml-4 px-3 py-1 bg-glass-bg backdrop-blur-md border border-white/10 rounded-lg text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                    {showResume ? 'Portfolio' : 'Resume'}
-                </span>
-            </button>
+                    <button
+                        onClick={toggleResume}
+                        className="flex items-center gap-3 p-2 rounded-lg text-neon-green hover:bg-white/10 transition-all whitespace-nowrap animate-fade-up"
+                    >
+                        <div className="min-w-[20px] flex justify-center">
+                            <FileText size={20} />
+                        </div>
+                        <span className="text-xs font-medium tracking-wide">
+                            {showResume ? 'Back' : 'Resume'}
+                        </span>
+                    </button>
+                </>
+            )}
         </nav>
     );
 };

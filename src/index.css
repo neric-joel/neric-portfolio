@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --color-deep-space: #0A0A2A;
+  --color-deep-space: #000000;
   --color-neon-green: #00FF00;
   --color-electric-blue: #00FFFF;
   --color-glass-bg: rgba(255, 255, 255, 0.05);
@@ -13,6 +13,7 @@
   --animate-float: float 6s ease-in-out infinite;
   --animate-pulse-glow: pulse-glow 3s infinite;
   --animate-fade-up: fadeUp 0.8s forwards;
+  --animate-bg-shift: bg-shift 10s ease infinite alternate;
 
   @keyframes float {
 
@@ -51,6 +52,16 @@
       transform: translateY(0);
     }
   }
+
+  @keyframes bg-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    100% {
+      background-position: 100% 50%;
+    }
+  }
 }
 
 html {
@@ -58,7 +69,30 @@ html {
 }
 
 body {
-  @apply bg-deep-space text-gray-200 font-sans antialiased overflow-x-hidden;
+  @apply bg-black text-gray-300 font-sans antialiased overflow-x-hidden;
+  background: radial-gradient(circle at 50% 50%, #0a0a0a 0%, #000000 100%);
+  background-size: 200% 200%;
+  animation: bg-shift 15s ease infinite;
+}
+
+/* Pop-out Hover Effect */
+.pop-out {
+  @apply transition-all duration-300;
+}
+
+.pop-out:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 30px -10px rgba(255, 255, 255, 0.1);
+}
+
+/* Typography Tweaks */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply tracking-tight font-semibold;
 }
 
 /* Custom Scrollbar */
@@ -67,11 +101,11 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-deep-space;
+  @apply bg-black;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-700 rounded-full;
+  @apply bg-gray-800 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {

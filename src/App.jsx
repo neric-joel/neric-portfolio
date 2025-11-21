@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -10,24 +10,49 @@ import Publications from './components/Publications';
 import Contact from './components/Contact';
 import Resume from './components/Resume';
 import ChatMail from './components/ChatMail';
+import TryMe from './components/TryMe';
+import Lenis from 'lenis';
 
 function App() {
   const [showResume, setShowResume] = useState(false);
 
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      direction: 'vertical',
+      gestureDirection: 'vertical',
+      smooth: true,
+      mouseMultiplier: 1,
+      smoothTouch: false,
+      touchMultiplier: 2,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
+
   const toggleResume = () => {
     setShowResume(!showResume);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-electric-blue selection:text-black font-sans">
+    <div className="bg-[var(--bg-primary)] min-h-screen text-[var(--text-primary)] selection:bg-[var(--accent-color)] selection:text-black transition-colors duration-700">
+      <TryMe />
       <Sidebar toggleResume={toggleResume} showResume={showResume} />
-
-      <div className="md:pl-24 transition-all duration-300">
-        {showResume ? (
-          <Resume />
-        ) : (
-          <main className="max-w-7xl mx-auto">
+      {showResume ? (
+        <Resume onClose={toggleResume} />
+      ) : (
+        <>
+          <main className="md:pl-24">
             <Hero />
             <About />
             <Experience />
@@ -37,16 +62,9 @@ function App() {
             <Publications />
             <Contact />
           </main>
-        )}
-
-        {!showResume && (
-          <footer className="py-8 text-center text-gray-800 text-xs">
-            <p>© {new Date().getFullYear()} Neric Joel.</p>
-          </footer>
-        )}
-      </div>
-
-      <ChatMail />
+          <ChatMail />
+        </>
+      )}
     </div>
   );
 }

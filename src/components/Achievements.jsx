@@ -1,5 +1,6 @@
 import React from 'react';
 import { Award, Users, Lightbulb } from 'lucide-react';
+import RevealOnScroll from './RevealOnScroll';
 
 const Achievements = () => {
     const achievements = [
@@ -32,9 +33,11 @@ const Achievements = () => {
     return (
         <section id="achievements" className="py-20 relative">
             <div className="container mx-auto px-6 md:px-20">
-                <h2 className="text-3xl font-bold mb-12 text-white">
-                    Leadership & Activities
-                </h2>
+                <RevealOnScroll>
+                    <h2 className="text-[1.8rem] font-medium mb-12 text-[var(--text-heading)] text-center">
+                        Leadership & Activities
+                    </h2>
+                </RevealOnScroll>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {achievements.map((item, idx) => (
@@ -45,10 +48,10 @@ const Achievements = () => {
                             <div className={`w-10 h-10 rounded-lg ${item.bg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                                 <item.icon size={20} className={item.color} />
                             </div>
-                            <h3 className="text-lg font-bold text-white mb-2">
+                            <h3 className="text-lg font-bold text-[var(--text-heading)] mb-2 transition-colors duration-400">
                                 {item.title}
                             </h3>
-                            <p className="text-sm text-gray-400 leading-relaxed">
+                            <p className="text-sm text-[var(--text-muted)] leading-relaxed transition-colors duration-400">
                                 {item.desc}
                             </p>
                         </div>

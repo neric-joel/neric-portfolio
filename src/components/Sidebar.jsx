@@ -43,13 +43,13 @@ const Sidebar = ({ toggleResume, showResume }) => {
         <nav
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className={`fixed left-4 top-1/2 -translate-y-1/2 z-[60] hidden md:flex flex-col gap-3 p-2 rounded-2xl bg-black/80 backdrop-blur-2xl border border-white/10 transition-all duration-500 overflow-hidden group shadow-[0_0_30px_rgba(0,0,0,0.5)] ${isHovered ? 'w-48' : 'w-14'}`}
+            className={`fixed left-4 top-1/2 -translate-y-1/2 z-[60] hidden md:flex flex-col gap-3 p-2 rounded-2xl bg-[var(--card-bg)]/80 backdrop-blur-2xl border border-white/10 transition-all duration-500 overflow-hidden group shadow-[0_0_30px_rgba(0,0,0,0.5)] ${isHovered ? 'w-48' : 'w-14'}`}
         >
             {visibleItems.map((item) => (
                 <button
                     key={item.id}
                     onClick={() => handleNavigation(item.id)}
-                    className="flex items-center gap-3 p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-all whitespace-nowrap"
+                    className="flex items-center gap-3 p-2 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-heading)] hover:bg-white/10 transition-all whitespace-nowrap"
                 >
                     <div className="min-w-[20px] flex justify-center">
                         <item.icon size={20} />
@@ -66,7 +66,7 @@ const Sidebar = ({ toggleResume, showResume }) => {
 
                     <button
                         onClick={toggleResume}
-                        className="flex items-center gap-3 p-2 rounded-lg text-neon-green hover:bg-white/10 transition-all whitespace-nowrap animate-fade-up"
+                        className="flex items-center gap-3 p-2 rounded-lg text-[var(--accent-color)] hover:bg-white/10 transition-all whitespace-nowrap animate-fade-up"
                     >
                         <div className="min-w-[20px] flex justify-center">
                             <FileText size={20} />

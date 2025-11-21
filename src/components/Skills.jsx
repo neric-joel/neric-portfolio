@@ -1,87 +1,68 @@
 import React from 'react';
+import { Code, Brain, Cpu, Wrench } from 'lucide-react';
+import RevealOnScroll from './RevealOnScroll';
+import { motion } from 'framer-motion';
 
 const Skills = () => {
-    const skillCategories = [
-        {
-            title: "Languages",
-            skills: [
-                { name: "Python", url: "https://www.python.org/" },
-                { name: "C++", url: "https://isocpp.org/" },
-                { name: "MATLAB", url: "https://www.mathworks.com/products/matlab.html" },
-                { name: "C", url: "https://en.wikipedia.org/wiki/C_(programming_language)" },
-                { name: "SQL", url: "https://www.mysql.com/" },
-                { name: "PostgreSQL", url: "https://www.postgresql.org/" }
-            ],
-            color: "text-blue-400"
-        },
-        {
-            title: "AI/ML",
-            skills: [
-                { name: "TensorFlow", url: "https://www.tensorflow.org/" },
-                { name: "scikit-learn", url: "https://scikit-learn.org/" },
-                { name: "Deep Learning", url: "https://en.wikipedia.org/wiki/Deep_learning" },
-                { name: "U-Net", url: "https://en.wikipedia.org/wiki/U-Net" },
-                { name: "ResNet-50", url: "https://arxiv.org/abs/1512.03385" },
-                { name: "OpenCV", url: "https://opencv.org/" }
-            ],
-            color: "text-purple-400"
-        },
-        {
-            title: "Hardware",
-            skills: [
-                { name: "Cadence Virtuoso", url: "https://www.cadence.com/" },
-                { name: "LTSpice", url: "https://www.analog.com/en/design-center/design-tools-and-calculators/ltspice-simulator.html" },
-                { name: "Microcontrollers", url: "https://en.wikipedia.org/wiki/Microcontroller" },
-                { name: "PCB Design", url: "https://www.altium.com/" },
-                { name: "IoT Systems", url: "https://en.wikipedia.org/wiki/Internet_of_things" }
-            ],
-            color: "text-neon-green"
-        },
-        {
-            title: "Tools",
-            skills: [
-                { name: "Git", url: "https://git-scm.com/" },
-                { name: "Linux", url: "https://www.linux.org/" },
-                { name: "VS Code", url: "https://code.visualstudio.com/" },
-                { name: "Jupyter", url: "https://jupyter.org/" },
-                { name: "Google Colab", url: "https://colab.research.google.com/" },
-                { name: "Simulink", url: "https://www.mathworks.com/products/simulink.html" },
-                { name: "Blynk IoT", url: "https://blynk.io/" }
-            ],
-            color: "text-orange-400"
-        }
-    ];
+    const skills = {
+        "Languages": ["Python", "C++", "JavaScript", "TypeScript", "MATLAB", "C", "SQL", "Verilog"],
+        "AI & ML": ["TensorFlow", "PyTorch", "scikit-learn", "OpenCV", "Keras", "Transformers", "Hugging Face", "YOLO"],
+        "Embedded": ["Embedded C", "RTOS", "Arduino", "Raspberry Pi", "ESP32", "STM32", "FPGA", "Altium"],
+        "Web & Tools": ["React", "Node.js", "Git", "Docker", "Linux", "AWS", "MongoDB", "VS Code"]
+    };
+
+    const categoryIcons = {
+        "Languages": <Code size={24} />,
+        "AI & ML": <Brain size={24} />,
+        "Embedded": <Cpu size={24} />,
+        "Web & Tools": <Wrench size={24} />
+    };
 
     return (
-        <section id="skills" className="py-20 relative">
-            <div className="container mx-auto px-6 md:px-20">
-                <h2 className="text-3xl font-bold mb-12 text-white">
-                    Technical Arsenal
-                </h2>
+        <section className="relative w-full bg-[var(--bg-primary)] py-20 transition-colors duration-400">
+            <div className="max-w-6xl mx-auto px-6">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-center mb-16"
+                >
+                    <h2 className="text-[1.8rem] font-medium text-[var(--text-heading)] mb-4 transition-colors duration-400">
+                        Technical Skills
+                    </h2>
+                    <div className="w-20 h-1 bg-[var(--accent-color)] mx-auto rounded-full shadow-[0_0_10px_var(--accent-color)]" />
+                </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {skillCategories.map((category, idx) => (
-                        <div
-                            key={idx}
-                            className="bg-white/5 border border-white/5 rounded-2xl p-8 hover:bg-white/10 transition-all duration-300 pop-out"
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {Object.entries(skills).map(([category, items], index) => (
+                        <motion.div
+                            key={category}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: index * 0.1 }}
+                            className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--text-muted)]/10 hover:border-[var(--accent-color)]/30 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] group flex flex-col h-full"
                         >
-                            <h3 className={`text-xl font-bold mb-6 ${category.color}`}>
-                                {category.title}
-                            </h3>
-                            <div className="flex flex-wrap gap-3">
-                                {category.skills.map((skill, sIdx) => (
-                                    <a
-                                        key={sIdx}
-                                        href={skill.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-sm text-gray-300 hover:text-white hover:border-electric-blue hover:bg-electric-blue/10 transition-all duration-300 cursor-pointer"
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="p-2.5 rounded-lg bg-[var(--accent-color)]/10 text-[var(--accent-color)] group-hover:scale-110 transition-transform duration-300">
+                                    {categoryIcons[category]}
+                                </div>
+                                <h3 className="text-[1.25rem] font-medium text-[var(--text-heading)]">
+                                    {category}
+                                </h3>
+                            </div>
+
+                            <div className="flex flex-wrap gap-2 content-start flex-1">
+                                {items.map((skill) => (
+                                    <span
+                                        key={skill}
+                                        className="px-3 py-1.5 rounded-lg bg-[var(--bg-primary)] border border-[var(--text-muted)]/10 text-[0.95rem] font-normal text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--card-bg)] hover:border-[var(--accent-color)]/30 transition-all duration-300 hover:scale-105 hover:shadow-md cursor-default text-center flex-grow-0"
                                     >
-                                        {skill.name}
-                                    </a>
+                                        {skill}
+                                    </span>
                                 ))}
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             </div>

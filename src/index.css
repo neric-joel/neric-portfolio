@@ -1,19 +1,22 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @theme {
   --color-deep-space: #000000;
-  --color-neon-green: #00FF00;
-  --color-electric-blue: #00FFFF;
+  --color-neon-green: var(--color-accent, #00ff88);
+  --color-electric-blue: var(--color-accent-secondary, #00ffff);
   --color-glass-bg: rgba(255, 255, 255, 0.05);
   --color-glass-border: rgba(255, 255, 255, 0.1);
 
   --font-sans: 'Inter', sans-serif;
-  --font-serif: 'Times New Roman', serif;
+  --font-serif: 'Playfair Display', serif;
 
   --animate-float: float 6s ease-in-out infinite;
-  --animate-pulse-glow: pulse-glow 3s infinite;
-  --animate-fade-up: fadeUp 0.8s forwards;
+  --animate-pulse-glow: pulse-glow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-fade-up: fade-up 0.8s ease-out forwards;
   --animate-bg-shift: bg-shift 10s ease infinite alternate;
+  --animate-gradient-shift: gradient-shift 15s ease infinite;
+  --animate-twinkle: twinkle 3s ease-in-out infinite;
 
   @keyframes float {
 
@@ -23,7 +26,7 @@
     }
 
     50% {
-      transform: translateY(-10px);
+      transform: translateY(-20px);
     }
   }
 
@@ -32,16 +35,16 @@
     0%,
     100% {
       opacity: 1;
-      text-shadow: 0 0 10px #00FFFF;
+      box-shadow: 0 0 20px var(--color-neon-green);
     }
 
     50% {
-      opacity: 0.8;
-      text-shadow: 0 0 20px #00FF00;
+      opacity: 0.7;
+      box-shadow: 0 0 40px var(--color-electric-blue);
     }
   }
 
-  @keyframes fadeUp {
+  @keyframes fade-up {
     from {
       opacity: 0;
       transform: translateY(20px);
@@ -62,6 +65,126 @@
       background-position: 100% 50%;
     }
   }
+
+  @keyframes gradient-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  @keyframes twinkle {
+
+    0%,
+    100% {
+      opacity: 0.3;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 1;
+      transform: scale(1.5);
+    }
+  }
+}
+
+:root {
+  --bg-primary: #000000;
+  --text-primary: #EAEAEA;
+  --text-heading: #FFFFFF;
+  --text-muted: #9CA3AF;
+  --accent-color: #00FF88;
+  --accent-secondary: #00FFFF;
+  --card-bg: #0A0A0A;
+  --signature-filter: grayscale(1) brightness(2) contrast(2);
+  --signature-mix-blend: screen;
+
+  /* Smooth transitions for theme changes */
+  transition: background-color 0.5s ease, color 0.5s ease;
+  cursor: auto;
+  /* Ensure default cursor behavior */
+}
+
+/* Force dark cursor in light mode if needed, though 'auto' usually handles this. 
+   Adding a specific rule for text selection to ensure contrast. */
+::selection {
+  background-color: var(--accent-color);
+  color: var(--bg-primary);
+}
+
+/* Ensure cursor is visible on white backgrounds */
+[data-theme='light'] body {
+  cursor: text;
+}
+
+[data-theme='abstract'] {
+  --bg-primary: #0f172a;
+  --text-primary: #f8fafc;
+  --text-heading: #ffffff;
+  --text-muted: #cbd5e1;
+  --accent-color: #f472b6;
+  --accent-secondary: #c084fc;
+  --card-bg: #1e293b;
+}
+
+[data-theme='geometric'] {
+  --bg-primary: #111827;
+  --text-primary: #f3f4f6;
+  --text-heading: #ffffff;
+  --text-muted: #d1d5db;
+  --accent-color: #60a5fa;
+  --accent-secondary: #34d399;
+  --card-bg: #1f2937;
+}
+
+[data-theme='nature'] {
+  --bg-primary: #0c120c;
+  --text-primary: #ecfccb;
+  --text-heading: #fef9c3;
+  --text-muted: #d9f99d;
+  --accent-color: #84cc16;
+  --accent-secondary: #22c55e;
+  --card-bg: #1a2e1a;
+}
+
+[data-theme='cyberpunk'] {
+  --bg-primary: #050505;
+  --text-primary: #e2e8f0;
+  --text-heading: #ffffff;
+  --text-muted: #94a3b8;
+  --accent-color: #ff00ff;
+  --accent-secondary: #00ffff;
+  --card-bg: #111;
+}
+
+[data-theme='cinematic'] {
+  --bg-primary: #0f0518;
+  --text-primary: #ffffff;
+  --text-heading: #ffffff;
+  --text-muted: #e0e7ff;
+  --accent-color: #00ffcc;
+  --accent-secondary: #9d00ff;
+  --card-bg: #1a0b2e;
+  background: radial-gradient(circle at 50% 50%, #1a0b2e 0%, #000000 100%);
+}
+
+[data-theme='white'] {
+  --bg-primary: #ffffff;
+  --text-primary: #1a1a1a;
+  --text-heading: #000000;
+  --text-muted: #6b7280;
+  --accent-color: #000000;
+  --accent-secondary: #333333;
+  --card-bg: #f5f5f5;
+  --signature-filter: invert(1);
+  --signature-mix-blend: normal;
 }
 
 html {
@@ -69,7 +192,7 @@ html {
 }
 
 body {
-  @apply bg-black text-gray-300 font-sans antialiased overflow-x-hidden;
+  @apply bg-[var(--bg-primary)] text-[var(--text-primary)] font-sans antialiased overflow-x-hidden;
   background: radial-gradient(circle at 50% 50%, #0a0a0a 0%, #000000 100%);
   background-size: 200% 200%;
   animation: bg-shift 15s ease infinite;

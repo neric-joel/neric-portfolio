@@ -1,32 +1,32 @@
 import React from 'react';
-import { Award, Users, Lightbulb } from 'lucide-react';
+import { Users, Lightbulb, Award } from 'lucide-react';
 import RevealOnScroll from './RevealOnScroll';
 
 const Achievements = () => {
     const achievements = [
         {
             title: "Volunteer, IEEE Student Branch",
-            desc: "Organized embedded systems and circuit design workshops.",
+            desc: "Organized technical workshops on circuit design, software tools, and systems engineering for undergraduate students.",
             icon: Users,
-            color: "text-blue-400",
-            bg: "bg-blue-400/10",
-            border: "border-blue-400/20"
+            accent: "text-[var(--accent-color)]",
+            bg: "bg-[var(--accent-color)]/10",
+            border: "border-[var(--accent-color)]/20"
         },
         {
             title: "Member, AI Club at ASU",
-            desc: "Collaborated on image recognition and ML pipeline projects.",
+            desc: "Collaborating on computer vision and ML pipeline projects with peers across CS and engineering programs.",
             icon: Lightbulb,
-            color: "text-yellow-400",
-            bg: "bg-yellow-400/10",
-            border: "border-yellow-400/20"
+            accent: "text-[var(--accent-secondary)]",
+            bg: "bg-[var(--accent-secondary)]/10",
+            border: "border-[var(--accent-secondary)]/20"
         },
         {
             title: "Mentored 10+ Students",
-            desc: "Guided students in Arduino-based automation and Python programming.",
+            desc: "Guided junior students through programming fundamentals, project architecture, and ML concepts.",
             icon: Award,
-            color: "text-neon-green",
-            bg: "bg-neon-green/10",
-            border: "border-neon-green/20"
+            accent: "text-[var(--accent-color)]",
+            bg: "bg-[var(--accent-color)]/10",
+            border: "border-[var(--accent-color)]/20"
         }
     ];
 
@@ -39,16 +39,16 @@ const Achievements = () => {
                     </h2>
                 </RevealOnScroll>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
                     {achievements.map((item, idx) => (
                         <div
                             key={idx}
-                            className={`group relative p-6 rounded-xl border ${item.border} ${item.bg} hover:bg-opacity-20 transition-all duration-300 pop-out`}
+                            className={`group relative p-6 rounded-xl border ${item.border} ${item.bg} transition-all duration-300 hover:-translate-y-1 hover:shadow-lg`}
                         >
-                            <div className={`w-10 h-10 rounded-lg ${item.bg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                                <item.icon size={20} className={item.color} />
+                            <div className={`w-10 h-10 rounded-lg ${item.bg} border ${item.border} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                                <item.icon size={20} className={item.accent} />
                             </div>
-                            <h3 className="text-lg font-bold text-[var(--text-heading)] mb-2 transition-colors duration-400">
+                            <h3 className="text-base font-semibold text-[var(--text-heading)] mb-2 transition-colors duration-400">
                                 {item.title}
                             </h3>
                             <p className="text-sm text-[var(--text-muted)] leading-relaxed transition-colors duration-400">

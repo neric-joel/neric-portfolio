@@ -19,7 +19,7 @@ const Skills = () => {
     };
 
     return (
-        <section className="relative w-full bg-[var(--bg-primary)] py-20 transition-colors duration-400">
+        <section id="skills" className="relative w-full bg-[var(--bg-primary)] py-20 transition-colors duration-400">
             <div className="max-w-6xl mx-auto px-6">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

@@ -1,41 +1,25 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
+import { motion } from 'framer-motion';
 
-const RevealOnScroll = ({ children, className = "" }) => {
-    const [isVisible, setIsVisible] = useState(false);
-    const ref = useRef(null);
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setIsVisible(true);
-                    observer.unobserve(entry.target);
-                }
-            },
-            {
-                threshold: 0.1,
-                rootMargin: "0px 0px -50px 0px"
-            }
-        );
-
-        if (ref.current) {
-            observer.observe(ref.current);
-        }
-
-        return () => {
-            if (ref.current) {
-                observer.unobserve(ref.current);
-            }
-        };
-    }, []);
-
+/**
+ * 21st.dev-style blur-fade reveal on scroll.
+ * Uses Framer Motion viewport detection for clean, performant entrance animations.
+ */
+const RevealOnScroll = ({ children, className = "", delay = 0, blur = true }) => {
     return (
-        <div
-            ref={ref}
-            className={`transition-all duration-1000 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} ${className}`}
+        <motion.div
+            initial={{ opacity: 0, y: 20, filter: blur ? 'blur(8px)' : 'blur(0px)' }}
+            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{
+                duration: 0.6,
+                delay,
+                ease: [0.21, 0.47, 0.32, 0.98]
+            }}
+            className={className}
         >
             {children}
-        </div>
+        </motion.div>
     );
 };
 

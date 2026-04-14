@@ -1,264 +1,172 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @theme {
-  --color-deep-space: #000000;
-  --color-neon-green: var(--color-accent, #00ff88);
-  --color-electric-blue: var(--color-accent-secondary, #00ffff);
-  --color-glass-bg: rgba(255, 255, 255, 0.05);
-  --color-glass-border: rgba(255, 255, 255, 0.1);
-
   --font-sans: 'Inter', sans-serif;
-  --font-serif: 'Playfair Display', serif;
 
-  --animate-float: float 6s ease-in-out infinite;
-  --animate-pulse-glow: pulse-glow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  --animate-fade-up: fade-up 0.8s ease-out forwards;
-  --animate-bg-shift: bg-shift 10s ease infinite alternate;
-  --animate-gradient-shift: gradient-shift 15s ease infinite;
-  --animate-twinkle: twinkle 3s ease-in-out infinite;
-
-  @keyframes float {
-
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-
-    50% {
-      transform: translateY(-20px);
-    }
-  }
-
-  @keyframes pulse-glow {
-
-    0%,
-    100% {
-      opacity: 1;
-      box-shadow: 0 0 20px var(--color-neon-green);
-    }
-
-    50% {
-      opacity: 0.7;
-      box-shadow: 0 0 40px var(--color-electric-blue);
-    }
-  }
-
+  /* 21st.dev-inspired animation keyframes */
   @keyframes fade-up {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  @keyframes blur-fade-in {
+    from { opacity: 0; filter: blur(8px); transform: translateY(16px); }
+    to   { opacity: 1; filter: blur(0px); transform: translateY(0); }
+  }
+
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes shimmer {
+    from { background-position: -200% center; }
+    to   { background-position: 200% center; }
+  }
+
+  @keyframes border-beam {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
 
   @keyframes bg-shift {
-    0% {
-      background-position: 0% 50%;
-    }
-
-    100% {
-      background-position: 100% 50%;
-    }
+    0%   { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
   }
 
-  @keyframes gradient-shift {
-    0% {
-      background-position: 0% 50%;
-    }
-
-    50% {
-      background-position: 100% 50%;
-    }
-
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-
-  @keyframes twinkle {
-
-    0%,
-    100% {
-      opacity: 0.3;
-      transform: scale(1);
-    }
-
-    50% {
-      opacity: 1;
-      transform: scale(1.5);
-    }
-  }
+  --animate-fade-up: fade-up 0.6s ease-out forwards;
+  --animate-blur-fade: blur-fade-in 0.7s ease-out forwards;
+  --animate-slide-up: slide-up 0.5s ease-out forwards;
+  --animate-shimmer: shimmer 3s linear infinite;
+  --animate-bg-shift: bg-shift 15s ease infinite alternate;
 }
 
+/* ── Default theme: professional dark ── */
 :root {
-  --bg-primary: #000000;
-  --text-primary: #EAEAEA;
-  --text-heading: #FFFFFF;
-  --text-muted: #9CA3AF;
-  --accent-color: #00FF88;
-  --accent-secondary: #00FFFF;
-  --card-bg: #0A0A0A;
-  --signature-filter: grayscale(1) brightness(2) contrast(2);
+  --bg-primary:        #0a0a0a;
+  --text-primary:      #e5e7eb;
+  --text-heading:      #ffffff;
+  --text-muted:        #6b7280;
+  --accent-color:      #6366f1;   /* indigo — professional, not neon */
+  --accent-secondary:  #8b5cf6;
+  --card-bg:           #111111;
+  --signature-filter:  grayscale(1) brightness(2) contrast(2);
   --signature-mix-blend: screen;
-
-  /* Smooth transitions for theme changes */
-  transition: background-color 0.5s ease, color 0.5s ease;
-  cursor: auto;
-  /* Ensure default cursor behavior */
 }
 
-/* Force dark cursor in light mode if needed, though 'auto' usually handles this. 
-   Adding a specific rule for text selection to ensure contrast. */
-::selection {
-  background-color: var(--accent-color);
-  color: var(--bg-primary);
-}
-
-/* Ensure cursor is visible on white backgrounds */
-[data-theme='light'] body {
-  cursor: text;
-}
-
-[data-theme='abstract'] {
-  --bg-primary: #0f172a;
-  --text-primary: #f8fafc;
-  --text-heading: #ffffff;
-  --text-muted: #cbd5e1;
-  --accent-color: #f472b6;
-  --accent-secondary: #c084fc;
-  --card-bg: #1e293b;
-}
-
-[data-theme='geometric'] {
-  --bg-primary: #111827;
-  --text-primary: #f3f4f6;
-  --text-heading: #ffffff;
-  --text-muted: #d1d5db;
-  --accent-color: #60a5fa;
-  --accent-secondary: #34d399;
-  --card-bg: #1f2937;
-}
-
-[data-theme='nature'] {
-  --bg-primary: #0c120c;
-  --text-primary: #ecfccb;
-  --text-heading: #fef9c3;
-  --text-muted: #d9f99d;
-  --accent-color: #84cc16;
-  --accent-secondary: #22c55e;
-  --card-bg: #1a2e1a;
-}
-
-[data-theme='cyberpunk'] {
-  --bg-primary: #050505;
-  --text-primary: #e2e8f0;
-  --text-heading: #ffffff;
-  --text-muted: #94a3b8;
-  --accent-color: #ff00ff;
-  --accent-secondary: #00ffff;
-  --card-bg: #111;
-}
-
-[data-theme='cinematic'] {
-  --bg-primary: #0f0518;
-  --text-primary: #ffffff;
-  --text-heading: #ffffff;
-  --text-muted: #e0e7ff;
-  --accent-color: #00ffcc;
-  --accent-secondary: #9d00ff;
-  --card-bg: #1a0b2e;
-  background: radial-gradient(circle at 50% 50%, #1a0b2e 0%, #000000 100%);
-}
-
-[data-theme='white'] {
-  --bg-primary: #ffffff;
-  --text-primary: #1a1a1a;
-  --text-heading: #000000;
-  --text-muted: #6b7280;
-  --accent-color: #000000;
-  --accent-secondary: #333333;
-  --card-bg: #f5f5f5;
-  --signature-filter: invert(1);
+/* ── Alternate themes via TryMe ── */
+[data-theme='clean-neutral'] {
+  --bg-primary:       #F6F5F2;
+  --text-primary:     #1a1a1a;
+  --text-heading:     #000000;
+  --text-muted:       #4b5563;
+  --accent-color:     #6366f1;
+  --accent-secondary: #8b5cf6;
+  --card-bg:          #ffffff;
+  --signature-filter: none;
   --signature-mix-blend: normal;
 }
 
-html {
-  scroll-behavior: smooth;
+[data-theme='deep-navy'] {
+  --bg-primary:       #0c1b2a;
+  --text-primary:     #e5e7eb;
+  --text-heading:     #ffffff;
+  --text-muted:       #94a3b8;
+  --accent-color:     #38bdf8;
+  --accent-secondary: #0ea5e9;
+  --card-bg:          #152d42;
 }
+
+[data-theme='warm-coffee'] {
+  --bg-primary:       #2e1f1a;
+  --text-primary:     #f1e3d3;
+  --text-heading:     #ffffff;
+  --text-muted:       #c4b5a0;
+  --accent-color:     #f59e0b;
+  --accent-secondary: #d97706;
+  --card-bg:          #3d2a24;
+}
+
+[data-theme='modern-gray'] {
+  --bg-primary:       #1c1c1c;
+  --text-primary:     #e8e8e8;
+  --text-heading:     #ffffff;
+  --text-muted:       #a0a0a0;
+  --accent-color:     #6366f1;
+  --accent-secondary: #8b5cf6;
+  --card-bg:          #2a2a2a;
+}
+
+/* ── Global styles ── */
+html { scroll-behavior: smooth; }
 
 body {
   @apply bg-[var(--bg-primary)] text-[var(--text-primary)] font-sans antialiased overflow-x-hidden;
-  background: radial-gradient(circle at 50% 50%, #0a0a0a 0%, #000000 100%);
-  background-size: 200% 200%;
-  animation: bg-shift 15s ease infinite;
 }
 
-/* Pop-out Hover Effect */
-.pop-out {
+::selection {
+  background-color: var(--accent-color);
+  color: #fff;
+}
+
+/* ── Typography ── */
+h1, h2, h3, h4, h5, h6 {
+  @apply tracking-tight;
+}
+
+/* ── Shimmer text (21st.dev style) ── */
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--text-heading) 0%,
+    var(--accent-color) 40%,
+    var(--accent-secondary) 60%,
+    var(--text-heading) 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+/* ── Hover card lift ── */
+.card-lift {
   @apply transition-all duration-300;
 }
-
-.pop-out:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 10px 30px -10px rgba(255, 255, 255, 0.1);
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px -8px rgba(99, 102, 241, 0.15);
 }
 
-/* Typography Tweaks */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  @apply tracking-tight font-semibold;
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 999px; opacity: 0.4; }
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .text-shimmer {
+    -webkit-text-fill-color: var(--text-heading);
+    animation: none;
+  }
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  @apply bg-black;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-gray-800 rounded-full;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-electric-blue;
-}
-
-/* Print Styles for Resume */
+/* ── Print (resume) ── */
 @media print {
-  body * {
-    visibility: hidden;
-  }
-
-  #resume-section,
-  #resume-section * {
-    visibility: visible;
-  }
-
+  body * { visibility: hidden; }
+  #resume-section, #resume-section * { visibility: visible; }
   #resume-section {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    background: white;
-    color: black;
-    box-shadow: none;
+    position: absolute; left: 0; top: 0;
+    width: 100%; margin: 0; padding: 0;
+    background: white; color: black;
   }
-
-  @page {
-    margin: 0.5cm;
-  }
+  @page { margin: 0.5cm; }
 }

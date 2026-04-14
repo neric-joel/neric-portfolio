@@ -1,14 +1,15 @@
 import React from 'react';
 import { Code, Brain, Cpu, Wrench } from 'lucide-react';
-import RevealOnScroll from './RevealOnScroll';
 import { motion } from 'framer-motion';
+
+const MotionDiv = motion.div;
 
 const Skills = () => {
     const skills = {
-        "Languages": ["Python", "C++", "JavaScript", "TypeScript", "MATLAB", "C", "SQL", "Verilog"],
         "AI & ML": ["TensorFlow", "PyTorch", "scikit-learn", "OpenCV", "Keras", "Transformers", "Hugging Face", "YOLO"],
+        "Languages": ["Python", "C++", "JavaScript", "TypeScript", "MATLAB", "C", "SQL", "Verilog"],
+        "Web & Tools": ["React", "FastAPI", "Node.js", "Docker", "AWS", "Git", "MongoDB", "Linux"],
         "Embedded": ["Embedded C", "RTOS", "Arduino", "Raspberry Pi", "ESP32", "STM32", "FPGA", "Altium"],
-        "Web & Tools": ["React", "Node.js", "Git", "Docker", "Linux", "AWS", "MongoDB", "VS Code"]
     };
 
     const categoryIcons = {
@@ -21,7 +22,7 @@ const Skills = () => {
     return (
         <section id="skills" className="relative w-full bg-[var(--bg-primary)] py-20 transition-colors duration-400">
             <div className="max-w-6xl mx-auto px-6">
-                <motion.div
+                <MotionDiv
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -31,11 +32,11 @@ const Skills = () => {
                         Technical Skills
                     </h2>
                     <div className="w-20 h-1 bg-[var(--accent-color)] mx-auto rounded-full shadow-[0_0_10px_var(--accent-color)]" />
-                </motion.div>
+                </MotionDiv>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {Object.entries(skills).map(([category, items], index) => (
-                        <motion.div
+                        <MotionDiv
                             key={category}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -62,7 +63,7 @@ const Skills = () => {
                                     </span>
                                 ))}
                             </div>
-                        </motion.div>
+                        </MotionDiv>
                     ))}
                 </div>
             </div>

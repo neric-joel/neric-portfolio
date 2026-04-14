@@ -8,30 +8,30 @@ const themes = [
     { name: 'Cyberpunk', id: 'cyberpunk', accent: '#ff00ff' },
 ];
 
+const applyTheme = (index) => {
+    const theme = themes[index];
+    document.documentElement.setAttribute('data-theme', theme.id);
+    localStorage.setItem('portfolio-theme-index', index);
+};
+
+const getInitialTheme = () => {
+    const saved = localStorage.getItem('portfolio-theme-index');
+    if (saved) {
+        const index = parseInt(saved);
+        if (!isNaN(index) && index >= 0 && index < themes.length) return index;
+    }
+    return 0;
+};
+
 const ThemeSwitcher = () => {
-    const [currentTheme, setCurrentTheme] = useState(0);
+    const [currentTheme, setCurrentTheme] = useState(getInitialTheme);
 
     useEffect(() => {
-        const savedTheme = localStorage.getItem('portfolio-theme-index');
-        if (savedTheme) {
-            const index = parseInt(savedTheme);
-            if (!isNaN(index) && index >= 0 && index < themes.length) {
-                setCurrentTheme(index);
-                applyTheme(index);
-            }
-        }
-    }, []);
-
-    const applyTheme = (index) => {
-        const theme = themes[index];
-        document.documentElement.setAttribute('data-theme', theme.id);
-        localStorage.setItem('portfolio-theme-index', index);
-    };
+        applyTheme(currentTheme);
+    }, [currentTheme]);
 
     const cycleTheme = () => {
-        const nextIndex = (currentTheme + 1) % themes.length;
-        setCurrentTheme(nextIndex);
-        applyTheme(nextIndex);
+        setCurrentTheme((prev) => (prev + 1) % themes.length);
     };
 
     return (

@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useDrag } from '@use-gesture/react';
 import { ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 
+const MotionDiv = motion.div;
+
 const projects = [
     {
         title: "Satellite Image Segmentation",
@@ -110,7 +112,7 @@ const MobileCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
         <div className="w-full">
             <div className="relative overflow-hidden rounded-2xl bg-[var(--card-bg)] border border-[var(--text-muted)]/10 min-h-[480px]" {...bind()}>
                 <AnimatePresence mode="wait">
-                    <motion.div
+                    <MotionDiv
                         key={activeIndex}
                         initial={{ opacity: 0, x: 30 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -119,7 +121,7 @@ const MobileCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
                         className="absolute inset-0"
                     >
                         <ProjectCard project={projects[activeIndex]} index={activeIndex} total={projects.length} />
-                    </motion.div>
+                    </MotionDiv>
                 </AnimatePresence>
             </div>
 
@@ -160,7 +162,7 @@ const DesktopCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
                     const style = getStyle(index);
                     const isActive = (index - activeIndex + total) % total === 0;
                     return (
-                        <motion.div
+                        <MotionDiv
                             key={index}
                             className={`absolute w-[500px] bg-[var(--card-bg)] rounded-2xl border cursor-grab active:cursor-grabbing overflow-hidden ${isActive ? 'border-[var(--accent-color)]/20 shadow-[0_8px_32px_rgba(99,102,241,0.08)]' : 'border-[var(--text-muted)]/8'}`}
                             style={{ transformStyle: 'preserve-3d', left: '50%', top: '50%', marginLeft: '-250px', marginTop: '-240px', height: '480px' }}
@@ -170,7 +172,7 @@ const DesktopCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
                             onClick={() => !isActive && setActiveIndex(index)}
                         >
                             <ProjectCard project={project} index={index} total={total} />
-                        </motion.div>
+                        </MotionDiv>
                     );
                 })}
             </div>
@@ -226,7 +228,7 @@ const ProjectsCarousel = () => {
 };
 
 const RevealHeader = () => (
-    <motion.div
+    <MotionDiv
         initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
         whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         viewport={{ once: true }}
@@ -236,7 +238,7 @@ const RevealHeader = () => (
         <h2 className="text-[1.8rem] font-semibold text-[var(--text-heading)] mb-2">Projects</h2>
         <p className="text-sm text-[var(--text-muted)]">Swipe or use arrows · {projects.length} projects</p>
         <div className="w-12 h-0.5 bg-[var(--accent-color)] mx-auto mt-4 rounded-full opacity-60" />
-    </motion.div>
+    </MotionDiv>
 );
 
 export default ProjectsCarousel;

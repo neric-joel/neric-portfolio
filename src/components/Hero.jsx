@@ -277,7 +277,7 @@ const Hero = () => {
                     </MotionDiv>
 
                     {/* Social links */}
-                    <MotionDiv variants={stagger.item} className="flex items-center gap-4">
+                    <MotionDiv variants={stagger.item} className="flex items-center gap-3">
                         {socialLinks.map(({ href, label, Icon }) => (
                             <motion.a
                                 key={label}
@@ -285,22 +285,33 @@ const Hero = () => {
                                 target={href.startsWith('mailto') ? undefined : '_blank'}
                                 rel="noopener noreferrer"
                                 aria-label={label}
-                                className="flex items-center justify-center w-10 h-10 rounded-xl cursor-pointer"
+                                className="group relative flex items-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer overflow-hidden"
                                 style={{
                                     color: 'var(--text-muted)',
-                                    border: '1px solid color-mix(in srgb, var(--text-muted) 18%, transparent)',
-                                    background: 'var(--glass-bg)',
+                                    border: '1px solid color-mix(in srgb, var(--accent-color) 18%, transparent)',
+                                    background: 'color-mix(in srgb, var(--accent-color) 5%, var(--glass-bg))',
+                                    backdropFilter: 'blur(12px)',
+                                    fontFamily: 'Space Grotesk, sans-serif',
                                 }}
                                 whileHover={{
-                                    scale: 1.15, y: -3,
+                                    y: -3,
                                     color: 'var(--accent-color)',
                                     borderColor: 'var(--accent-color)',
-                                    boxShadow: '0 4px 18px color-mix(in srgb, var(--accent-color) 22%, transparent)',
+                                    background: 'color-mix(in srgb, var(--accent-color) 12%, var(--glass-bg))',
+                                    boxShadow: '0 0 22px color-mix(in srgb, var(--accent-color) 35%, transparent), 0 0 0 1px color-mix(in srgb, var(--accent-color) 18%, transparent)',
                                 }}
-                                whileTap={{ scale: 0.9 }}
-                                transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                                whileTap={{ scale: 0.94 }}
+                                transition={{ type: 'spring', stiffness: 360, damping: 20 }}
                             >
-                                <Icon size={18} />
+                                <motion.span
+                                    className="absolute inset-0 pointer-events-none"
+                                    style={{ background: 'linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.08), transparent 65%)' }}
+                                    initial={{ x: '-100%' }}
+                                    whileHover={{ x: '160%' }}
+                                    transition={{ duration: 0.5, ease: 'easeInOut' }}
+                                />
+                                <Icon size={15} className="relative z-10" />
+                                <span className="relative z-10 text-[11px] font-semibold tracking-wide">{label}</span>
                             </motion.a>
                         ))}
                     </MotionDiv>

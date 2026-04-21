@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Palette } from 'lucide-react';
 
 const themes = [
     {
@@ -90,7 +89,6 @@ const TryMe = () => {
             whileHover={{ scale: 1.06 }}
             whileTap={{ scale: 0.95 }}
         >
-            <Palette size={14} />
             <AnimatePresence mode="wait">
                 <motion.span
                     key={idx}

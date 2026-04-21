@@ -183,8 +183,8 @@ const DesktopCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
     const getStyle = (index) => {
         const pos = (index - activeIndex + total) % total;
         if (pos === 0)        return { x: 0,    scale: 1.0,  opacity: 1,    zIndex: 10, rotateY: 0   };
-        if (pos === total-1)  return { x: -320, scale: 0.84, opacity: 0.45, zIndex: 5,  rotateY: 8   };
-        if (pos === 1)        return { x: 320,  scale: 0.84, opacity: 0.45, zIndex: 5,  rotateY: -8  };
+        if (pos === total-1)  return { x: -320, scale: 0.87, opacity: 0.72, zIndex: 5,  rotateY: 6   };
+        if (pos === 1)        return { x: 320,  scale: 0.87, opacity: 0.72, zIndex: 5,  rotateY: -6  };
         return { x: pos > total/2 ? -680 : 680, scale: 0.7, opacity: 0, zIndex: 0, rotateY: 0 };
     };
 
@@ -275,8 +275,10 @@ const ProjectsCarousel = () => {
             if (!section) return;
 
             const rect = section.getBoundingClientRect();
-            const centreVisible = rect.top <= window.innerHeight * 0.5 && rect.bottom >= window.innerHeight * 0.5;
-            if (!centreVisible) return;
+            const sectionMid   = (rect.top + rect.bottom) / 2;
+            const viewportMid  = window.innerHeight / 2;
+            const isCentered   = Math.abs(sectionMid - viewportMid) < window.innerHeight * 0.18;
+            if (!isCentered) return;
 
             if (e.deltaY > 0) {
                 // Scrolling down — advance if not at last

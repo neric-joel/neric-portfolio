@@ -35,7 +35,7 @@ const LofiPlayer = () => {
     const [isPlaying, setIsPlaying]   = useState(false);
     const [volume, setVolume]         = useState(0.5);
     const [bars, setBars]             = useState(BASE_HEIGHTS.map(() => 3));
-    const [collapsed, setCollapsed]   = useState(false);
+    const [collapsed, setCollapsed]   = useState(() => window.innerWidth < 768);
     const [trackIdx, setTrackIdx]     = useState(0);
 
     const ctxRef    = useRef(null);

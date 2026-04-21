@@ -182,15 +182,23 @@ const DesktopCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
     const total = projects.length;
     const getStyle = (index) => {
         const pos = (index - activeIndex + total) % total;
-        if (pos === 0)        return { x: 0,    scale: 1.02, opacity: 1,    zIndex: 10, rotateY: 0   };
-        if (pos === total-1)  return { x: -390, scale: 0.86, opacity: 0.5,  zIndex: 5,  rotateY: 10  };
-        if (pos === 1)        return { x: 390,  scale: 0.86, opacity: 0.5,  zIndex: 5,  rotateY: -10 };
-        return { x: pos > total/2 ? -740 : 740, scale: 0.7, opacity: 0, zIndex: 0, rotateY: 0 };
+        if (pos === 0)        return { x: 0,    scale: 1.0,  opacity: 1,    zIndex: 10, rotateY: 0   };
+        if (pos === total-1)  return { x: -320, scale: 0.84, opacity: 0.45, zIndex: 5,  rotateY: 8   };
+        if (pos === 1)        return { x: 320,  scale: 0.84, opacity: 0.45, zIndex: 5,  rotateY: -8  };
+        return { x: pos > total/2 ? -680 : 680, scale: 0.7, opacity: 0, zIndex: 0, rotateY: 0 };
     };
 
     return (
         <div className="w-full">
-            <div className="relative h-[520px] w-full flex items-center justify-center" style={{ perspective: '2000px', overflow: 'visible' }}>
+            <div
+                className="relative h-[520px] w-full flex items-center justify-center"
+                style={{
+                    perspective: '2000px',
+                    overflow: 'hidden',
+                    maskImage: 'linear-gradient(90deg, transparent 0%, black 7%, black 93%, transparent 100%)',
+                    WebkitMaskImage: 'linear-gradient(90deg, transparent 0%, black 7%, black 93%, transparent 100%)',
+                }}
+            >
                 {projects.map((project, index) => {
                     const s = getStyle(index);
                     const isActive = (index - activeIndex + total) % total === 0;

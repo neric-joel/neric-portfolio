@@ -57,8 +57,8 @@ const projects = [
     }
 ];
 
-const ProjectCard = memo(({ project, index, total }) => {
-return (    <div className="flex flex-col h-full p-6 md:p-8">
+const ProjectCard = memo(({ project, index, total }) => (
+    <div className="flex flex-col h-full p-6 md:p-8">
         <div className="flex items-start justify-between mb-4">
             <span className="text-[10px] font-semibold tracking-widest uppercase px-2.5 py-1 rounded-full"
                 style={{
@@ -109,8 +109,7 @@ return (    <div className="flex flex-col h-full p-6 md:p-8">
             ))}
         </div>
     </div>
-);
-});
+));
 
 /* ── Scroll progress indicator ── */
 const ScrollHint = ({ current, total }) => (

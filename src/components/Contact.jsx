@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Linkedin, Github } from 'lucide-react';
 import signatureImg from '../assets/final_signature.png';
+import { playClick } from '../utils/clickSound';
 
 const links = [
     { href: 'mailto:nericjoel07@gmail.com',            label: 'Email',    Icon: Mail,     delay: 0    },
@@ -55,6 +56,7 @@ const Contact = () => (
                         target={href.startsWith('mailto') ? undefined : '_blank'}
                         rel="noopener noreferrer"
                         aria-label={label}
+                        onClick={playClick}
                         initial={{ opacity: 0, y: 16 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}

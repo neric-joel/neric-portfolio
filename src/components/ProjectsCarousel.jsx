@@ -182,10 +182,10 @@ const DesktopCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
     const total = projects.length;
     const getStyle = (index) => {
         const pos = (index - activeIndex + total) % total;
-        if (pos === 0)        return { x: 0,    scale: 1.0,  opacity: 1,    zIndex: 10, rotateY: 0   };
-        if (pos === total-1)  return { x: -320, scale: 0.87, opacity: 0.72, zIndex: 5,  rotateY: 6   };
-        if (pos === 1)        return { x: 320,  scale: 0.87, opacity: 0.72, zIndex: 5,  rotateY: -6  };
-        return { x: pos > total/2 ? -680 : 680, scale: 0.7, opacity: 0, zIndex: 0, rotateY: 0 };
+        if (pos === 0)        return { x: 0,    scale: 1.0,  opacity: 1,    zIndex: 10, filter: 'blur(0px)'   };
+        if (pos === total-1)  return { x: -400, scale: 0.84, opacity: 0.55, zIndex: 5,  filter: 'blur(1.5px)' };
+        if (pos === 1)        return { x: 400,  scale: 0.84, opacity: 0.55, zIndex: 5,  filter: 'blur(1.5px)' };
+        return { x: pos > total/2 ? -720 : 720, scale: 0.7, opacity: 0, zIndex: 0, filter: 'blur(4px)' };
     };
 
     return (
@@ -206,7 +206,7 @@ const DesktopCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
                         <MotionDiv key={index}
                             className="absolute w-[500px] rounded-2xl overflow-hidden"
                             style={{
-                                transformStyle: 'preserve-3d', left: '50%', top: '50%',
+                                left: '50%', top: '50%',
                                 marginLeft: '-250px', marginTop: '-240px', height: '480px',
                                 zIndex: s.zIndex,
                                 background: 'var(--card-bg)',
@@ -218,12 +218,12 @@ const DesktopCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
                                     ? '0 0 0 1px color-mix(in srgb, var(--accent-color) 12%, transparent), 0 16px 48px color-mix(in srgb, var(--accent-color) 18%, transparent)'
                                     : 'none',
                             }}
-                            animate={{ x: s.x, scale: s.scale, opacity: s.opacity, rotateY: s.rotateY }}
+                            animate={{ x: s.x, scale: s.scale, opacity: s.opacity, filter: s.filter }}
                             transition={{
                                 x:       { type: 'spring', stiffness: 35, damping: 22 },
                                 scale:   { type: 'spring', stiffness: 60, damping: 20 },
                                 opacity: { duration: 0.5 },
-                                rotateY: { type: 'spring', stiffness: 50, damping: 22 },
+                                filter:  { duration: 0.4 },
                             }}
                             onClick={() => !isActive && setActiveIndex(index)}
                         >

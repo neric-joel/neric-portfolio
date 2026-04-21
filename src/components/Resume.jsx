@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { X, Download, ExternalLink } from 'lucide-react';
+import { playClick } from '../utils/clickSound';
 
 const Resume = ({ onClose }) => (
     <motion.div
@@ -26,6 +27,7 @@ const Resume = ({ onClose }) => (
                 <motion.a
                     href="/neric-resume.pdf"
                     download="Neric_Joel_Resume.pdf"
+                    onClick={playClick}
                     className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold"
                     style={{
                         background: 'linear-gradient(135deg, var(--accent-color), var(--accent-secondary))',

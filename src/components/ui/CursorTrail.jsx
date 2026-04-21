@@ -20,18 +20,14 @@ const CursorTrail = () => {
         let raf;
 
         const pts    = Array.from({ length: TRAIL }, () => ({ x: -600, y: -600 }));
-        let mx = -600, my = -600, hovering = false;
-        let sparks = [];   // click burst particles
-        let ringScale = 1; // animated ring scale
+        let mx = -600, my = -600;
+        let sparks = [];
 
         const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
         resize();
         window.addEventListener('resize', resize, { passive: true });
 
         const onMove  = (e) => { mx = e.clientX; my = e.clientY; };
-        const onOver  = (e) => {
-            hovering = !!e.target?.closest('a, button, [role="button"], input, label, select, textarea');
-        };
         const onClick = (e) => {
             const raw = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
             const [r,g,b] = raw.startsWith('#') ? parseHex(raw) : [34,211,238];
@@ -50,7 +46,6 @@ const CursorTrail = () => {
         };
 
         window.addEventListener('mousemove', onMove, { passive: true });
-        document.addEventListener('mouseover', onOver, { passive: true });
         window.addEventListener('click', onClick, { passive: true });
 
         const draw = () => {
@@ -71,8 +66,8 @@ const CursorTrail = () => {
             // ── Draw comet trail ──
             for (let i = TRAIL - 1; i >= 1; i--) {
                 const t     = 1 - i / TRAIL;           // 0 at tail → 1 at head
-                const alpha = t * (hovering ? 0.62 : 0.42) * t; // quadratic fade
-                const size  = (hovering ? 14 : 9) * t * t;
+                const alpha = t * 0.42 * t;
+                const size  = 9 * t * t;
 
                 if (size < 0.4) continue;
 
@@ -92,25 +87,6 @@ const CursorTrail = () => {
                     ctx.fillStyle = `rgba(${r},${g},${b},${Math.min(1, alpha * 2.2)})`;
                     ctx.fill();
                 }
-            }
-
-            // ── Hover ring ──
-            ringScale += (hovering ? 1.0 : 0.0 - ringScale) * 0.15;
-            if (hovering || ringScale > 0.02) {
-                const rs  = 20 + 4 * ringScale;
-                const ra  = Math.max(0, ringScale) * 0.75;
-                // Outer ring
-                ctx.beginPath();
-                ctx.arc(pts[0].x, pts[0].y, rs, 0, Math.PI * 2);
-                ctx.strokeStyle = `rgba(${r},${g},${b},${ra * 0.5})`;
-                ctx.lineWidth   = 6;
-                ctx.stroke();
-                // Inner sharp ring
-                ctx.beginPath();
-                ctx.arc(pts[0].x, pts[0].y, rs, 0, Math.PI * 2);
-                ctx.strokeStyle = `rgba(${r},${g},${b},${ra})`;
-                ctx.lineWidth   = 1.5;
-                ctx.stroke();
             }
 
             // ── Click sparks ──
@@ -150,7 +126,6 @@ const CursorTrail = () => {
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', resize);
             window.removeEventListener('mousemove', onMove);
-            document.removeEventListener('mouseover', onOver);
             window.removeEventListener('click', onClick);
         };
     }, []);

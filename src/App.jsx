@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import Lenis from 'lenis';
 import Sidebar from './components/Sidebar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -11,10 +12,21 @@ import Contact from './components/Contact';
 import Resume from './components/Resume';
 import ChatMail from './components/ChatMail';
 import TryMe from './components/TryMe';
-import Lenis from 'lenis';
+import IntroScreen from './components/IntroScreen';
+import LofiPlayer from './components/ui/LofiPlayer';
 
 function App() {
   const [showResume, setShowResume] = useState(false);
+
+  // Only show intro once per session
+  const [introVisible, setIntroVisible] = useState(
+    () => sessionStorage.getItem('nj-intro') !== 'done'
+  );
+
+  const handleIntroComplete = useCallback(() => {
+    setIntroVisible(false);
+    sessionStorage.setItem('nj-intro', 'done');
+  }, []);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -32,24 +44,23 @@ function App() {
       lenis.raf(time);
       requestAnimationFrame(raf);
     }
-
     requestAnimationFrame(raf);
-
-    return () => {
-      lenis.destroy();
-    };
+    return () => lenis.destroy();
   }, []);
 
-  const toggleResume = () => {
-    setShowResume(!showResume);
-  };
-
   return (
-    <div className="bg-[var(--bg-primary)] min-h-screen text-[var(--text-primary)] selection:bg-[var(--accent-color)] selection:text-black transition-colors duration-700">
+    <div
+      className="min-h-screen transition-colors duration-700"
+      style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}
+    >
+      {/* Intro overlay — only shown once per session */}
+      <IntroScreen visible={introVisible} onComplete={handleIntroComplete} />
+
       <TryMe />
-      <Sidebar toggleResume={toggleResume} showResume={showResume} />
+      <Sidebar toggleResume={() => setShowResume(v => !v)} showResume={showResume} />
+
       {showResume ? (
-        <Resume onClose={toggleResume} />
+        <Resume onClose={() => setShowResume(false)} />
       ) : (
         <>
           <main className="md:pl-24">
@@ -65,6 +76,9 @@ function App() {
           <ChatMail />
         </>
       )}
+
+      {/* Lofi music player — always visible */}
+      <LofiPlayer />
     </div>
   );
 }

@@ -142,7 +142,7 @@ const Hero = () => {
                                 position: 'absolute', inset: '3px', borderRadius: '50%',
                                 overflow: 'hidden', backgroundColor: 'var(--bg-primary)',
                             }}>
-                                <img src={profilePic} alt="Neric Joel" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                <img src={profilePic} alt="Neric Joel" width={320} height={320} fetchpriority="high" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                             </div>
                         </motion.div>
                     </MotionDiv>

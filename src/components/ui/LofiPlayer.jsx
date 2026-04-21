@@ -275,6 +275,7 @@ const LofiPlayer = () => {
                                     {/* Play/Pause */}
                                     <motion.button
                                         onClick={toggle}
+                                        aria-label={isPlaying ? 'Pause music' : 'Play music'}
                                         className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer shrink-0"
                                         style={{
                                             background: isPlaying
@@ -303,6 +304,7 @@ const LofiPlayer = () => {
                                     {/* Skip */}
                                     <motion.button
                                         onClick={nextTrack}
+                                        aria-label="Next track"
                                         className="flex items-center justify-center cursor-pointer"
                                         style={{ color: 'rgba(255,255,255,0.4)' }}
                                         whileHover={{ scale: 1.15, color: 'var(--accent-color)' }}
@@ -316,6 +318,7 @@ const LofiPlayer = () => {
                                         <input
                                             type="range" min="0" max="1" step="0.05"
                                             value={volume}
+                                            aria-label="Volume"
                                             onChange={handleVolume}
                                             className="w-full appearance-none rounded-full"
                                             style={{

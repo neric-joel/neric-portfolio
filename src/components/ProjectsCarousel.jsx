@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDrag } from '@use-gesture/react';
 import { ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -57,8 +57,8 @@ const projects = [
     }
 ];
 
-const ProjectCard = ({ project, index, total }) => (
-    <div className="flex flex-col h-full p-6 md:p-8">
+const ProjectCard = memo(({ project, index, total }) => {
+return (    <div className="flex flex-col h-full p-6 md:p-8">
         <div className="flex items-start justify-between mb-4">
             <span className="text-[10px] font-semibold tracking-widest uppercase px-2.5 py-1 rounded-full"
                 style={{
@@ -110,6 +110,7 @@ const ProjectCard = ({ project, index, total }) => (
         </div>
     </div>
 );
+});
 
 /* ── Scroll progress indicator ── */
 const ScrollHint = ({ current, total }) => (
@@ -163,12 +164,12 @@ const MobileCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
                 </AnimatePresence>
             </div>
             <div className="flex items-center justify-between mt-4 px-1">
-                <button onClick={() => paginate(-1)} className="p-2.5 rounded-xl cursor-pointer"
+                <button aria-label="Previous project" onClick={() => paginate(-1)} className="p-2.5 rounded-xl cursor-pointer"
                     style={{ background: 'var(--card-bg)', border: '1px solid color-mix(in srgb, var(--text-muted) 10%, transparent)', color: 'var(--text-muted)' }}>
                     <ChevronLeft size={18} />
                 </button>
                 <ScrollHint current={activeIndex} total={projects.length} />
-                <button onClick={() => paginate(1)} className="p-2.5 rounded-xl cursor-pointer"
+                <button aria-label="Next project" onClick={() => paginate(1)} className="p-2.5 rounded-xl cursor-pointer"
                     style={{ background: 'var(--card-bg)', border: '1px solid color-mix(in srgb, var(--text-muted) 10%, transparent)', color: 'var(--text-muted)' }}>
                     <ChevronRight size={18} />
                 </button>
@@ -234,13 +235,13 @@ const DesktopCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
             </div>
 
             <div className="flex items-center justify-center gap-6 mt-4">
-                <button onClick={() => paginate(-1)}
+                <button aria-label="Previous project" onClick={() => paginate(-1)}
                     className="p-2.5 rounded-xl cursor-pointer group transition-all duration-200"
                     style={{ background: 'var(--card-bg)', border: '1px solid color-mix(in srgb, var(--text-muted) 10%, transparent)', color: 'var(--text-muted)' }}>
                     <ChevronLeft size={18} />
                 </button>
                 <ScrollHint current={activeIndex} total={projects.length} />
-                <button onClick={() => paginate(1)}
+                <button aria-label="Next project" onClick={() => paginate(1)}
                     className="p-2.5 rounded-xl cursor-pointer group transition-all duration-200"
                     style={{ background: 'var(--card-bg)', border: '1px solid color-mix(in srgb, var(--text-muted) 10%, transparent)', color: 'var(--text-muted)' }}>
                     <ChevronRight size={18} />
@@ -265,49 +266,42 @@ const ProjectsCarousel = () => {
     const paginateRef = useRef(paginate);
     paginateRef.current = paginate;
 
-    // Scroll-jacking: intercept wheel when section is in view
+    // Scroll-jacking: only attach non-passive listener while section is centered
     useEffect(() => {
         let cooldown = false;
         const COOLDOWN_MS = 650;
+        let attached = false;
 
         const onWheel = (e) => {
-            const section = sectionRef.current;
-            if (!section) return;
-
-            const rect = section.getBoundingClientRect();
-            const sectionMid   = (rect.top + rect.bottom) / 2;
-            const viewportMid  = window.innerHeight / 2;
-            const isCentered   = Math.abs(sectionMid - viewportMid) < window.innerHeight * 0.18;
-            if (!isCentered) return;
-
-            if (e.deltaY > 0) {
-                // Scrolling down — advance if not at last
-                if (activeRef.current < total - 1) {
-                    e.preventDefault();
-                    if (cooldown) return;
-                    cooldown = true;
-                    setTimeout(() => { cooldown = false; }, COOLDOWN_MS);
-                    // Pause lenis briefly
-                    window._lenis?.stop();
-                    paginateRef.current(1);
-                    setTimeout(() => window._lenis?.start(), COOLDOWN_MS);
-                }
-            } else if (e.deltaY < 0) {
-                // Scrolling up — go back if not at first
-                if (activeRef.current > 0) {
-                    e.preventDefault();
-                    if (cooldown) return;
-                    cooldown = true;
-                    setTimeout(() => { cooldown = false; }, COOLDOWN_MS);
-                    window._lenis?.stop();
-                    paginateRef.current(-1);
-                    setTimeout(() => window._lenis?.start(), COOLDOWN_MS);
-                }
+            if (e.deltaY > 0 && activeRef.current < total - 1) {
+                e.preventDefault();
+                if (cooldown) return;
+                cooldown = true;
+                setTimeout(() => { cooldown = false; }, COOLDOWN_MS);
+                window._lenis?.stop();
+                paginateRef.current(1);
+                setTimeout(() => window._lenis?.start(), COOLDOWN_MS);
+            } else if (e.deltaY < 0 && activeRef.current > 0) {
+                e.preventDefault();
+                if (cooldown) return;
+                cooldown = true;
+                setTimeout(() => { cooldown = false; }, COOLDOWN_MS);
+                window._lenis?.stop();
+                paginateRef.current(-1);
+                setTimeout(() => window._lenis?.start(), COOLDOWN_MS);
             }
         };
 
-        window.addEventListener('wheel', onWheel, { passive: false });
-        return () => window.removeEventListener('wheel', onWheel);
+        const attach = () => { if (!attached) { window.addEventListener('wheel', onWheel, { passive: false }); attached = true; } };
+        const detach = () => { if (attached)  { window.removeEventListener('wheel', onWheel); attached = false; } };
+
+        const io = new IntersectionObserver(
+            ([entry]) => entry.isIntersecting ? attach() : detach(),
+            { threshold: 0.5 }
+        );
+        if (sectionRef.current) io.observe(sectionRef.current);
+
+        return () => { io.disconnect(); detach(); };
     }, [total]);
 
     return (

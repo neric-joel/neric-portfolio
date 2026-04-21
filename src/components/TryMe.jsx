@@ -70,7 +70,8 @@ const TryMe = () => {
             onClick={handleClick}
             onHoverStart={() => setShowLabel(true)}
             onHoverEnd={() => setShowLabel(false)}
-            className="fixed top-6 left-6 z-[100] flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer"
+            aria-label="Switch color theme"
+        className="fixed top-6 left-6 z-[100] flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer"
             style={{
                 fontFamily: 'Space Grotesk, sans-serif',
                 background: 'color-mix(in srgb, var(--accent-color) 8%, transparent)',

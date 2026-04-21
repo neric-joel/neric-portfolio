@@ -235,7 +235,7 @@ const LofiPlayer = () => {
                                                 exit={{ opacity: 0, y: -4 }}
                                                 transition={{ duration: 0.2 }}
                                                 className="text-[11px] font-medium tracking-wide"
-                                                style={{ color: isPlaying ? 'var(--text-primary)' : 'var(--text-muted)', fontFamily: 'Space Grotesk, sans-serif' }}
+                                                style={{ color: isPlaying ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.4)', fontFamily: 'Space Grotesk, sans-serif' }}
                                             >
                                                 {track.title}
                                             </motion.span>
@@ -244,7 +244,7 @@ const LofiPlayer = () => {
                                     <motion.button
                                         onClick={() => setCollapsed(true)}
                                         className="cursor-pointer opacity-40 hover:opacity-80 ml-2"
-                                        style={{ color: 'var(--text-muted)' }}
+                                        style={{ color: 'rgba(255,255,255,0.6)' }}
                                         whileHover={{ scale: 1.1 }}
                                     >
                                         <ChevronDown size={12} />
@@ -304,7 +304,7 @@ const LofiPlayer = () => {
                                     <motion.button
                                         onClick={nextTrack}
                                         className="flex items-center justify-center cursor-pointer"
-                                        style={{ color: 'var(--text-muted)' }}
+                                        style={{ color: 'rgba(255,255,255,0.4)' }}
                                         whileHover={{ scale: 1.15, color: 'var(--accent-color)' }}
                                         whileTap={{ scale: 0.9 }}
                                     >

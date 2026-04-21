@@ -103,6 +103,17 @@
   --animate-pulse-border:  pulse-border 2s ease-in-out infinite;
   --animate-glow-pulse:    glow-pulse 3s ease-in-out infinite;
   --animate-scale-in:      scale-in 0.4s ease-out forwards;
+  --animate-marquee:       marquee 28s linear infinite;
+  --animate-marquee-rev:   marquee-rev 22s linear infinite;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes marquee-rev {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
 }
 
 /* ── Default theme: premium dark ── */
@@ -112,13 +123,13 @@
   --text-primary:      #e8eaf0;
   --text-heading:      #ffffff;
   --text-muted:        #8b95a9;
-  --accent-color:      #6366f1;
-  --accent-rgb:        99, 102, 241;
-  --accent-secondary:  #a855f7;
-  --accent-glow:       rgba(99, 102, 241, 0.15);
+  --accent-color:      #22d3ee;
+  --accent-rgb:        34, 211, 238;
+  --accent-secondary:  #06b6d4;
+  --accent-glow:       rgba(34, 211, 238, 0.15);
   --card-bg:           rgba(255, 255, 255, 0.03);
   --card-border:       rgba(255, 255, 255, 0.07);
-  --card-hover-border: rgba(99, 102, 241, 0.35);
+  --card-hover-border: rgba(34, 211, 238, 0.35);
   --signature-filter:  grayscale(1) brightness(2) contrast(2);
   --signature-mix-blend: screen;
   --glass-bg:          rgba(255, 255, 255, 0.04);
@@ -195,13 +206,11 @@ body {
   @apply text-[var(--text-primary)] antialiased overflow-x-hidden;
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-primary);
-  cursor: none;
 }
 
-/* Restore cursor on touch/mobile */
-@media (hover: none) {
-  body { cursor: auto; }
-  * { cursor: auto !important; }
+/* Hide system cursor on pointer devices; canvas trail replaces it */
+@media (hover: hover) and (pointer: fine) {
+  *, *::before, *::after { cursor: none !important; }
 }
 
 h1, h2, h3, h4, h5, h6 {

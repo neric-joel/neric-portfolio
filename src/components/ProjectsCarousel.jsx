@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDrag } from '@use-gesture/react';
 import { ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
+import RevealOnScroll from './RevealOnScroll';
 
 const MotionDiv = motion.div;
 
@@ -56,44 +57,53 @@ const projects = [
     }
 ];
 
-/* ── Card component ── */
 const ProjectCard = ({ project, index, total }) => (
     <div className="flex flex-col h-full p-6 md:p-8">
-        {/* Header */}
         <div className="flex items-start justify-between mb-4">
-            <span className="text-[10px] font-semibold tracking-widest uppercase px-2.5 py-1 rounded-full bg-[var(--accent-color)]/10 text-[var(--accent-color)] border border-[var(--accent-color)]/20">
+            <span className="text-[10px] font-semibold tracking-widest uppercase px-2.5 py-1 rounded-full"
+                style={{
+                    background: 'color-mix(in srgb, var(--accent-color) 10%, transparent)',
+                    color: 'var(--accent-color)',
+                    border: '1px solid color-mix(in srgb, var(--accent-color) 20%, transparent)',
+                }}>
                 {project.category}
             </span>
-            <span className="text-2xl font-light text-[var(--text-muted)]/20 select-none tabular-nums">
-                {String(index + 1).padStart(2, '0')}/{String(total).padStart(2, '0')}
+            <span className="text-2xl font-light select-none tabular-nums"
+                style={{ color: 'color-mix(in srgb, var(--text-muted) 25%, transparent)' }}>
+                {String(index + 1).padStart(2,'0')}/{String(total).padStart(2,'0')}
             </span>
         </div>
 
-        {/* Title */}
-        <h3 className="text-xl md:text-2xl font-semibold text-[var(--text-heading)] leading-tight mb-5">
+        <h3 className="text-xl md:text-2xl font-semibold leading-tight mb-5"
+            style={{ color: 'var(--text-heading)', fontFamily: 'Space Grotesk, sans-serif' }}>
             {project.title}
         </h3>
 
-        {/* Case study fields */}
         <div className="space-y-4 flex-1 mb-5">
             {[
-                { label: 'Problem', text: project.problem, highlight: false },
-                { label: 'Approach', text: project.approach, highlight: false },
-                { label: 'Outcome', text: project.result, highlight: true },
-            ].map(({ label, text, highlight }) => (
+                { label: 'Problem',  text: project.problem,  accent: false },
+                { label: 'Approach', text: project.approach, accent: false },
+                { label: 'Outcome',  text: project.result,   accent: true  },
+            ].map(({ label, text, accent }) => (
                 <div key={label}>
-                    <p className="text-[10px] font-semibold uppercase tracking-widest text-[var(--text-muted)] mb-1">{label}</p>
-                    <p className={`text-sm leading-relaxed ${highlight ? 'text-[var(--accent-color)] font-medium' : 'text-[var(--text-primary)]'}`}>
+                    <p className="text-[10px] font-semibold uppercase tracking-widest mb-1"
+                        style={{ color: 'var(--text-muted)' }}>{label}</p>
+                    <p className="text-sm leading-relaxed"
+                        style={{ color: accent ? 'var(--accent-color)' : 'var(--text-primary)', fontWeight: accent ? 500 : 400 }}>
                         {text}
                     </p>
                 </div>
             ))}
         </div>
 
-        {/* Stack chips */}
         <div className="flex flex-wrap gap-1.5 mt-auto">
-            {project.stack.map((tech) => (
-                <span key={tech} className="px-2 py-0.5 rounded text-[11px] font-medium bg-[var(--bg-primary)] border border-[var(--text-muted)]/10 text-[var(--text-muted)]">
+            {project.stack.map(tech => (
+                <span key={tech} className="px-2 py-0.5 rounded text-[11px] font-medium"
+                    style={{
+                        background: 'var(--bg-primary)',
+                        border: '1px solid color-mix(in srgb, var(--text-muted) 12%, transparent)',
+                        color: 'var(--text-muted)',
+                    }}>
                     {tech}
                 </span>
             ))}
@@ -101,41 +111,65 @@ const ProjectCard = ({ project, index, total }) => (
     </div>
 );
 
-/* ── Mobile: simple slide view ── */
+/* ── Scroll progress indicator ── */
+const ScrollHint = ({ current, total }) => (
+    <div className="flex flex-col items-center gap-2 my-4">
+        <div className="flex gap-1.5">
+            {Array.from({ length: total }).map((_, i) => (
+                <motion.div
+                    key={i}
+                    animate={{ width: i === current ? 20 : 6, opacity: i === current ? 1 : 0.3 }}
+                    transition={{ duration: 0.3 }}
+                    className="h-1.5 rounded-full"
+                    style={{ background: 'var(--accent-color)' }}
+                />
+            ))}
+        </div>
+        {current < total - 1 && (
+            <p className="text-[10px] tracking-widest uppercase" style={{ color: 'var(--text-muted)' }}>
+                scroll to advance
+            </p>
+        )}
+        {current === total - 1 && (
+            <motion.p
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                className="text-[10px] tracking-widest uppercase"
+                style={{ color: 'var(--accent-color)' }}
+            >
+                scroll to continue ↓
+            </motion.p>
+        )}
+    </div>
+);
+
+/* ── Mobile ── */
 const MobileCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
     const bind = useDrag(
         ({ swipe: [swipeX] }) => { if (swipeX !== 0) paginate(-swipeX); },
         { axis: 'x', filterTaps: true }
     );
-
     return (
         <div className="w-full">
-            <div className="relative overflow-hidden rounded-2xl bg-[var(--card-bg)] border border-[var(--text-muted)]/10 min-h-[480px]" {...bind()}>
+            <div className="relative overflow-hidden rounded-2xl min-h-[480px]"
+                style={{ background: 'var(--card-bg)', border: '1px solid color-mix(in srgb, var(--text-muted) 10%, transparent)' }}
+                {...bind()}>
                 <AnimatePresence mode="wait">
-                    <MotionDiv
-                        key={activeIndex}
-                        initial={{ opacity: 0, x: 30 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -30 }}
+                    <MotionDiv key={activeIndex}
+                        initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }}
                         transition={{ duration: 0.3, ease: 'easeInOut' }}
-                        className="absolute inset-0"
-                    >
+                        className="absolute inset-0">
                         <ProjectCard project={projects[activeIndex]} index={activeIndex} total={projects.length} />
                     </MotionDiv>
                 </AnimatePresence>
             </div>
-
-            {/* Mobile nav */}
             <div className="flex items-center justify-between mt-4 px-1">
-                <button onClick={() => paginate(-1)} className="p-2.5 rounded-xl bg-[var(--card-bg)] border border-[var(--text-muted)]/10 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer" aria-label="Previous">
+                <button onClick={() => paginate(-1)} className="p-2.5 rounded-xl cursor-pointer"
+                    style={{ background: 'var(--card-bg)', border: '1px solid color-mix(in srgb, var(--text-muted) 10%, transparent)', color: 'var(--text-muted)' }}>
                     <ChevronLeft size={18} />
                 </button>
-                <div className="flex gap-2">
-                    {projects.map((_, i) => (
-                        <button key={i} onClick={() => setActiveIndex(i)} className={`rounded-full transition-all duration-300 cursor-pointer ${i === activeIndex ? 'w-5 h-2 bg-[var(--accent-color)]' : 'w-2 h-2 bg-[var(--text-muted)]/25'}`} aria-label={`Project ${i + 1}`} />
-                    ))}
-                </div>
-                <button onClick={() => paginate(1)} className="p-2.5 rounded-xl bg-[var(--card-bg)] border border-[var(--text-muted)]/10 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer" aria-label="Next">
+                <ScrollHint current={activeIndex} total={projects.length} />
+                <button onClick={() => paginate(1)} className="p-2.5 rounded-xl cursor-pointer"
+                    style={{ background: 'var(--card-bg)', border: '1px solid color-mix(in srgb, var(--text-muted) 10%, transparent)', color: 'var(--text-muted)' }}>
                     <ChevronRight size={18} />
                 </button>
             </div>
@@ -143,32 +177,43 @@ const MobileCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
     );
 };
 
-/* ── Desktop: 3D carousel ── */
+/* ── Desktop 3D ── */
 const DesktopCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
     const total = projects.length;
-
     const getStyle = (index) => {
         const pos = (index - activeIndex + total) % total;
-        if (pos === 0) return { x: 0, scale: 1.02, opacity: 1, zIndex: 10, rotateY: 0 };
-        if (pos === total - 1) return { x: -380, scale: 0.86, opacity: 0.55, zIndex: 5, rotateY: 10 };
-        if (pos === 1) return { x: 380, scale: 0.86, opacity: 0.55, zIndex: 5, rotateY: -10 };
-        return { x: pos > total / 2 ? -720 : 720, scale: 0.7, opacity: 0, zIndex: 0, rotateY: 0 };
+        if (pos === 0)        return { x: 0,    scale: 1.02, opacity: 1,    zIndex: 10, rotateY: 0   };
+        if (pos === total-1)  return { x: -390, scale: 0.86, opacity: 0.5,  zIndex: 5,  rotateY: 10  };
+        if (pos === 1)        return { x: 390,  scale: 0.86, opacity: 0.5,  zIndex: 5,  rotateY: -10 };
+        return { x: pos > total/2 ? -740 : 740, scale: 0.7, opacity: 0, zIndex: 0, rotateY: 0 };
     };
 
     return (
         <div className="w-full">
             <div className="relative h-[480px] w-full flex items-center justify-center" style={{ perspective: '2000px' }}>
                 {projects.map((project, index) => {
-                    const style = getStyle(index);
+                    const s = getStyle(index);
                     const isActive = (index - activeIndex + total) % total === 0;
                     return (
-                        <MotionDiv
-                            key={index}
-                            className={`absolute w-[500px] bg-[var(--card-bg)] rounded-2xl border cursor-grab active:cursor-grabbing overflow-hidden ${isActive ? 'border-[var(--accent-color)]/20 shadow-[0_8px_32px_rgba(99,102,241,0.08)]' : 'border-[var(--text-muted)]/8'}`}
-                            style={{ transformStyle: 'preserve-3d', left: '50%', top: '50%', marginLeft: '-250px', marginTop: '-240px', height: '480px' }}
-                            animate={{ x: style.x, scale: style.scale, opacity: style.opacity, rotateY: style.rotateY }}
-                            transition={{ x: { type: 'spring', stiffness: 35, damping: 22 }, scale: { type: 'spring', stiffness: 60, damping: 20 }, opacity: { duration: 0.5 }, rotateY: { type: 'spring', stiffness: 50, damping: 22 } }}
-                            style={{ zIndex: style.zIndex, transformStyle: 'preserve-3d', left: '50%', top: '50%', marginLeft: '-250px', marginTop: '-240px', height: '480px' }}
+                        <MotionDiv key={index}
+                            className="absolute w-[500px] rounded-2xl overflow-hidden"
+                            style={{
+                                transformStyle: 'preserve-3d', left: '50%', top: '50%',
+                                marginLeft: '-250px', marginTop: '-240px', height: '480px',
+                                zIndex: s.zIndex,
+                                background: 'var(--card-bg)',
+                                border: isActive
+                                    ? '1px solid color-mix(in srgb, var(--accent-color) 25%, transparent)'
+                                    : '1px solid color-mix(in srgb, var(--text-muted) 8%, transparent)',
+                                boxShadow: isActive ? '0 8px 40px color-mix(in srgb, var(--accent-color) 8%, transparent)' : 'none',
+                            }}
+                            animate={{ x: s.x, scale: s.scale, opacity: s.opacity, rotateY: s.rotateY }}
+                            transition={{
+                                x:       { type: 'spring', stiffness: 35, damping: 22 },
+                                scale:   { type: 'spring', stiffness: 60, damping: 20 },
+                                opacity: { duration: 0.5 },
+                                rotateY: { type: 'spring', stiffness: 50, damping: 22 },
+                            }}
                             onClick={() => !isActive && setActiveIndex(index)}
                         >
                             <ProjectCard project={project} index={index} total={total} />
@@ -177,68 +222,117 @@ const DesktopCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
                 })}
             </div>
 
-            {/* Desktop nav */}
-            <div className="flex items-center justify-center gap-6 mt-6">
-                <button onClick={() => paginate(-1)} className="p-2.5 rounded-xl bg-[var(--card-bg)] border border-[var(--text-muted)]/10 text-[var(--text-muted)] hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]/30 transition-all duration-200 group cursor-pointer" aria-label="Previous">
-                    <ChevronLeft size={18} className="group-hover:-translate-x-0.5 transition-transform" />
+            <div className="flex items-center justify-center gap-6 mt-4">
+                <button onClick={() => paginate(-1)}
+                    className="p-2.5 rounded-xl cursor-pointer group transition-all duration-200"
+                    style={{ background: 'var(--card-bg)', border: '1px solid color-mix(in srgb, var(--text-muted) 10%, transparent)', color: 'var(--text-muted)' }}>
+                    <ChevronLeft size={18} />
                 </button>
-                <div className="flex gap-2">
-                    {projects.map((_, i) => (
-                        <button key={i} onClick={() => setActiveIndex(i)} className={`rounded-full transition-all duration-300 cursor-pointer ${i === activeIndex ? 'w-6 h-2 bg-[var(--accent-color)]' : 'w-2 h-2 bg-[var(--text-muted)]/25 hover:bg-[var(--text-muted)]/50'}`} aria-label={`Project ${i + 1}`} />
-                    ))}
-                </div>
-                <button onClick={() => paginate(1)} className="p-2.5 rounded-xl bg-[var(--card-bg)] border border-[var(--text-muted)]/10 text-[var(--text-muted)] hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]/30 transition-all duration-200 group cursor-pointer" aria-label="Next">
-                    <ChevronRight size={18} className="group-hover:translate-x-0.5 transition-transform" />
+                <ScrollHint current={activeIndex} total={projects.length} />
+                <button onClick={() => paginate(1)}
+                    className="p-2.5 rounded-xl cursor-pointer group transition-all duration-200"
+                    style={{ background: 'var(--card-bg)', border: '1px solid color-mix(in srgb, var(--text-muted) 10%, transparent)', color: 'var(--text-muted)' }}>
+                    <ChevronRight size={18} />
                 </button>
             </div>
         </div>
     );
 };
 
-/* ── Main export ── */
+/* ── Main ── */
 const ProjectsCarousel = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const total = projects.length;
+    const sectionRef = useRef(null);
+    const activeRef  = useRef(activeIndex);
+    activeRef.current = activeIndex;
 
-    const paginate = (dir) => setActiveIndex((prev) => (prev + dir + total) % total);
+    const paginate = useCallback((dir) => {
+        setActiveIndex(prev => (prev + dir + total) % total);
+    }, [total]);
+
+    const paginateRef = useRef(paginate);
+    paginateRef.current = paginate;
+
+    // Scroll-jacking: intercept wheel when section is in view
+    useEffect(() => {
+        let cooldown = false;
+        const COOLDOWN_MS = 650;
+
+        const onWheel = (e) => {
+            const section = sectionRef.current;
+            if (!section) return;
+
+            const rect = section.getBoundingClientRect();
+            const centreVisible = rect.top <= window.innerHeight * 0.5 && rect.bottom >= window.innerHeight * 0.5;
+            if (!centreVisible) return;
+
+            if (e.deltaY > 0) {
+                // Scrolling down — advance if not at last
+                if (activeRef.current < total - 1) {
+                    e.preventDefault();
+                    if (cooldown) return;
+                    cooldown = true;
+                    setTimeout(() => { cooldown = false; }, COOLDOWN_MS);
+                    // Pause lenis briefly
+                    window._lenis?.stop();
+                    paginateRef.current(1);
+                    setTimeout(() => window._lenis?.start(), COOLDOWN_MS);
+                }
+            } else if (e.deltaY < 0) {
+                // Scrolling up — go back if not at first
+                if (activeRef.current > 0) {
+                    e.preventDefault();
+                    if (cooldown) return;
+                    cooldown = true;
+                    setTimeout(() => { cooldown = false; }, COOLDOWN_MS);
+                    window._lenis?.stop();
+                    paginateRef.current(-1);
+                    setTimeout(() => window._lenis?.start(), COOLDOWN_MS);
+                }
+            }
+        };
+
+        window.addEventListener('wheel', onWheel, { passive: false });
+        return () => window.removeEventListener('wheel', onWheel);
+    }, [total]);
 
     return (
-        <section id="projects" className="relative w-full bg-[var(--bg-primary)] py-16 transition-colors duration-400 overflow-hidden">
-            <div className="max-w-7xl mx-auto px-4 md:px-6 flex flex-col items-center">
-                <RevealHeader />
+        <section ref={sectionRef} id="projects"
+            className="relative w-full py-16 transition-colors duration-400 overflow-hidden"
+            style={{ backgroundColor: 'var(--bg-primary)' }}>
 
-                {/* Mobile view */}
+            <div className="max-w-7xl mx-auto px-4 md:px-6 flex flex-col items-center">
+                <RevealOnScroll>
+                    <div className="text-center mb-10">
+                        <h2 className="text-[1.8rem] font-semibold mb-2"
+                            style={{ color: 'var(--text-heading)', fontFamily: 'Space Grotesk, sans-serif' }}>
+                            Projects
+                        </h2>
+                        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+                            {projects.length} case studies — scroll to navigate
+                        </p>
+                        <div className="w-12 h-0.5 mx-auto mt-4 rounded-full opacity-60"
+                            style={{ background: 'var(--accent-color)' }} />
+                    </div>
+                </RevealOnScroll>
+
                 <div className="w-full block md:hidden">
                     <MobileCarousel activeIndex={activeIndex} setActiveIndex={setActiveIndex} paginate={paginate} />
                 </div>
-
-                {/* Desktop view */}
                 <div className="w-full hidden md:block">
                     <DesktopCarousel activeIndex={activeIndex} setActiveIndex={setActiveIndex} paginate={paginate} />
                 </div>
 
-                {/* GitHub CTA */}
-                <a href="https://github.com/neric-joel" target="_blank" rel="noopener noreferrer" className="mt-8 flex items-center gap-1.5 text-sm text-[var(--text-muted)] hover:text-[var(--accent-color)] transition-colors group cursor-pointer">
-                    <ExternalLink size={13} className="group-hover:translate-x-0.5 transition-transform" />
+                <a href="https://github.com/neric-joel" target="_blank" rel="noopener noreferrer"
+                    className="mt-6 flex items-center gap-1.5 text-sm transition-colors group cursor-pointer"
+                    style={{ color: 'var(--text-muted)' }}>
+                    <ExternalLink size={13} />
                     View all on GitHub
                 </a>
             </div>
         </section>
     );
 };
-
-const RevealHeader = () => (
-    <MotionDiv
-        initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
-        whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
-        className="text-center mb-10"
-    >
-        <h2 className="text-[1.8rem] font-semibold text-[var(--text-heading)] mb-2">Projects</h2>
-        <p className="text-sm text-[var(--text-muted)]">Swipe or use arrows · {projects.length} projects</p>
-        <div className="w-12 h-0.5 bg-[var(--accent-color)] mx-auto mt-4 rounded-full opacity-60" />
-    </MotionDiv>
-);
 
 export default ProjectsCarousel;

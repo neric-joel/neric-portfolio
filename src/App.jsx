@@ -40,13 +40,14 @@ function App() {
       smoothTouch: false,
       touchMultiplier: 2,
     });
+    window._lenis = lenis;
 
     function raf(time) {
       lenis.raf(time);
       requestAnimationFrame(raf);
     }
     requestAnimationFrame(raf);
-    return () => lenis.destroy();
+    return () => { lenis.destroy(); window._lenis = null; };
   }, []);
 
   return (

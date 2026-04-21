@@ -3,7 +3,6 @@ import { motion, animate } from 'framer-motion';
 import { Github, Linkedin, Mail, ArrowDown } from 'lucide-react';
 import profilePic from '../assets/profile.png';
 import { Meteors } from './ui/Meteors';
-import { WordRotate } from './ui/WordRotate';
 import { Spotlight } from './ui/Spotlight';
 
 const MotionDiv = motion.div;
@@ -59,8 +58,6 @@ const stats = [
     { label: 'Grad',        value: "'26" },
 ];
 
-const roles = ['Software Engineer', 'AI/ML Engineer', 'Research Engineer', 'Full-Stack Builder'];
-
 const socialLinks = [
     { href: 'https://github.com/neric-joel',      label: 'GitHub',   Icon: Github   },
     { href: 'https://linkedin.com/in/neric-joel', label: 'LinkedIn', Icon: Linkedin },
@@ -78,8 +75,15 @@ const Hero = () => {
         >
             <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="var(--accent-color)" />
 
+            {/* Subtle dot grid */}
+            <div className="absolute inset-0 pointer-events-none" style={{
+                backgroundImage: 'radial-gradient(circle, color-mix(in srgb, var(--text-muted) 18%, transparent) 1px, transparent 1px)',
+                backgroundSize: '30px 30px',
+                maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)',
+            }} />
+
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <Meteors number={16} />
+                <Meteors number={12} />
             </div>
 
             {/* Radial glows */}
@@ -174,31 +178,23 @@ const Hero = () => {
                         </MotionH1>
                     </MotionDiv>
 
-                    {/* Rotating role */}
-                    <MotionDiv variants={stagger.item} className="mb-7 h-9 flex items-center gap-3">
-                        <WordRotate
-                            words={roles}
-                            duration={2800}
+                    {/* Role — static */}
+                    <MotionDiv variants={stagger.item} className="mb-7 flex items-center gap-3">
+                        <span
                             className="text-lg md:text-xl font-semibold"
                             style={{ color: 'var(--accent-color)', fontFamily: 'Space Grotesk, sans-serif' }}
-                        />
+                        >
+                            AI / ML Engineer
+                        </span>
                         <span className="text-sm md:text-base" style={{ color: 'var(--text-muted)' }}>
                             · M.S. CS @ ASU
                         </span>
                     </MotionDiv>
 
-                    {/* Bio — specific, no slop */}
-                    <MotionDiv variants={stagger.item} className="space-y-2.5 text-base md:text-[1.05rem] leading-relaxed max-w-2xl mb-9">
-                        <p style={{ color: 'var(--text-primary)' }}>
-                            GPA 3.89. Two IEEE papers published. I've shipped{' '}
-                            <span style={{ color: 'var(--accent-color)', fontWeight: 500 }}>satellite image segmentation</span>{' '}
-                            at 91% precision, a solar PV emulator with 15% efficiency gains, and an AI resume analyzer
-                            that cut review time by 70%.
-                        </p>
-                        <p style={{ color: 'var(--text-muted)' }}>
-                            I like problems at the edge of ML and real systems — hardware, research, production software.
-                            Not looking for "rockstar engineers" — looking for hard problems.
-                        </p>
+                    {/* Bio */}
+                    <MotionDiv variants={stagger.item} className="text-base md:text-[1.02rem] leading-relaxed max-w-xl mb-9" style={{ color: 'var(--text-muted)' }}>
+                        GPA 3.89 · 2 IEEE papers · targeting Summer 2026.{' '}
+                        I build ML systems that ship — computer vision, NLP pipelines, and adaptive hardware control.
                     </MotionDiv>
 
                     {/* Stats */}

@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion, animate } from 'framer-motion';
-import { Github, Linkedin, Mail, ArrowDown, Volume2 } from 'lucide-react';
+import { Github, Linkedin, Mail, ArrowDown } from 'lucide-react';
 import profilePic from '../assets/profile.png';
 import { Meteors } from './ui/Meteors';
 import { WordRotate } from './ui/WordRotate';
@@ -67,19 +67,8 @@ const socialLinks = [
     { href: 'mailto:naruljoe@asu.edu',            label: 'Email',    Icon: Mail     },
 ];
 
-// Pronounce name via Web Speech API
-const usePronounce = () => useCallback(() => {
-    if (!window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance('Neric Joel');
-    u.rate = 0.88;
-    u.pitch = 1;
-    window.speechSynthesis.speak(u);
-}, []);
-
 const Hero = () => {
-    const scrollTo   = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-    const pronounce  = usePronounce();
+    const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
     return (
         <section
@@ -175,30 +164,14 @@ const Hero = () => {
                         </motion.span>
                     </MotionDiv>
 
-                    {/* Name + pronounce */}
-                    <MotionDiv variants={stagger.item} className="flex items-center gap-3 mb-3">
+                    {/* Name */}
+                    <MotionDiv variants={stagger.item} className="mb-3">
                         <MotionH1
                             className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-shimmer"
                             style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                         >
                             Neric Joel
                         </MotionH1>
-                        <motion.button
-                            onClick={pronounce}
-                            title="Hear pronunciation"
-                            aria-label="Pronounce name"
-                            className="flex items-center justify-center w-8 h-8 rounded-full cursor-pointer shrink-0"
-                            style={{
-                                color: 'var(--text-muted)',
-                                border: '1px solid color-mix(in srgb, var(--text-muted) 18%, transparent)',
-                                background: 'transparent',
-                                marginTop: '6px',
-                            }}
-                            whileHover={{ scale: 1.15, color: 'var(--accent-color)', borderColor: 'var(--accent-color)' }}
-                            whileTap={{ scale: 0.9 }}
-                        >
-                            <Volume2 size={14} />
-                        </motion.button>
                     </MotionDiv>
 
                     {/* Rotating role */}

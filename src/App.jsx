@@ -14,6 +14,7 @@ import ChatMail from './components/ChatMail';
 import TryMe from './components/TryMe';
 import IntroScreen from './components/IntroScreen';
 import LofiPlayer from './components/ui/LofiPlayer';
+import CursorTrail from './components/ui/CursorTrail';
 
 function App() {
   const [showResume, setShowResume] = useState(false);
@@ -53,6 +54,9 @@ function App() {
       className="min-h-screen transition-colors duration-700"
       style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}
     >
+      {/* Cursor trail — hidden on touch devices */}
+      <CursorTrail />
+
       {/* Intro overlay — only shown once per session */}
       <IntroScreen visible={introVisible} onComplete={handleIntroComplete} />
 

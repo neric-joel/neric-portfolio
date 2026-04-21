@@ -35,7 +35,7 @@ const experiences = [
 ];
 
 const Experience = () => (
-    <section id="experience" className="py-24 relative transition-colors duration-400" style={{ backgroundColor: 'var(--bg-primary)' }}>
+    <section id="experience" className="py-16 relative transition-colors duration-400" style={{ backgroundColor: 'var(--bg-primary)' }}>
         <div className="container mx-auto px-6 md:px-20">
             <RevealOnScroll>
                 <h2

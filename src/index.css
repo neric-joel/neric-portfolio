@@ -206,11 +206,14 @@ body {
   @apply text-[var(--text-primary)] antialiased overflow-x-hidden;
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-primary);
-}
-
-/* Hide system cursor on pointer devices; canvas trail replaces it */
-@media (hover: hover) and (pointer: fine) {
-  *, *::before, *::after { cursor: none !important; }
+  /* Global dot-grid background across all sections */
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--text-muted) 9%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 28px 28px;
+  background-attachment: fixed;
 }
 
 h1, h2, h3, h4, h5, h6 {

@@ -41,7 +41,12 @@ const Sidebar = ({ toggleResume, showResume }) => {
             <nav
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
-                className={`fixed left-4 top-1/2 -translate-y-1/2 z-[60] hidden md:flex flex-col gap-2 p-2 rounded-2xl bg-[var(--card-bg)]/80 backdrop-blur-2xl border border-white/10 transition-all duration-400 overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.4)] ${isHovered ? 'w-44' : 'w-14'}`}
+                className={`fixed left-4 top-1/2 -translate-y-1/2 z-[60] hidden md:flex flex-col gap-2 p-2 rounded-2xl backdrop-blur-2xl border transition-all duration-400 overflow-hidden ${isHovered ? 'w-44' : 'w-14'}`}
+            style={{
+                background: 'rgba(4,4,12,0.72)',
+                borderColor: 'rgba(255,255,255,0.08)',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.35)',
+            }}
             >
                 {navItems.map((item) => (
                     <button

@@ -27,7 +27,7 @@ const cards = [
 ];
 
 const About = () => (
-    <section id="about" className="py-24 relative" style={{ backgroundColor: 'var(--bg-primary)' }}>
+    <section id="about" className="py-16 relative" style={{ backgroundColor: 'var(--bg-primary)' }}>
         <div className="container mx-auto px-6">
             <RevealOnScroll>
                 <h2

@@ -70,19 +70,14 @@ const CursorTrail = () => {
                 ctx.fill();
             }
 
-            // Lead dot
-            const lead = hovering ? 18 : 7;
-            ctx.beginPath();
-            ctx.arc(pts[0].x, pts[0].y, lead, 0, Math.PI * 2);
+            // Hover ring only (no opaque dot — system cursor stays visible)
             if (hovering) {
-                ctx.strokeStyle = `rgba(${r},${g},${b},0.85)`;
+                ctx.beginPath();
+                ctx.arc(pts[0].x, pts[0].y, 18, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(${r},${g},${b},0.7)`;
                 ctx.lineWidth = 1.5;
                 ctx.stroke();
-                ctx.fillStyle = `rgba(${r},${g},${b},0.12)`;
-            } else {
-                ctx.fillStyle = `rgba(${r},${g},${b},0.85)`;
             }
-            ctx.fill();
 
             raf = requestAnimationFrame(draw);
         };

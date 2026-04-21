@@ -201,11 +201,12 @@ const DesktopCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
                                 transformStyle: 'preserve-3d', left: '50%', top: '50%',
                                 marginLeft: '-250px', marginTop: '-240px', height: '480px',
                                 zIndex: s.zIndex,
-                                background: 'var(--card-bg)',
+                                background: isActive ? 'var(--bg-secondary, #0d0d1a)' : 'var(--card-bg)',
+                                backdropFilter: 'blur(20px)',
                                 border: isActive
-                                    ? '1px solid color-mix(in srgb, var(--accent-color) 25%, transparent)'
+                                    ? '1px solid color-mix(in srgb, var(--accent-color) 28%, transparent)'
                                     : '1px solid color-mix(in srgb, var(--text-muted) 8%, transparent)',
-                                boxShadow: isActive ? '0 8px 40px color-mix(in srgb, var(--accent-color) 8%, transparent)' : 'none',
+                                boxShadow: isActive ? '0 8px 40px color-mix(in srgb, var(--accent-color) 10%, transparent)' : 'none',
                             }}
                             animate={{ x: s.x, scale: s.scale, opacity: s.opacity, rotateY: s.rotateY }}
                             transition={{

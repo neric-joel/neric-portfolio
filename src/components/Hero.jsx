@@ -75,11 +75,9 @@ const Hero = () => {
         >
             <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="var(--accent-color)" />
 
-            {/* Subtle dot grid */}
+            {/* Radial fade to darken grid edges in hero */}
             <div className="absolute inset-0 pointer-events-none" style={{
-                backgroundImage: 'radial-gradient(circle, color-mix(in srgb, var(--text-muted) 18%, transparent) 1px, transparent 1px)',
-                backgroundSize: '30px 30px',
-                maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)',
+                background: 'radial-gradient(ellipse 80% 70% at 50% 50%, transparent 40%, var(--bg-primary) 100%)',
             }} />
 
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -151,21 +149,28 @@ const Hero = () => {
 
                     {/* Status badge */}
                     <MotionDiv variants={stagger.item} className="mb-5">
-                        <motion.span
-                            className="inline-flex items-center gap-2 text-xs font-medium tracking-wide px-4 py-1.5 rounded-full"
+                        <motion.div
+                            className="inline-flex items-center gap-2.5 text-xs font-medium px-3.5 py-1.5 rounded-full"
                             style={{
-                                border: '1px solid color-mix(in srgb, var(--accent-color) 28%, transparent)',
-                                color: 'var(--accent-color)',
-                                background: 'color-mix(in srgb, var(--accent-color) 8%, transparent)',
+                                border: '1px solid color-mix(in srgb, var(--accent-color) 22%, transparent)',
+                                background: 'color-mix(in srgb, var(--accent-color) 6%, var(--bg-primary))',
                                 fontFamily: 'Space Grotesk, sans-serif',
-                                letterSpacing: '0.03em',
                             }}
-                            animate={{ boxShadow: ['0 0 0 transparent', '0 0 14px color-mix(in srgb, var(--accent-color) 18%, transparent)', '0 0 0 transparent'] }}
-                            transition={{ duration: 3.5, repeat: Infinity }}
+                            animate={{ boxShadow: ['0 0 0px transparent', '0 0 12px color-mix(in srgb, var(--accent-color) 14%, transparent)', '0 0 0px transparent'] }}
+                            transition={{ duration: 4, repeat: Infinity }}
                         >
-                            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: 'var(--accent-color)' }} />
-                            Open to roles · Summer 2026 · F-1 OPT
-                        </motion.span>
+                            {/* Live green dot */}
+                            <span className="relative flex h-2 w-2 shrink-0">
+                                <span className="absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping"
+                                    style={{ backgroundColor: '#4ade80' }} />
+                                <span className="relative inline-flex rounded-full h-2 w-2"
+                                    style={{ backgroundColor: '#22c55e' }} />
+                            </span>
+                            <span style={{ color: 'var(--text-muted)' }}>
+                                Available · Summer 2026 ·
+                            </span>
+                            <span style={{ color: 'var(--accent-color)', fontWeight: 600 }}>F-1 OPT</span>
+                        </motion.div>
                     </MotionDiv>
 
                     {/* Name */}
@@ -209,40 +214,43 @@ const Hero = () => {
                         {/* Primary */}
                         <motion.button
                             onClick={() => scrollTo('projects')}
-                            className="relative px-6 py-3 rounded-xl text-sm font-semibold text-white overflow-hidden cursor-pointer"
+                            className="relative px-6 py-3 rounded-xl text-sm font-semibold text-white overflow-hidden"
                             style={{
                                 background: 'linear-gradient(135deg, var(--accent-color), var(--accent-secondary))',
                                 fontFamily: 'Space Grotesk, sans-serif',
                             }}
-                            whileHover={{ scale: 1.04, boxShadow: '0 0 28px color-mix(in srgb, var(--accent-color) 40%, transparent)' }}
-                            whileTap={{ scale: 0.97 }}
+                            whileHover={{ scale: 1.05, boxShadow: '0 0 32px color-mix(in srgb, var(--accent-color) 50%, transparent)' }}
+                            whileTap={{ scale: 0.96 }}
                         >
+                            {/* shimmer sweep */}
                             <motion.span
-                                className="absolute inset-0 rounded-xl"
-                                style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent)' }}
+                                className="absolute inset-0 rounded-xl pointer-events-none"
+                                style={{ background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.18), transparent 60%)' }}
                                 initial={{ x: '-100%' }}
-                                whileHover={{ x: '100%' }}
-                                transition={{ duration: 0.45 }}
+                                whileHover={{ x: '160%' }}
+                                transition={{ duration: 0.5, ease: 'easeInOut' }}
                             />
-                            <span className="relative z-10">View Projects</span>
+                            <span className="relative z-10 flex items-center gap-2">
+                                View Projects
+                                <motion.span
+                                    animate={{ x: [0, 3, 0] }}
+                                    transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
+                                >→</motion.span>
+                            </span>
                         </motion.button>
 
-                        {/* Secondary — white border, always visible */}
+                        {/* Secondary */}
                         <motion.button
                             onClick={() => scrollTo('contact')}
-                            className="px-6 py-3 rounded-xl text-sm font-semibold cursor-pointer"
+                            className="relative px-6 py-3 rounded-xl text-sm font-semibold overflow-hidden"
                             style={{
                                 color: 'var(--text-heading)',
-                                border: '1px solid color-mix(in srgb, var(--text-heading) 28%, transparent)',
+                                border: '1px solid color-mix(in srgb, var(--text-heading) 22%, transparent)',
                                 background: 'transparent',
                                 fontFamily: 'Space Grotesk, sans-serif',
                             }}
-                            whileHover={{
-                                scale: 1.04,
-                                borderColor: 'var(--accent-color)',
-                                color: 'var(--accent-color)',
-                            }}
-                            whileTap={{ scale: 0.97 }}
+                            whileHover={{ scale: 1.05, borderColor: 'var(--accent-color)', color: 'var(--accent-color)' }}
+                            whileTap={{ scale: 0.96 }}
                         >
                             Get in Touch
                         </motion.button>

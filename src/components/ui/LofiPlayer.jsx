@@ -26,9 +26,9 @@ function fillVinylCrackle(data, rate) {
 }
 
 const TRACKS = [
-    { title: 'late night study', key: 'Dm7',  chord: [146.83, 174.61, 220.00, 261.63] },
-    { title: 'coffee & code',    key: 'Fmaj7', chord: [174.61, 220.00, 261.63, 329.63] },
-    { title: 'rain on glass',    key: 'Am7',   chord: [110.00, 130.81, 164.81, 196.00] },
+    { title: 'focus mode',    key: 'Dm7',   chord: [146.83, 174.61, 220.00, 261.63] },
+    { title: 'deep work',     key: 'Fmaj7', chord: [174.61, 220.00, 261.63, 329.63] },
+    { title: 'flow state',    key: 'Am7',   chord: [110.00, 130.81, 164.81, 196.00] },
 ];
 
 const LofiPlayer = () => {
@@ -182,15 +182,15 @@ const LofiPlayer = () => {
             <motion.div
                 className="relative rounded-2xl overflow-hidden"
                 style={{
-                    background: 'rgba(6, 6, 15, 0.88)',
-                    backdropFilter: 'blur(24px)',
+                    background: 'rgba(4, 4, 12, 0.96)',
+                    backdropFilter: 'blur(28px)',
                     border: '1px solid',
                     borderColor: isPlaying
-                        ? 'color-mix(in srgb, var(--accent-color) 40%, transparent)'
-                        : 'color-mix(in srgb, var(--text-muted) 16%, transparent)',
+                        ? 'color-mix(in srgb, var(--accent-color) 45%, transparent)'
+                        : 'rgba(255,255,255,0.12)',
                     boxShadow: isPlaying
-                        ? '0 0 32px color-mix(in srgb, var(--accent-color) 15%, transparent)'
-                        : 'none',
+                        ? '0 0 32px color-mix(in srgb, var(--accent-color) 18%, transparent), 0 4px 24px rgba(0,0,0,0.6)'
+                        : '0 4px 24px rgba(0,0,0,0.5)',
                     transition: 'border-color 0.4s, box-shadow 0.4s',
                 }}
             >
@@ -312,13 +312,20 @@ const LofiPlayer = () => {
                                     </motion.button>
 
                                     {/* Volume */}
-                                    <input
-                                        type="range" min="0" max="1" step="0.05"
-                                        value={volume}
-                                        onChange={handleVolume}
-                                        className="w-12 h-1 cursor-pointer appearance-none rounded-full"
-                                        style={{ accentColor: 'var(--accent-color)' }}
-                                    />
+                                    <div className="flex items-center gap-1 w-14">
+                                        <input
+                                            type="range" min="0" max="1" step="0.05"
+                                            value={volume}
+                                            onChange={handleVolume}
+                                            className="w-full appearance-none rounded-full"
+                                            style={{
+                                                height: '3px',
+                                                accentColor: 'var(--accent-color)',
+                                                background: `linear-gradient(to right, var(--accent-color) ${volume * 100}%, rgba(255,255,255,0.15) ${volume * 100}%)`,
+                                                outline: 'none',
+                                            }}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </motion.div>

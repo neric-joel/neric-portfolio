@@ -65,7 +65,7 @@ const TryMe = () => {
         <button
             onClick={handleClick}
             className="fixed top-8 left-8 z-[100] text-xs font-medium tracking-widest uppercase hover:opacity-60 transition-opacity"
-            style={{ color: 'var(--text-muted)', fontFamily: 'Space Grotesk, sans-serif', cursor: 'none' }}
+            style={{ color: 'var(--text-muted)', fontFamily: 'Space Grotesk, sans-serif' }}
         >
             {messages[idx]}
         </button>

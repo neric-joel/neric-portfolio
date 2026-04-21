@@ -138,7 +138,7 @@ const CategoryCard = ({ cat, index }) => {
 };
 
 const Skills = () => (
-    <section id="skills" className="relative w-full py-24 transition-colors duration-400 overflow-hidden"
+    <section id="skills" className="relative w-full py-16 transition-colors duration-400 overflow-hidden"
         style={{ backgroundColor: 'var(--bg-primary)' }}>
 
         {/* Subtle section bg pattern */}

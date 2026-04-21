@@ -25,7 +25,7 @@ const achievements = [
 ];
 
 const Achievements = () => (
-    <section id="achievements" className="py-16 relative" style={{ backgroundColor: 'var(--bg-primary)' }}>
+    <section id="achievements" className="py-16 relative" >
         <div className="container mx-auto px-6 md:px-20">
             <RevealOnScroll>
                 <h2

@@ -201,12 +201,14 @@ const DesktopCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
                                 transformStyle: 'preserve-3d', left: '50%', top: '50%',
                                 marginLeft: '-250px', marginTop: '-240px', height: '480px',
                                 zIndex: s.zIndex,
-                                background: isActive ? 'var(--bg-secondary, #0d0d1a)' : 'var(--card-bg)',
-                                backdropFilter: 'blur(20px)',
+                                background: 'var(--card-bg)',
+                                backdropFilter: 'blur(24px)',
                                 border: isActive
-                                    ? '1px solid color-mix(in srgb, var(--accent-color) 28%, transparent)'
+                                    ? '1px solid color-mix(in srgb, var(--accent-color) 45%, transparent)'
                                     : '1px solid color-mix(in srgb, var(--text-muted) 8%, transparent)',
-                                boxShadow: isActive ? '0 8px 40px color-mix(in srgb, var(--accent-color) 10%, transparent)' : 'none',
+                                boxShadow: isActive
+                                    ? '0 0 0 1px color-mix(in srgb, var(--accent-color) 12%, transparent), 0 16px 48px color-mix(in srgb, var(--accent-color) 18%, transparent)'
+                                    : 'none',
                             }}
                             animate={{ x: s.x, scale: s.scale, opacity: s.opacity, rotateY: s.rotateY }}
                             transition={{
@@ -301,7 +303,7 @@ const ProjectsCarousel = () => {
     return (
         <section ref={sectionRef} id="projects"
             className="relative w-full py-16 transition-colors duration-400 overflow-hidden"
-            style={{ backgroundColor: 'var(--bg-primary)' }}>
+>
 
             <div className="max-w-7xl mx-auto px-4 md:px-6 flex flex-col items-center">
                 <RevealOnScroll>

@@ -19,7 +19,7 @@ const papers = [
 ];
 
 const Publications = () => (
-    <section id="publications" className="py-16 relative" style={{ backgroundColor: 'var(--bg-primary)' }}>
+    <section id="publications" className="py-16 relative" >
         <div className="container mx-auto px-6 md:px-20">
             <RevealOnScroll>
                 <h2

@@ -53,7 +53,7 @@ function App() {
   return (
     <div
       className="min-h-screen transition-colors duration-700"
-      style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}
+      style={{ color: 'var(--text-primary)' }}
     >
       {/* Cursor trail — hidden on touch devices */}
       <CursorTrail />

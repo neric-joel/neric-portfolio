@@ -71,7 +71,7 @@ const Hero = () => {
         <section
             id="hero"
             className="relative min-h-screen flex items-center overflow-hidden transition-colors duration-500"
-            style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}
+            style={{ color: 'var(--text-primary)' }}
         >
             <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="var(--accent-color)" />
 

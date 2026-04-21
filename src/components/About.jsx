@@ -27,11 +27,11 @@ const cards = [
 ];
 
 const About = () => (
-    <section id="about" className="py-16 relative" style={{ backgroundColor: 'var(--bg-primary)' }}>
+    <section id="about" className="py-16 relative">
         <div className="container mx-auto px-6">
             <RevealOnScroll>
                 <h2
-                    className="text-[2rem] font-bold mb-14 text-center heading-accent inline-block w-full"
+                    className="text-[2rem] font-bold mb-14 text-center"
                     style={{ color: 'var(--text-heading)', fontFamily: 'Space Grotesk, sans-serif' }}
                 >
                     About

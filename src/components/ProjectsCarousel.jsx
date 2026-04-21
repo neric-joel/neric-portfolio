@@ -190,7 +190,7 @@ const DesktopCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
 
     return (
         <div className="w-full">
-            <div className="relative h-[480px] w-full flex items-center justify-center" style={{ perspective: '2000px' }}>
+            <div className="relative h-[520px] w-full flex items-center justify-center" style={{ perspective: '2000px', overflow: 'visible' }}>
                 {projects.map((project, index) => {
                     const s = getStyle(index);
                     const isActive = (index - activeIndex + total) % total === 0;
@@ -302,7 +302,7 @@ const ProjectsCarousel = () => {
 
     return (
         <section ref={sectionRef} id="projects"
-            className="relative w-full py-16 transition-colors duration-400 overflow-hidden"
+            className="relative w-full py-16 transition-colors duration-400"
 >
 
             <div className="max-w-7xl mx-auto px-4 md:px-6 flex flex-col items-center">

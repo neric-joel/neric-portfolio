@@ -6,7 +6,7 @@ const experiences = [
     {
         role: "Research Assistant",
         org: "PV Systems Lab, Amrita University",
-        date: "Jan 2024 – May 2024",
+        date: "Jan 2024 – May 2025",
         details: [
             "Developed a solar PV emulator with AI-based MPPT algorithms to enhance solar cell efficiency.",
             "Modeled PV characteristics using MATLAB and Python for real-time performance prediction.",

@@ -15,6 +15,7 @@ import TryMe from './components/TryMe';
 import IntroScreen from './components/IntroScreen';
 import LofiPlayer from './components/ui/LofiPlayer';
 import CursorTrail from './components/ui/CursorTrail';
+import AnimatedBackground from './components/ui/AnimatedBackground';
 
 function App() {
   const [showResume, setShowResume] = useState(false);
@@ -55,6 +56,8 @@ function App() {
       className="min-h-screen transition-colors duration-700"
       style={{ color: 'var(--text-primary)' }}
     >
+      {/* Animated gradient background — reacts to theme CSS vars */}
+      <AnimatedBackground />
       {/* Cursor trail — hidden on touch devices */}
       <CursorTrail />
 

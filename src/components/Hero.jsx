@@ -55,7 +55,7 @@ const stats = [
     { label: 'IEEE Papers', value: '2'   },
     { label: 'Projects',    value: '6'   },
     { label: 'Exp. Years',  value: '3+'  },
-    { label: 'Grad',        value: "'26" },
+    { label: 'Grad',        value: "'27" },
 ];
 
 const socialLinks = [
@@ -167,9 +167,9 @@ const Hero = () => {
                                     style={{ backgroundColor: '#22c55e' }} />
                             </span>
                             <span style={{ color: 'var(--text-muted)' }}>
-                                Available · Summer 2026 ·
+                                Available for
                             </span>
-                            <span style={{ color: 'var(--accent-color)', fontWeight: 600 }}>F-1 OPT</span>
+                            <span style={{ color: 'var(--accent-color)', fontWeight: 600 }}>Summer 2026</span>
                         </motion.div>
                     </MotionDiv>
 
@@ -210,50 +210,70 @@ const Hero = () => {
                     </MotionDiv>
 
                     {/* CTAs */}
-                    <MotionDiv variants={stagger.item} className="flex flex-wrap gap-3 mb-10">
-                        {/* Primary */}
-                        <motion.button
-                            onClick={() => scrollTo('projects')}
-                            className="relative px-6 py-3 rounded-xl text-sm font-semibold text-white overflow-hidden"
-                            style={{
-                                background: 'linear-gradient(135deg, var(--accent-color), var(--accent-secondary))',
-                                fontFamily: 'Space Grotesk, sans-serif',
-                            }}
-                            whileHover={{ scale: 1.05, boxShadow: '0 0 32px color-mix(in srgb, var(--accent-color) 50%, transparent)' }}
-                            whileTap={{ scale: 0.96 }}
-                        >
-                            {/* shimmer sweep */}
-                            <motion.span
-                                className="absolute inset-0 rounded-xl pointer-events-none"
-                                style={{ background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.18), transparent 60%)' }}
-                                initial={{ x: '-100%' }}
-                                whileHover={{ x: '160%' }}
-                                transition={{ duration: 0.5, ease: 'easeInOut' }}
+                    <MotionDiv variants={stagger.item} className="flex flex-col sm:flex-row flex-wrap gap-3 mb-10 w-full max-w-xs sm:max-w-none">
+                        {/* Primary — spinning border beam + gradient fill */}
+                        <div className="relative p-[1.5px] rounded-xl overflow-hidden">
+                            <motion.div
+                                className="absolute pointer-events-none"
+                                style={{
+                                    inset: '-120%',
+                                    background: 'conic-gradient(from 0deg, transparent 0%, rgba(255,255,255,0.9) 12%, transparent 22%)',
+                                }}
+                                animate={{ rotate: [0, 360] }}
+                                transition={{ duration: 2.2, repeat: Infinity, ease: 'linear' }}
                             />
-                            <span className="relative z-10 flex items-center gap-2">
-                                View Projects
+                            <motion.button
+                                onClick={() => scrollTo('projects')}
+                                className="relative w-full sm:w-auto px-6 py-3 rounded-[10px] text-sm font-semibold text-white overflow-hidden"
+                                style={{
+                                    background: 'linear-gradient(135deg, var(--accent-color), var(--accent-secondary))',
+                                    fontFamily: 'Space Grotesk, sans-serif',
+                                }}
+                                whileHover={{ scale: 1.04, boxShadow: '0 0 36px color-mix(in srgb, var(--accent-color) 55%, transparent)' }}
+                                whileTap={{ scale: 0.96 }}
+                            >
                                 <motion.span
-                                    animate={{ x: [0, 3, 0] }}
-                                    transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
-                                >→</motion.span>
-                            </span>
-                        </motion.button>
+                                    className="absolute inset-0 rounded-[10px] pointer-events-none"
+                                    style={{ background: 'linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.22), transparent 65%)' }}
+                                    initial={{ x: '-100%' }}
+                                    whileHover={{ x: '160%' }}
+                                    transition={{ duration: 0.5, ease: 'easeInOut' }}
+                                />
+                                <span className="relative z-10 flex items-center gap-2">
+                                    View Projects
+                                    <motion.span
+                                        animate={{ x: [0, 4, 0] }}
+                                        transition={{ repeat: Infinity, duration: 1.6, ease: 'easeInOut' }}
+                                    >→</motion.span>
+                                </span>
+                            </motion.button>
+                        </div>
 
-                        {/* Secondary */}
-                        <motion.button
-                            onClick={() => scrollTo('contact')}
-                            className="relative px-6 py-3 rounded-xl text-sm font-semibold overflow-hidden"
-                            style={{
-                                color: 'var(--text-heading)',
-                                border: '1px solid color-mix(in srgb, var(--text-heading) 22%, transparent)',
-                                background: 'transparent',
-                                fontFamily: 'Space Grotesk, sans-serif',
-                            }}
-                            whileHover={{ scale: 1.05, borderColor: 'var(--accent-color)', color: 'var(--accent-color)' }}
-                            whileTap={{ scale: 0.96 }}
-                        >
-                            Get in Touch
-                        </motion.button>
+                        {/* Secondary — rotating accent border */}
+                        <div className="relative p-[1.5px] rounded-xl overflow-hidden">
+                            <motion.div
+                                className="absolute pointer-events-none"
+                                style={{
+                                    inset: '-120%',
+                                    background: 'conic-gradient(from 180deg, transparent 0%, var(--accent-color) 20%, var(--accent-secondary) 32%, transparent 50%)',
+                                }}
+                                animate={{ rotate: [0, 360] }}
+                                transition={{ duration: 3.5, repeat: Infinity, ease: 'linear' }}
+                            />
+                            <motion.button
+                                onClick={() => scrollTo('contact')}
+                                className="relative w-full sm:w-auto px-6 py-3 rounded-[10px] text-sm font-semibold"
+                                style={{
+                                    color: 'var(--text-heading)',
+                                    background: 'var(--bg-primary)',
+                                    fontFamily: 'Space Grotesk, sans-serif',
+                                }}
+                                whileHover={{ color: 'var(--accent-color)', scale: 1.04 }}
+                                whileTap={{ scale: 0.96 }}
+                            >
+                                Get in Touch
+                            </motion.button>
+                        </div>
                     </MotionDiv>
 
                     {/* Social links */}

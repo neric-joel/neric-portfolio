@@ -39,9 +39,14 @@ const CursorTrail = ({ paused = false }) => {
         const observer = new MutationObserver(() => { [r, g, b] = readAccent(); });
         observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] });
 
-        const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+        const resize = () => {
+            canvas.width  = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
         resize();
-        window.addEventListener('resize', resize, { passive: true });
+        // ResizeObserver catches ALL viewport changes; window resize misses some
+        const ro = new ResizeObserver(resize);
+        ro.observe(document.documentElement);
 
         const onMove = (e) => {
             mx = e.clientX;
@@ -165,8 +170,12 @@ const CursorTrail = ({ paused = false }) => {
         raf = requestAnimationFrame(draw);
 
         const onVisibility = () => {
-            if (document.hidden) { cancelAnimationFrame(raf); }
-            else { raf = requestAnimationFrame(draw); }
+            if (document.hidden) {
+                cancelAnimationFrame(raf);
+                raf = null;
+            } else if (!raf) {
+                raf = requestAnimationFrame(draw);
+            }
         };
         document.addEventListener('visibilitychange', onVisibility);
 
@@ -174,7 +183,7 @@ const CursorTrail = ({ paused = false }) => {
             cancelAnimationFrame(raf);
             document.removeEventListener('visibilitychange', onVisibility);
             observer.disconnect();
-            window.removeEventListener('resize', resize);
+            ro.disconnect();
             window.removeEventListener('mousemove', onMove);
             window.removeEventListener('click', onClick);
         };

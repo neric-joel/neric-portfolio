@@ -4,25 +4,36 @@ import { Play, Pause, Music2, ChevronDown, SkipForward } from 'lucide-react';
 
 const NUM_BARS = 8;
 const BASE_HEIGHTS = [6, 12, 18, 22, 16, 20, 14, 8];
+// Pre-computed sample rate for buffer sizing (standard 44.1 kHz)
+const SAMPLE_RATE = 44100;
+const BUF_SIZE    = 2 * SAMPLE_RATE; // 2 seconds
 
-// Pink noise — Paul Kellett's method
-function fillPinkNoise(data) {
+// Pre-compute raw Float32Arrays at module load (idle, off the click hot-path)
+// so buildAudio() only needs a fast memcopy into the AudioBuffer — no blocking loop
+const _noiseData   = new Float32Array(BUF_SIZE);
+const _crackleData = new Float32Array(BUF_SIZE);
+
+function _prefill() {
+    // Pink noise — Paul Kellett's method
     let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < BUF_SIZE; i++) {
         const w = Math.random() * 2 - 1;
         b0=.99886*b0+w*.0555179; b1=.99332*b1+w*.0750759;
         b2=.96900*b2+w*.1538520; b3=.86650*b3+w*.3104856;
         b4=.55000*b4+w*.5329522; b5=-.7616*b5-w*.0168980;
-        data[i] = (b0+b1+b2+b3+b4+b5+b6+w*.5362) * 0.06;
+        _noiseData[i] = (b0+b1+b2+b3+b4+b5+b6+w*.5362) * 0.06;
         b6 = w * 0.115926;
     }
-}
-
-// Vinyl crackle — sparse random clicks
-function fillVinylCrackle(data) {
-    for (let i = 0; i < data.length; i++) {
-        data[i] = Math.random() < 0.0008 ? (Math.random() * 2 - 1) * 0.35 : 0;
+    // Vinyl crackle — sparse random clicks
+    for (let i = 0; i < BUF_SIZE; i++) {
+        _crackleData[i] = Math.random() < 0.0008 ? (Math.random() * 2 - 1) * 0.35 : 0;
     }
+}
+// Schedule off the critical path using idle callback or a timeout
+if (typeof requestIdleCallback !== 'undefined') {
+    requestIdleCallback(_prefill);
+} else {
+    setTimeout(_prefill, 200);
 }
 
 const TRACKS = [
@@ -71,10 +82,9 @@ const LofiPlayer = () => {
         try { teardown(); } catch (_e) { /* ignore */ }
         try {
 
-        // Pink noise (vinyl texture)
-        const bufSize = 2 * ctx.sampleRate;
-        const noiseBuf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
-        fillPinkNoise(noiseBuf.getChannelData(0));
+        // Pink noise (vinyl texture) — use pre-computed data, O(1) copyToChannel
+        const noiseBuf = ctx.createBuffer(1, BUF_SIZE, SAMPLE_RATE);
+        noiseBuf.copyToChannel(_noiseData, 0);
         const noise = ctx.createBufferSource();
         noise.buffer = noiseBuf;
         noise.loop = true;
@@ -84,9 +94,9 @@ const LofiPlayer = () => {
         noise.connect(lpf); lpf.connect(ng); ng.connect(master);
         noise.start();
 
-        // Vinyl crackle
-        const crackBuf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
-        fillVinylCrackle(crackBuf.getChannelData(0), ctx.sampleRate);
+        // Vinyl crackle — use pre-computed data
+        const crackBuf = ctx.createBuffer(1, BUF_SIZE, SAMPLE_RATE);
+        crackBuf.copyToChannel(_crackleData, 0);
         const crackle = ctx.createBufferSource();
         crackle.buffer = crackBuf;
         crackle.loop = true;

@@ -18,9 +18,20 @@ const readAccent = () => {
 const CursorTrail = ({ paused = false }) => {
     const canvasRef  = useRef(null);
     const pausedRef  = useRef(paused);
+    const prevPaused = useRef(paused);
 
-    // Keep pausedRef in sync without restarting the effect
-    useEffect(() => { pausedRef.current = paused; }, [paused]);
+    // Keep pausedRef in sync; when unpausing, signal the draw loop to reset position
+    const resetRef   = useRef(false);
+    useEffect(() => {
+        pausedRef.current = paused;
+        // Transitioning from paused → unpaused: stale mx/my would show cursor
+        // frozen at the position it was in before the iframe captured events.
+        // Signal the draw loop to reset to off-screen until real mousemove fires.
+        if (prevPaused.current && !paused) {
+            resetRef.current = true;
+        }
+        prevPaused.current = paused;
+    }, [paused]);
 
     useEffect(() => {
         if (window.matchMedia('(hover: none)').matches) return;
@@ -77,6 +88,15 @@ const CursorTrail = ({ paused = false }) => {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 raf = requestAnimationFrame(draw);
                 return;
+            }
+
+            // Resume from pause: discard stale cursor position so it doesn't
+            // appear frozen at wherever the mouse was before the iframe opened.
+            if (resetRef.current) {
+                mx = -600; my = -600;
+                hasMoved = false;
+                for (let i = 0; i < TRAIL; i++) { pts[i].x = -600; pts[i].y = -600; }
+                resetRef.current = false;
             }
 
             // Smooth trailing chain

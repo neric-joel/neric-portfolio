@@ -299,8 +299,13 @@ const LofiPlayer = () => {
                                         onClick={toggle}
                                         aria-label={isPlaying ? 'Pause music' : 'Play music'}
                                         aria-pressed={isPlaying}
-                                        className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer shrink-0"
+                                        className="rounded-full flex items-center justify-center cursor-pointer"
                                         style={{
+                                            width: '28px',
+                                            height: '28px',
+                                            minWidth: '28px',
+                                            minHeight: '28px',
+                                            flexShrink: 0,
                                             background: isPlaying
                                                 ? 'linear-gradient(135deg, var(--accent-color), var(--accent-secondary))'
                                                 : 'color-mix(in srgb, var(--accent-color) 14%, transparent)',

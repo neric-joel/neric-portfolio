@@ -3,7 +3,9 @@
 
 @theme {
   --font-sans: 'Inter', sans-serif;
-  --font-display: 'Space Grotesk', sans-serif;
+  --font-ui: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  --font-display: 'Syne', 'Space Grotesk', sans-serif;
+  --font-mono: 'Space Grotesk', sans-serif;
 
   /* ── Keyframes ── */
   @keyframes fade-up {
@@ -116,24 +118,26 @@
   to   { transform: translateX(0); }
 }
 
-/* ── Default theme: premium dark ── */
+/* ── Default theme: graphite ── */
 :root {
-  --bg-primary:        #06060f;
-  --bg-secondary:      #0d0d1a;
-  --text-primary:      #e8eaf0;
-  --text-heading:      #ffffff;
-  --text-muted:        #8b95a9;
-  --accent-color:      #22d3ee;
-  --accent-rgb:        34, 211, 238;
-  --accent-secondary:  #06b6d4;
-  --accent-glow:       rgba(34, 211, 238, 0.15);
-  --card-bg:           rgba(255, 255, 255, 0.03);
-  --card-border:       rgba(255, 255, 255, 0.07);
-  --card-hover-border: rgba(34, 211, 238, 0.35);
+  --bg-primary:        #0B0D10;
+  --bg-secondary:      #13171C;
+  --text-primary:      #F3F5F7;
+  --text-heading:      #FFFFFF;
+  --text-muted:        #A7B0BA;
+  --accent-color:      #9BE564;
+  --accent-rgb:        155, 229, 100;
+  --accent-secondary:  #6DD440;
+  --accent-glow:       rgba(155, 229, 100, 0.14);
+  --card-bg:           #13171C;
+  --card-border:       #232A33;
+  --card-hover-border: rgba(155, 229, 100, 0.35);
   --signature-filter:  grayscale(1) brightness(2) contrast(2);
   --signature-mix-blend: screen;
-  --glass-bg:          rgba(255, 255, 255, 0.04);
-  --glass-border:      rgba(255, 255, 255, 0.08);
+  --glass-bg:          rgba(19, 23, 28, 0.85);
+  --glass-border:      #232A33;
+  --surface:           #13171C;
+  --border:            #232A33;
 }
 
 /* ── Alternate themes ── */
@@ -200,20 +204,12 @@
 }
 
 /* ── Global ── */
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 
 body {
   @apply text-[var(--text-primary)] antialiased overflow-x-hidden;
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-primary);
-  /* Global dot-grid background across all sections */
-  background-image: radial-gradient(
-    circle,
-    color-mix(in srgb, var(--text-muted) 9%, transparent) 1px,
-    transparent 1px
-  );
-  background-size: 28px 28px;
-  background-attachment: fixed;
 }
 
 h1, h2, h3, h4, h5, h6 {

@@ -1,339 +1,373 @@
-import React, { useEffect, useRef } from 'react';
-import { motion, animate } from 'framer-motion';
-import { Github, Linkedin, Mail, ArrowDown } from 'lucide-react';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Github, Linkedin, Mail, ArrowRight, FileText } from 'lucide-react';
 import profilePic from '../assets/profile.png';
-import { Meteors } from './ui/Meteors';
-import { Spotlight } from './ui/Spotlight';
 
-const MotionDiv = motion.div;
-const MotionH1 = motion.h1;
+const DISPLAY = 'Syne, sans-serif';
+const UI      = 'Plus Jakarta Sans, Inter, sans-serif';
 
-const stagger = {
-    container: { hidden: {}, visible: { transition: { staggerChildren: 0.09 } } },
-    item: {
-        hidden:   { opacity: 0, y: 28, filter: 'blur(8px)' },
-        visible:  { opacity: 1, y: 0,  filter: 'blur(0px)',
-            transition: { duration: 0.65, ease: [0.21, 0.47, 0.32, 0.98] } },
-    },
-};
+/* ── Fade-up variant — simple, no blur ── */
+const fadeUp = (delay = 0) => ({
+    initial:    { opacity: 0, y: 14 },
+    animate:    { opacity: 1, y: 0  },
+    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1], delay },
+});
 
-// Animated stat counter
-const Stat = ({ value, label }) => {
-    const ref = useRef(null);
-    const num  = parseFloat(value.replace(/[^0-9.]/g, ''));
-    const sfx  = value.replace(/[0-9.]/g, '');
-
-    useEffect(() => {
-        const el = ref.current;
-        if (!el) return;
-        const ctrl = animate(0, num, {
-            duration: 1.8,
-            ease: [0.16, 1, 0.3, 1],
-            delay: 0.9,
-            onUpdate(v) {
-                el.textContent = (Number.isInteger(num) ? Math.round(v) : v.toFixed(1)) + sfx;
-            },
-        });
-        return () => ctrl.stop();
-    }, [num, sfx]);
-
-    return (
-        <div className="flex flex-col items-start">
-            <span ref={ref} className="text-2xl font-bold tabular-nums"
-                style={{ color: 'var(--accent-color)', fontFamily: 'Space Grotesk, sans-serif' }}>
-                0{sfx}
-            </span>
-            <span className="text-[11px] tracking-widest uppercase mt-0.5"
-                style={{ color: 'var(--text-muted)' }}>
-                {label}
-            </span>
-        </div>
-    );
-};
-
-const stats = [
-    { label: 'IEEE Papers', value: '2'   },
-    { label: 'Projects',    value: '6'   },
-    { label: 'Exp. Years',  value: '3+'  },
-    { label: 'Grad',        value: "'27" },
+/* ── Proof items ── */
+const proof = [
+    { value: '3.89', label: 'GPA'         },
+    { value: '2',    label: 'IEEE Papers'  },
+    { value: 'M.S.', label: 'CS @ ASU'    },
+    { value: "'27",  label: 'Graduating'   },
 ];
 
-const socialLinks = [
+/* ── Social links ── */
+const social = [
     { href: 'https://github.com/neric-joel',      label: 'GitHub',   Icon: Github   },
     { href: 'https://linkedin.com/in/neric-joel', label: 'LinkedIn', Icon: Linkedin },
     { href: 'mailto:naruljoe@asu.edu',            label: 'Email',    Icon: Mail     },
 ];
 
-const Hero = () => {
-    const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+/* ── Featured project ── */
+const featured = {
+    label:    'Featured Work',
+    title:    'Satellite Image Segmentation',
+    desc:     'Multi-scale ResNet-50 + U-Net pipeline for land-use classification from multispectral satellite imagery. Includes Grad-CAM explainability and automated augmentation.',
+    result:   '91% precision on terrain classification',
+    stack:    ['Python', 'TensorFlow', 'OpenCV', 'Grad-CAM'],
+    category: 'Computer Vision',
+};
+
+/* ──────────────────────────────────────────────────── */
+
+const Hero = ({ toggleResume }) => {
+    const scrollTo = (id) =>
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
     return (
         <section
             id="hero"
-            className="relative min-h-screen flex items-center overflow-hidden transition-colors duration-500"
+            className="relative min-h-screen flex items-center"
             style={{ color: 'var(--text-primary)' }}
         >
-            <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="var(--accent-color)" />
-
-            {/* Radial fade to darken grid edges in hero */}
-            <div className="absolute inset-0 pointer-events-none" style={{
-                background: 'radial-gradient(ellipse 80% 70% at 50% 50%, transparent 40%, var(--bg-primary) 100%)',
-            }} />
-
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <Meteors number={12} />
-            </div>
-
-            {/* Radial glows */}
-            <div className="absolute inset-0 pointer-events-none" style={{
-                background: 'radial-gradient(ellipse 70% 55% at 15% 50%, color-mix(in srgb, var(--accent-color) 7%, transparent), transparent)',
-            }} />
-            <div className="absolute inset-0 pointer-events-none" style={{
-                background: 'radial-gradient(ellipse 50% 35% at 85% 15%, color-mix(in srgb, var(--accent-secondary) 5%, transparent), transparent)',
-            }} />
-
-            {/* Floating orbs */}
-            <MotionDiv
-                className="absolute top-1/3 right-[12%] w-72 h-72 rounded-full pointer-events-none"
-                style={{ background: 'radial-gradient(circle, color-mix(in srgb, var(--accent-color) 7%, transparent), transparent 70%)' }}
-                animate={{ y: [0, -22, 0], x: [0, 10, 0] }}
-                transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
-            />
-            <MotionDiv
-                className="absolute bottom-1/4 left-[8%] w-48 h-48 rounded-full pointer-events-none"
-                style={{ background: 'radial-gradient(circle, color-mix(in srgb, var(--accent-secondary) 6%, transparent), transparent 70%)' }}
-                animate={{ y: [0, 16, 0], x: [0, -8, 0] }}
-                transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 2.5 }}
+            {/* Single faint top-center glow — CSS only, no canvas noise */}
+            <div
+                aria-hidden="true"
+                style={{
+                    position: 'absolute', inset: 0, pointerEvents: 'none',
+                    background: 'radial-gradient(ellipse 70% 45% at 50% 0%, rgba(155,229,100,0.06) 0%, transparent 100%)',
+                }}
             />
 
-            <div className="container mx-auto px-6 md:px-12 lg:px-24 relative z-10 flex justify-center py-20">
-                <MotionDiv
-                    variants={stagger.container}
-                    initial="hidden"
-                    animate="visible"
-                    className="max-w-3xl flex flex-col items-start text-left w-full"
-                >
-                    {/* Avatar */}
-                    <MotionDiv variants={stagger.item} className="mb-8">
-                        <motion.div
-                            style={{ width: 'clamp(116px, 14vw, 152px)', height: 'clamp(116px, 14vw, 152px)', position: 'relative' }}
-                            whileHover={{ scale: 1.05 }}
-                            transition={{ type: 'spring', stiffness: 280, damping: 22 }}
-                        >
-                            {/* Spinning gradient ring */}
+            <div className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-10 py-20">
+                {/*
+                  Two-column grid on lg+:
+                  left = 3 cols (name, role, tagline, proof, CTAs, social)
+                  right = 2 cols (featured project card)
+                */}
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 lg:gap-14 items-center">
+
+                    {/* ── LEFT: main content ── */}
+                    <div className="lg:col-span-3 flex flex-col gap-6">
+
+                        {/* Availability badge */}
+                        <motion.div {...fadeUp(0.05)} className="flex items-center gap-2">
+                            <span
+                                className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-widest uppercase px-2.5 py-1 rounded-md"
+                                style={{
+                                    background: 'rgba(155,229,100,0.08)',
+                                    border: '1px solid rgba(155,229,100,0.22)',
+                                    color: 'var(--accent-color)',
+                                    fontFamily: UI,
+                                }}
+                            >
+                                <span
+                                    className="inline-block w-1.5 h-1.5 rounded-full animate-pulse"
+                                    style={{ background: 'var(--accent-color)' }}
+                                />
+                                Open to Summer 2026 internships
+                            </span>
+                        </motion.div>
+
+                        {/* Name + photo row */}
+                        <motion.div {...fadeUp(0.1)} className="flex items-center gap-4">
+                            {/* Profile photo — small, clean */}
                             <div
+                                className="shrink-0 rounded-full overflow-hidden"
                                 style={{
-                                    position: 'absolute', inset: 0, borderRadius: '50%',
-                                    background: 'conic-gradient(from 0deg, var(--accent-color), var(--accent-secondary), transparent, var(--accent-color))',
-                                    animation: 'spin-around 5s linear infinite',
-                                    padding: '3px',
+                                    width: 56, height: 56,
+                                    border: '2px solid var(--border)',
                                 }}
-                            />
-                            {/* Glow pulse */}
-                            <motion.div
-                                style={{
-                                    position: 'absolute', inset: 0, borderRadius: '50%',
-                                    background: 'radial-gradient(circle, color-mix(in srgb, var(--accent-color) 22%, transparent), transparent 70%)',
-                                }}
-                                animate={{ opacity: [0.3, 0.75, 0.3], scale: [1, 1.12, 1] }}
-                                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-                            />
-                            <div style={{
-                                position: 'absolute', inset: '3px', borderRadius: '50%',
-                                overflow: 'hidden', backgroundColor: 'var(--bg-primary)',
-                            }}>
-                                <img src={profilePic} alt="Neric Joel" width={320} height={320} fetchpriority="high" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            >
+                                <img
+                                    src={profilePic}
+                                    alt="Neric Joel"
+                                    width={56} height={56}
+                                    fetchPriority="high"
+                                    decoding="sync"
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                />
+                            </div>
+                            <div>
+                                <h1
+                                    className="font-bold leading-none tracking-tight"
+                                    style={{
+                                        fontFamily: DISPLAY,
+                                        fontSize: 'clamp(36px, 5vw, 58px)',
+                                        color: 'var(--text-heading)',
+                                        letterSpacing: '-0.02em',
+                                    }}
+                                >
+                                    Neric Joel
+                                </h1>
+                                <p
+                                    className="mt-0.5 text-sm font-medium"
+                                    style={{ color: 'var(--text-muted)', fontFamily: UI }}
+                                >
+                                    naruljoe@asu.edu
+                                </p>
                             </div>
                         </motion.div>
-                    </MotionDiv>
 
-                    {/* Status badge */}
-                    <MotionDiv variants={stagger.item} className="mb-5">
-                        <motion.div
-                            className="inline-flex items-center gap-2.5 text-xs font-medium px-3.5 py-1.5 rounded-full"
-                            style={{
-                                border: '1px solid color-mix(in srgb, var(--accent-color) 22%, transparent)',
-                                background: 'color-mix(in srgb, var(--accent-color) 6%, var(--bg-primary))',
-                                fontFamily: 'Space Grotesk, sans-serif',
-                            }}
-                            animate={{ boxShadow: ['0 0 0px transparent', '0 0 12px color-mix(in srgb, var(--accent-color) 14%, transparent)', '0 0 0px transparent'] }}
-                            transition={{ duration: 4, repeat: Infinity }}
-                        >
-                            {/* Live green dot */}
-                            <span className="relative flex h-2 w-2 shrink-0">
-                                <span className="absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping"
-                                    style={{ backgroundColor: '#4ade80' }} />
-                                <span className="relative inline-flex rounded-full h-2 w-2"
-                                    style={{ backgroundColor: '#22c55e' }} />
-                            </span>
-                            <span style={{ color: 'var(--text-muted)' }}>
-                                Available for
-                            </span>
-                            <span style={{ color: 'var(--accent-color)', fontWeight: 600 }}>Summer 2026</span>
+                        {/* Role */}
+                        <motion.div {...fadeUp(0.15)}>
+                            <p
+                                className="text-xl md:text-2xl font-semibold"
+                                style={{ color: 'var(--accent-color)', fontFamily: UI }}
+                            >
+                                Computer Vision Engineer
+                            </p>
                         </motion.div>
-                    </MotionDiv>
 
-                    {/* Name */}
-                    <MotionDiv variants={stagger.item} className="mb-3">
-                        <MotionH1
-                            className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-shimmer"
-                            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-                        >
-                            Neric Joel
-                        </MotionH1>
-                    </MotionDiv>
+                        {/* Tagline */}
+                        <motion.div {...fadeUp(0.2)}>
+                            <p
+                                className="text-base md:text-lg leading-relaxed max-w-lg"
+                                style={{ color: 'var(--text-muted)', fontFamily: UI }}
+                            >
+                                I build and deploy ML systems across computer vision, NLP, and signal
+                                processing, from research prototype to production pipeline.
+                            </p>
+                        </motion.div>
 
-                    {/* Role — static */}
-                    <MotionDiv variants={stagger.item} className="mb-7 flex items-center gap-3">
-                        <span
-                            className="text-lg md:text-xl font-semibold"
-                            style={{ color: 'var(--accent-color)', fontFamily: 'Space Grotesk, sans-serif' }}
-                        >
-                            AI / ML Engineer
-                        </span>
-                        <span className="text-sm md:text-base" style={{ color: 'var(--text-muted)' }}>
-                            · M.S. CS @ ASU
-                        </span>
-                    </MotionDiv>
-
-                    {/* Bio */}
-                    <MotionDiv variants={stagger.item} className="text-base md:text-[1.02rem] leading-relaxed max-w-xl mb-9" style={{ color: 'var(--text-muted)' }}>
-                        GPA 3.89 · 2 IEEE papers · targeting Summer 2026.{' '}
-                        I build ML systems that ship — computer vision, NLP pipelines, and adaptive hardware control.
-                    </MotionDiv>
-
-                    {/* Stats */}
-                    <MotionDiv variants={stagger.item} className="flex flex-wrap gap-8 mb-9">
-                        {stats.map(({ label, value }) => (
-                            <Stat key={label} value={value} label={label} />
-                        ))}
-                    </MotionDiv>
-
-                    {/* CTAs */}
-                    <MotionDiv variants={stagger.item} className="flex flex-col sm:flex-row flex-wrap gap-3 mb-10 w-full max-w-xs sm:max-w-none">
-                        {/* Primary — spinning border beam + gradient fill */}
-                        <div className="relative p-[1.5px] rounded-xl overflow-hidden">
-                            <motion.div
-                                className="absolute pointer-events-none"
+                        {/* Proof strip */}
+                        <motion.div {...fadeUp(0.25)}>
+                            <div
+                                className="inline-flex flex-wrap gap-x-6 gap-y-3 px-4 py-3 rounded-lg"
                                 style={{
-                                    inset: '-120%',
-                                    background: 'conic-gradient(from 0deg, transparent 0%, rgba(255,255,255,0.9) 12%, transparent 22%)',
+                                    background: 'var(--surface)',
+                                    border: '1px solid var(--border)',
+                                    fontFamily: UI,
                                 }}
-                                animate={{ rotate: [0, 360] }}
-                                transition={{ duration: 2.2, repeat: Infinity, ease: 'linear' }}
-                            />
+                            >
+                                {proof.map(({ value, label }, i) => (
+                                    <React.Fragment key={label}>
+                                        <div className="flex flex-col items-center min-w-[3rem]">
+                                            <span
+                                                className="text-lg font-bold tabular-nums leading-none"
+                                                style={{ color: 'var(--text-heading)', fontFamily: DISPLAY }}
+                                            >
+                                                {value}
+                                            </span>
+                                            <span
+                                                className="text-[10px] font-medium tracking-wider uppercase mt-0.5"
+                                                style={{ color: 'var(--text-muted)' }}
+                                            >
+                                                {label}
+                                            </span>
+                                        </div>
+                                        {i < proof.length - 1 && (
+                                            <div
+                                                className="self-stretch w-px"
+                                                style={{ background: 'var(--border)' }}
+                                            />
+                                        )}
+                                    </React.Fragment>
+                                ))}
+                            </div>
+                        </motion.div>
+
+                        {/* CTAs */}
+                        <motion.div {...fadeUp(0.3)} className="flex flex-wrap gap-3">
+                            {/* Primary */}
                             <motion.button
                                 onClick={() => scrollTo('projects')}
-                                className="relative w-full sm:w-auto px-6 py-3 rounded-[10px] text-sm font-semibold text-white overflow-hidden"
+                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold cursor-pointer"
                                 style={{
-                                    background: 'linear-gradient(135deg, var(--accent-color), var(--accent-secondary))',
-                                    fontFamily: 'Space Grotesk, sans-serif',
+                                    background: 'var(--accent-color)',
+                                    color: '#0B0D10',
+                                    fontFamily: UI,
+                                    border: 'none',
+                                    outline: 'none',
                                 }}
-                                whileHover={{ scale: 1.04, boxShadow: '0 0 36px color-mix(in srgb, var(--accent-color) 55%, transparent)' }}
-                                whileTap={{ scale: 0.96 }}
+                                whileHover={{ opacity: 0.9 }}
+                                whileTap={{ scale: 0.97 }}
+                                transition={{ duration: 0.12 }}
                             >
-                                <motion.span
-                                    className="absolute inset-0 rounded-[10px] pointer-events-none"
-                                    style={{ background: 'linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.22), transparent 65%)' }}
-                                    initial={{ x: '-100%' }}
-                                    whileHover={{ x: '160%' }}
-                                    transition={{ duration: 0.5, ease: 'easeInOut' }}
-                                />
-                                <span className="relative z-10 flex items-center gap-2">
-                                    View Projects
-                                    <motion.span
-                                        animate={{ x: [0, 4, 0] }}
-                                        transition={{ repeat: Infinity, duration: 1.6, ease: 'easeInOut' }}
-                                    >→</motion.span>
-                                </span>
+                                View Projects
+                                <ArrowRight size={14} />
                             </motion.button>
-                        </div>
 
-                        {/* Secondary — rotating accent border */}
-                        <div className="relative p-[1.5px] rounded-xl overflow-hidden">
-                            <motion.div
-                                className="absolute pointer-events-none"
-                                style={{
-                                    inset: '-120%',
-                                    background: 'conic-gradient(from 180deg, transparent 0%, var(--accent-color) 20%, var(--accent-secondary) 32%, transparent 50%)',
-                                }}
-                                animate={{ rotate: [0, 360] }}
-                                transition={{ duration: 3.5, repeat: Infinity, ease: 'linear' }}
-                            />
+                            {/* Secondary */}
                             <motion.button
-                                onClick={() => scrollTo('contact')}
-                                className="relative w-full sm:w-auto px-6 py-3 rounded-[10px] text-sm font-semibold"
+                                onClick={toggleResume}
+                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold cursor-pointer"
                                 style={{
-                                    color: 'var(--text-heading)',
-                                    background: 'var(--bg-primary)',
-                                    fontFamily: 'Space Grotesk, sans-serif',
+                                    background: 'transparent',
+                                    color: 'var(--text-primary)',
+                                    fontFamily: UI,
+                                    border: '1px solid var(--border)',
+                                    outline: 'none',
                                 }}
-                                whileHover={{ color: 'var(--accent-color)', scale: 1.04 }}
-                                whileTap={{ scale: 0.96 }}
+                                whileHover={{ borderColor: 'rgba(155,229,100,0.5)', color: 'var(--accent-color)' }}
+                                whileTap={{ scale: 0.97 }}
+                                transition={{ duration: 0.12 }}
                             >
-                                Get in Touch
+                                <FileText size={14} />
+                                Resume
+                            </motion.button>
+                        </motion.div>
+
+                        {/* Social links */}
+                        <motion.div {...fadeUp(0.35)} className="flex items-center gap-2">
+                            {social.map(({ href, label, Icon }) => (
+                                <motion.a
+                                    key={label}
+                                    href={href}
+                                    target={href.startsWith('mailto') ? undefined : '_blank'}
+                                    rel="noopener noreferrer"
+                                    aria-label={label}
+                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium cursor-pointer"
+                                    style={{
+                                        color: 'var(--text-muted)',
+                                        background: 'transparent',
+                                        border: '1px solid var(--border)',
+                                        fontFamily: UI,
+                                        textDecoration: 'none',
+                                    }}
+                                    whileHover={{ color: 'var(--text-primary)', borderColor: 'rgba(155,229,100,0.3)' }}
+                                    whileTap={{ scale: 0.96 }}
+                                    transition={{ duration: 0.12 }}
+                                >
+                                    <Icon size={13} />
+                                    {label}
+                                </motion.a>
+                            ))}
+                        </motion.div>
+                    </div>
+
+                    {/* ── RIGHT: featured project card ── */}
+                    <motion.div
+                        className="lg:col-span-2"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
+                    >
+                        <div
+                            className="rounded-xl p-5 flex flex-col gap-4"
+                            style={{
+                                background: 'var(--surface)',
+                                border: '1px solid var(--border)',
+                            }}
+                        >
+                            {/* Card header */}
+                            <div className="flex items-center justify-between">
+                                <span
+                                    className="text-[10px] font-semibold tracking-widest uppercase px-2 py-0.5 rounded"
+                                    style={{
+                                        background: 'rgba(155,229,100,0.08)',
+                                        border: '1px solid rgba(155,229,100,0.18)',
+                                        color: 'var(--accent-color)',
+                                        fontFamily: UI,
+                                    }}
+                                >
+                                    {featured.category}
+                                </span>
+                                <span
+                                    className="text-[10px] font-medium uppercase tracking-widest"
+                                    style={{ color: 'var(--text-muted)', fontFamily: UI }}
+                                >
+                                    Featured
+                                </span>
+                            </div>
+
+                            {/* Title */}
+                            <h2
+                                className="text-base font-semibold leading-snug"
+                                style={{ color: 'var(--text-heading)', fontFamily: DISPLAY }}
+                            >
+                                {featured.title}
+                            </h2>
+
+                            {/* Description */}
+                            <p
+                                className="text-sm leading-relaxed"
+                                style={{ color: 'var(--text-muted)', fontFamily: UI }}
+                            >
+                                {featured.desc}
+                            </p>
+
+                            {/* Result — highlighted */}
+                            <div
+                                className="flex items-start gap-2 px-3 py-2.5 rounded-lg"
+                                style={{
+                                    background: 'rgba(155,229,100,0.06)',
+                                    border: '1px solid rgba(155,229,100,0.15)',
+                                }}
+                            >
+                                <span
+                                    className="mt-0.5 shrink-0 rounded-full"
+                                    style={{ width: 6, height: 6, background: 'var(--accent-color)', marginTop: 6 }}
+                                />
+                                <p
+                                    className="text-sm font-medium"
+                                    style={{ color: 'var(--accent-color)', fontFamily: UI }}
+                                >
+                                    {featured.result}
+                                </p>
+                            </div>
+
+                            {/* Stack */}
+                            <div className="flex flex-wrap gap-1.5">
+                                {featured.stack.map(t => (
+                                    <span
+                                        key={t}
+                                        className="px-2 py-0.5 rounded text-[11px] font-medium"
+                                        style={{
+                                            background: 'var(--bg-primary)',
+                                            border: '1px solid var(--border)',
+                                            color: 'var(--text-muted)',
+                                            fontFamily: UI,
+                                        }}
+                                    >
+                                        {t}
+                                    </span>
+                                ))}
+                            </div>
+
+                            {/* Link */}
+                            <motion.button
+                                onClick={() => scrollTo('projects')}
+                                className="flex items-center gap-1.5 text-sm font-medium cursor-pointer w-fit"
+                                style={{
+                                    color: 'var(--accent-color)',
+                                    background: 'none',
+                                    border: 'none',
+                                    outline: 'none',
+                                    padding: 0,
+                                    fontFamily: UI,
+                                }}
+                                whileHover={{ x: 3 }}
+                                transition={{ duration: 0.15 }}
+                            >
+                                View all projects
+                                <ArrowRight size={13} />
                             </motion.button>
                         </div>
-                    </MotionDiv>
+                    </motion.div>
 
-                    {/* Social links */}
-                    <MotionDiv variants={stagger.item} className="flex items-center gap-3">
-                        {socialLinks.map(({ href, label, Icon }) => (
-                            <motion.a
-                                key={label}
-                                href={href}
-                                target={href.startsWith('mailto') ? undefined : '_blank'}
-                                rel="noopener noreferrer"
-                                aria-label={label}
-                                className="group relative flex items-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer overflow-hidden"
-                                style={{
-                                    color: 'var(--text-muted)',
-                                    border: '1px solid color-mix(in srgb, var(--accent-color) 18%, transparent)',
-                                    background: 'color-mix(in srgb, var(--accent-color) 5%, var(--glass-bg))',
-                                    backdropFilter: 'blur(12px)',
-                                    fontFamily: 'Space Grotesk, sans-serif',
-                                }}
-                                whileHover={{
-                                    y: -3,
-                                    color: 'var(--accent-color)',
-                                    borderColor: 'var(--accent-color)',
-                                    background: 'color-mix(in srgb, var(--accent-color) 12%, var(--glass-bg))',
-                                    boxShadow: '0 0 22px color-mix(in srgb, var(--accent-color) 35%, transparent), 0 0 0 1px color-mix(in srgb, var(--accent-color) 18%, transparent)',
-                                }}
-                                whileTap={{ scale: 0.94 }}
-                                transition={{ type: 'spring', stiffness: 360, damping: 20 }}
-                            >
-                                <motion.span
-                                    className="absolute inset-0 pointer-events-none"
-                                    style={{ background: 'linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.08), transparent 65%)' }}
-                                    initial={{ x: '-100%' }}
-                                    whileHover={{ x: '160%' }}
-                                    transition={{ duration: 0.5, ease: 'easeInOut' }}
-                                />
-                                <Icon size={15} className="relative z-10" />
-                                <span className="relative z-10 text-[11px] font-semibold tracking-wide">{label}</span>
-                            </motion.a>
-                        ))}
-                    </MotionDiv>
-                </MotionDiv>
+                </div>
             </div>
-
-            {/* Scroll hint */}
-            <MotionDiv
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.8, duration: 0.6 }}
-                className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5"
-                style={{ color: 'var(--text-muted)' }}
-            >
-                <span className="text-[10px] uppercase tracking-[0.22em]">Scroll</span>
-                <motion.div
-                    animate={{ y: [0, 6, 0] }}
-                    transition={{ repeat: Infinity, duration: 1.6, ease: 'easeInOut' }}
-                >
-                    <ArrowDown size={13} />
-                </motion.div>
-            </MotionDiv>
         </section>
     );
 };

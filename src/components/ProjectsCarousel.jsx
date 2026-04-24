@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDrag } from '@use-gesture/react';
 import { ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -18,7 +18,7 @@ const projects = [
     {
         title: "AI-Powered Resume Analyzer",
         problem: "Automate resume screening for HR teams handling high-volume candidate pipelines.",
-        approach: "NLP ranking engine using Transformers and spaCy to score relevance, sentiment, and skill overlap — served via FastAPI.",
+        approach: "NLP ranking engine using Transformers and spaCy to score relevance, sentiment, and skill overlap, served via FastAPI.",
         stack: ["Python", "spaCy", "Transformers", "FastAPI", "HuggingFace"],
         result: "70% reduction in review time; batch-processes 1000+ resumes with live analytics dashboard.",
         category: "NLP · Full-Stack"
@@ -150,14 +150,14 @@ const MobileCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
     );
     return (
         <div className="w-full">
-            <div className="relative overflow-hidden rounded-2xl min-h-[480px]"
-                style={{ background: 'var(--card-bg)', border: '1px solid color-mix(in srgb, var(--text-muted) 10%, transparent)' }}
+            <div className="relative rounded-2xl"
+                style={{ minHeight: '420px', background: 'var(--card-bg)', border: '1px solid color-mix(in srgb, var(--text-muted) 10%, transparent)', overflow: 'hidden' }}
                 {...bind()}>
                 <AnimatePresence mode="wait">
                     <MotionDiv key={activeIndex}
                         initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }}
                         transition={{ duration: 0.3, ease: 'easeInOut' }}
-                        className="absolute inset-0">
+                        style={{ position: 'relative' }}>
                         <ProjectCard project={projects[activeIndex]} index={activeIndex} total={projects.length} />
                     </MotionDiv>
                 </AnimatePresence>
@@ -191,7 +191,7 @@ const DesktopCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
     return (
         <div className="w-full">
             <div
-                className="relative h-[520px] w-full flex items-center justify-center"
+                className="relative h-[460px] w-full flex items-center justify-center"
                 style={{
                     perspective: '2000px',
                     overflow: 'hidden',
@@ -207,7 +207,7 @@ const DesktopCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
                             className="absolute w-[500px] rounded-2xl overflow-hidden"
                             style={{
                                 left: '50%', top: '50%',
-                                marginLeft: '-250px', marginTop: '-240px', height: '480px',
+                                marginLeft: '-250px', marginTop: '-210px', height: '420px',
                                 zIndex: s.zIndex,
                                 background: 'var(--card-bg)',
                                 backdropFilter: 'blur(24px)',
@@ -254,58 +254,14 @@ const DesktopCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
 const ProjectsCarousel = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const total = projects.length;
-    const sectionRef = useRef(null);
-    const activeRef  = useRef(activeIndex);
-    activeRef.current = activeIndex;
 
     const paginate = useCallback((dir) => {
         setActiveIndex(prev => (prev + dir + total) % total);
     }, [total]);
 
-    const paginateRef = useRef(paginate);
-    paginateRef.current = paginate;
-
-    // Scroll-jacking: only attach non-passive listener while section is centered
-    useEffect(() => {
-        let cooldown = false;
-        const COOLDOWN_MS = 650;
-        let attached = false;
-
-        const onWheel = (e) => {
-            if (e.deltaY > 0 && activeRef.current < total - 1) {
-                e.preventDefault();
-                if (cooldown) return;
-                cooldown = true;
-                setTimeout(() => { cooldown = false; }, COOLDOWN_MS);
-                window._lenis?.stop();
-                paginateRef.current(1);
-                setTimeout(() => window._lenis?.start(), COOLDOWN_MS);
-            } else if (e.deltaY < 0 && activeRef.current > 0) {
-                e.preventDefault();
-                if (cooldown) return;
-                cooldown = true;
-                setTimeout(() => { cooldown = false; }, COOLDOWN_MS);
-                window._lenis?.stop();
-                paginateRef.current(-1);
-                setTimeout(() => window._lenis?.start(), COOLDOWN_MS);
-            }
-        };
-
-        const attach = () => { if (!attached) { window.addEventListener('wheel', onWheel, { passive: false }); attached = true; } };
-        const detach = () => { if (attached)  { window.removeEventListener('wheel', onWheel); attached = false; } };
-
-        const io = new IntersectionObserver(
-            ([entry]) => entry.isIntersecting ? attach() : detach(),
-            { threshold: 0.5 }
-        );
-        if (sectionRef.current) io.observe(sectionRef.current);
-
-        return () => { io.disconnect(); detach(); };
-    }, [total]);
-
     return (
-        <section ref={sectionRef} id="projects"
-            className="relative w-full py-16 transition-colors duration-400"
+        <section id="projects"
+            className="relative w-full py-16 transition-colors duration-400 overflow-x-hidden"
 >
 
             <div className="max-w-7xl mx-auto px-4 md:px-6 flex flex-col items-center">
@@ -316,7 +272,7 @@ const ProjectsCarousel = () => {
                             Projects
                         </h2>
                         <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-                            {projects.length} case studies — scroll to navigate
+                            {projects.length} case studies · click arrows or swipe to navigate
                         </p>
                         <div className="w-12 h-0.5 mx-auto mt-4 rounded-full opacity-60"
                             style={{ background: 'var(--accent-color)' }} />

@@ -276,6 +276,7 @@ const LofiPlayer = () => {
                                     <motion.button
                                         onClick={toggle}
                                         aria-label={isPlaying ? 'Pause music' : 'Play music'}
+                                        aria-pressed={isPlaying}
                                         className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer shrink-0"
                                         style={{
                                             background: isPlaying

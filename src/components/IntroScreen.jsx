@@ -7,7 +7,9 @@ const IntroScreen = ({ visible, onComplete }) => {
     useEffect(() => {
         if (!visible) return;
         const t = setTimeout(onComplete, 2800);
-        return () => clearTimeout(t);
+        const onKey = (e) => { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') { clearTimeout(t); onComplete(); } };
+        window.addEventListener('keydown', onKey);
+        return () => { clearTimeout(t); window.removeEventListener('keydown', onKey); };
     }, [visible, onComplete]);
 
     return (

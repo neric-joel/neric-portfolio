@@ -15,7 +15,7 @@ import TryMe from './components/TryMe';
 import IntroScreen from './components/IntroScreen';
 import LofiPlayer from './components/ui/LofiPlayer';
 import CursorTrail from './components/ui/CursorTrail';
-import AnimatedBackground from './components/ui/AnimatedBackground';
+import WorldBackground from './components/ui/WorldBackground';
 
 function App() {
   const [showResume, setShowResume] = useState(false);
@@ -43,12 +43,13 @@ function App() {
     });
     window._lenis = lenis;
 
+    let rafId;
     function raf(time) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
-    requestAnimationFrame(raf);
-    return () => { lenis.destroy(); window._lenis = null; };
+    rafId = requestAnimationFrame(raf);
+    return () => { cancelAnimationFrame(rafId); lenis.destroy(); window._lenis = null; };
   }, []);
 
   return (
@@ -57,7 +58,7 @@ function App() {
       style={{ color: 'var(--text-primary)' }}
     >
       {/* Animated gradient background — reacts to theme CSS vars */}
-      <AnimatedBackground />
+      <WorldBackground />
       {/* Cursor trail — hidden on touch devices */}
       <CursorTrail />
 
@@ -71,8 +72,8 @@ function App() {
         <Resume onClose={() => setShowResume(false)} />
       ) : (
         <>
-          <main className="md:pl-24">
-            <Hero />
+          <main className="md:pl-40">
+            <Hero toggleResume={() => setShowResume(v => !v)} />
             <About />
             <Experience />
             <Skills />

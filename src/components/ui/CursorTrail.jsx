@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-const TRAIL = 28;
+const TRAIL = 36;
 
 const parseHex = (hex) => {
     const h = hex.trim().replace('#', '');
@@ -28,8 +28,8 @@ const CursorTrail = () => {
         const pts  = Array.from({ length: TRAIL }, () => ({ x: -600, y: -600 }));
         let mx = -600, my = -600;
         let sparks = [];
+        let hasMoved = false;
 
-        // Cache accent color; update only when <html> style changes
         let [r, g, b] = readAccent();
         const observer = new MutationObserver(() => { [r, g, b] = readAccent(); });
         observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] });
@@ -38,18 +38,23 @@ const CursorTrail = () => {
         resize();
         window.addEventListener('resize', resize, { passive: true });
 
-        const onMove  = (e) => { mx = e.clientX; my = e.clientY; };
+        const onMove = (e) => {
+            mx = e.clientX;
+            my = e.clientY;
+            hasMoved = true;
+        };
+
         const onClick = (e) => {
-            for (let i = 0; i < 10; i++) {
-                const angle = (i / 10) * Math.PI * 2 + Math.random() * 0.3;
-                const speed = 2.5 + Math.random() * 3.5;
-                if (sparks.length < 80) sparks.push({
+            for (let i = 0; i < 14; i++) {
+                const angle = (i / 14) * Math.PI * 2 + Math.random() * 0.3;
+                const speed = 3 + Math.random() * 4;
+                if (sparks.length < 100) sparks.push({
                     x: e.clientX, y: e.clientY,
                     vx: Math.cos(angle) * speed,
                     vy: Math.sin(angle) * speed,
                     life: 1,
                     r, g, b,
-                    size: 2 + Math.random() * 2,
+                    size: 2.5 + Math.random() * 2.5,
                 });
             }
         };
@@ -58,37 +63,63 @@ const CursorTrail = () => {
         window.addEventListener('click', onClick, { passive: true });
 
         const draw = () => {
-            pts[0].x += (mx - pts[0].x) * 0.26;
-            pts[0].y += (my - pts[0].y) * 0.26;
+            // Smooth trailing chain
+            pts[0].x += (mx - pts[0].x) * 0.28;
+            pts[0].y += (my - pts[0].y) * 0.28;
             for (let i = 1; i < TRAIL; i++) {
-                const f = Math.max(0.06, 0.2 - i * 0.005);
+                const f = Math.max(0.05, 0.18 - i * 0.004);
                 pts[i].x += (pts[i-1].x - pts[i].x) * f;
                 pts[i].y += (pts[i-1].y - pts[i].y) * f;
             }
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // ── Comet trail ──
-            for (let i = TRAIL - 1; i >= 1; i--) {
-                const t     = 1 - i / TRAIL;
-                const alpha = t * 0.42 * t;
-                const size  = 9 * t * t;
-                if (size < 0.4) continue;
+            if (hasMoved) {
+                // ── Glow trail ──
+                for (let i = TRAIL - 1; i >= 1; i--) {
+                    const t     = 1 - i / TRAIL;
+                    const alpha = t * 0.55 * t;
+                    const size  = 11 * t * t;
+                    if (size < 0.5) continue;
 
-                const glow = ctx.createRadialGradient(pts[i].x, pts[i].y, 0, pts[i].x, pts[i].y, size * 2.5);
-                glow.addColorStop(0, `rgba(${r},${g},${b},${alpha * 0.6})`);
-                glow.addColorStop(1, `rgba(${r},${g},${b},0)`);
-                ctx.beginPath();
-                ctx.arc(pts[i].x, pts[i].y, size * 2.5, 0, Math.PI * 2);
-                ctx.fillStyle = glow;
-                ctx.fill();
-
-                if (i < TRAIL * 0.4) {
+                    // Soft outer glow
+                    const glow = ctx.createRadialGradient(pts[i].x, pts[i].y, 0, pts[i].x, pts[i].y, size * 2.8);
+                    glow.addColorStop(0, `rgba(${r},${g},${b},${alpha * 0.55})`);
+                    glow.addColorStop(1, `rgba(${r},${g},${b},0)`);
                     ctx.beginPath();
-                    ctx.arc(pts[i].x, pts[i].y, size * 0.55, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(${r},${g},${b},${Math.min(1, alpha * 2.2)})`;
+                    ctx.arc(pts[i].x, pts[i].y, size * 2.8, 0, Math.PI * 2);
+                    ctx.fillStyle = glow;
                     ctx.fill();
+
+                    // Bright inner core (front 40% of trail)
+                    if (i < TRAIL * 0.4) {
+                        ctx.beginPath();
+                        ctx.arc(pts[i].x, pts[i].y, size * 0.6, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(${r},${g},${b},${Math.min(1, alpha * 2.5)})`;
+                        ctx.fill();
+                    }
                 }
+
+                // ── Custom cursor dot ──
+                // Outer ring
+                ctx.beginPath();
+                ctx.arc(mx, my, 10, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(${r},${g},${b},0.5)`;
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+                // Inner fill
+                ctx.beginPath();
+                ctx.arc(mx, my, 3.5, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${r},${g},${b},0.9)`;
+                ctx.fill();
+                // Outer glow ring
+                const cursorGlow = ctx.createRadialGradient(mx, my, 0, mx, my, 20);
+                cursorGlow.addColorStop(0, `rgba(${r},${g},${b},0.15)`);
+                cursorGlow.addColorStop(1, `rgba(${r},${g},${b},0)`);
+                ctx.beginPath();
+                ctx.arc(mx, my, 20, 0, Math.PI * 2);
+                ctx.fillStyle = cursorGlow;
+                ctx.fill();
             }
 
             // ── Click sparks ──
@@ -96,25 +127,25 @@ const CursorTrail = () => {
             for (const s of sparks) {
                 s.x  += s.vx;
                 s.y  += s.vy;
-                s.vy += 0.08;
-                s.vx *= 0.95;
-                s.vy *= 0.95;
-                s.life -= 0.045;
+                s.vy += 0.09;
+                s.vx *= 0.94;
+                s.vy *= 0.94;
+                s.life -= 0.04;
 
                 const sa = Math.max(0, s.life * 0.9);
                 const ss = s.size * s.life;
 
-                const sg = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, ss * 3);
-                sg.addColorStop(0, `rgba(${s.r},${s.g},${s.b},${sa * 0.7})`);
+                const sg = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, ss * 3.5);
+                sg.addColorStop(0, `rgba(${s.r},${s.g},${s.b},${sa * 0.8})`);
                 sg.addColorStop(1, `rgba(${s.r},${s.g},${s.b},0)`);
                 ctx.beginPath();
-                ctx.arc(s.x, s.y, ss * 3, 0, Math.PI * 2);
+                ctx.arc(s.x, s.y, ss * 3.5, 0, Math.PI * 2);
                 ctx.fillStyle = sg;
                 ctx.fill();
 
                 ctx.beginPath();
                 ctx.arc(s.x, s.y, ss, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255,255,255,${sa * 0.9})`;
+                ctx.fillStyle = `rgba(255,255,255,${sa})`;
                 ctx.fill();
             }
 
@@ -122,8 +153,15 @@ const CursorTrail = () => {
         };
         raf = requestAnimationFrame(draw);
 
+        const onVisibility = () => {
+            if (document.hidden) { cancelAnimationFrame(raf); }
+            else { raf = requestAnimationFrame(draw); }
+        };
+        document.addEventListener('visibilitychange', onVisibility);
+
         return () => {
             cancelAnimationFrame(raf);
+            document.removeEventListener('visibilitychange', onVisibility);
             observer.disconnect();
             window.removeEventListener('resize', resize);
             window.removeEventListener('mousemove', onMove);

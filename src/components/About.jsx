@@ -51,7 +51,7 @@ const About = () => (
                     <p className="text-lg md:text-xl leading-relaxed mb-6" style={{ color: 'var(--text-primary)' }}>
                         I'm a graduate student in Computer Science at Arizona State University, with a background
                         in electrical engineering and a focus on applied AI and software systems. I work across
-                        the full spectrum — from training ML models to building production applications to
+                        the full spectrum: from training ML models to building production applications to
                         optimizing systems closer to the hardware.
                     </p>
                     <p className="text-base leading-relaxed" style={{ color: 'var(--text-muted)' }}>

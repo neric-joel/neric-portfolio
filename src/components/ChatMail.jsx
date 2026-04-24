@@ -61,7 +61,7 @@ const ChatMail = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!message.trim()) return;
-    window.location.href = `mailto:naruljoe@asu.edu?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+    window.location.href = `mailto:nericjoel07@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
     setIsOpen(false);
     setMessage('');
     setSubject('Portfolio Contact');
@@ -90,7 +90,7 @@ const ChatMail = () => {
             exit="exit"
             style={{
               width: '300px',
-              background: 'rgba(6,6,15,0.92)',
+              background: 'var(--glass-bg)',
               backdropFilter: 'blur(24px)',
               WebkitBackdropFilter: 'blur(24px)',
               border: '1px solid color-mix(in srgb, var(--accent-color) 25%, transparent)',
@@ -158,10 +158,10 @@ const ChatMail = () => {
                     textAlign: 'left',
                     background: activeChip === idx
                       ? 'color-mix(in srgb, var(--accent-color) 12%, transparent)'
-                      : 'rgba(255,255,255,0.03)',
+                      : 'color-mix(in srgb, var(--text-muted) 5%, transparent)',
                     border: `1px solid ${activeChip === idx
                       ? 'color-mix(in srgb, var(--accent-color) 40%, transparent)'
-                      : 'rgba(255,255,255,0.07)'}`,
+                      : 'color-mix(in srgb, var(--text-muted) 12%, transparent)'}`,
                     borderRadius: '0.5rem',
                     padding: '0.45rem 0.75rem',
                     color: activeChip === idx ? 'var(--accent-color)' : 'var(--text-muted)',
@@ -178,7 +178,14 @@ const ChatMail = () => {
 
             {/* Textarea */}
             <form onSubmit={handleSubmit}>
+              <label
+                htmlFor="chatmail-message"
+                style={{ display: 'block', fontSize: '0.68rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: '0.35rem' }}
+              >
+                Your message
+              </label>
               <textarea
+                id="chatmail-message"
                 ref={textareaRef}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
@@ -188,8 +195,8 @@ const ChatMail = () => {
                 style={{
                   width: '100%',
                   boxSizing: 'border-box',
-                  background: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(255,255,255,0.08)',
+                  background: 'color-mix(in srgb, var(--text-muted) 5%, transparent)',
+                  border: '1px solid color-mix(in srgb, var(--text-muted) 12%, transparent)',
                   borderRadius: '0.6rem',
                   padding: '0.65rem 0.75rem',
                   color: 'var(--text-heading)',
@@ -207,7 +214,7 @@ const ChatMail = () => {
                   e.target.style.borderColor = 'color-mix(in srgb, var(--accent-color) 55%, transparent)';
                 }}
                 onBlur={(e) => {
-                  e.target.style.borderColor = 'rgba(255,255,255,0.08)';
+                  e.target.style.borderColor = 'color-mix(in srgb, var(--text-muted) 12%, transparent)';
                 }}
               />
 
@@ -257,7 +264,7 @@ const ChatMail = () => {
               alignItems: 'center',
               gap: '0.55rem',
               padding: '0.65rem 1.1rem 0.65rem 0.85rem',
-              background: 'rgba(6,6,15,0.88)',
+              background: 'var(--glass-bg)',
               backdropFilter: 'blur(16px)',
               WebkitBackdropFilter: 'blur(16px)',
               border: '1px solid color-mix(in srgb, var(--accent-color) 30%, transparent)',

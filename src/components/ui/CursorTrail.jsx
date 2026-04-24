@@ -161,7 +161,6 @@ const CursorTrail = ({ paused = false }) => {
             }
 
             // ── Click sparks ──
-            sparks = sparks.filter(s => s.life > 0.01);
             for (const s of sparks) {
                 s.x  += s.vx;
                 s.y  += s.vy;
@@ -169,7 +168,12 @@ const CursorTrail = ({ paused = false }) => {
                 s.vx *= 0.94;
                 s.vy *= 0.94;
                 s.life -= 0.04;
-
+            }
+            // Filter AFTER decrement so life can never go negative inside the render loop.
+            // Pre-decrement filter + negative life → ss < 0 → createRadialGradient throws
+            // a DOMException (negative radius), silently killing the entire RAF loop.
+            sparks = sparks.filter(s => s.life > 0);
+            for (const s of sparks) {
                 const sa = Math.max(0, s.life * 0.9);
                 const ss = s.size * s.life;
 

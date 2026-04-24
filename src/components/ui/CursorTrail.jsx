@@ -83,7 +83,9 @@ const CursorTrail = ({ paused = false }) => {
         window.addEventListener('mousemove', onMove, { passive: true });
         window.addEventListener('click', onClick, { passive: true });
 
-        const draw = () => {
+        let lastFrameTs = performance.now();
+        const draw = (ts) => {
+            lastFrameTs = ts ?? performance.now();
             if (pausedRef.current) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 raf = requestAnimationFrame(draw);
@@ -193,14 +195,27 @@ const CursorTrail = ({ paused = false }) => {
             if (document.hidden) {
                 cancelAnimationFrame(raf);
                 raf = null;
-            } else if (!raf) {
+            } else {
+                // Always cancel stale handle and get a fresh one — "else if (!raf)"
+                // misses the case where raf holds an already-fired ID that isn't null.
+                cancelAnimationFrame(raf);
                 raf = requestAnimationFrame(draw);
             }
         };
         document.addEventListener('visibilitychange', onVisibility);
 
+        // Watchdog: if no frame in 800ms and tab is visible, the loop silently
+        // died (HMR, visibilitychange race, etc.). Restart unconditionally.
+        const watchdog = setInterval(() => {
+            if (!document.hidden && performance.now() - lastFrameTs > 800) {
+                cancelAnimationFrame(raf);
+                raf = requestAnimationFrame(draw);
+            }
+        }, 800);
+
         return () => {
             cancelAnimationFrame(raf);
+            clearInterval(watchdog);
             document.removeEventListener('visibilitychange', onVisibility);
             observer.disconnect();
             ro.disconnect();

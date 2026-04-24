@@ -90,19 +90,19 @@ const Hero = ({ toggleResume }) => {
                         </motion.div>
 
                         {/* Name + photo row */}
-                        <motion.div {...fadeUp(0.1)} className="flex items-center gap-4">
-                            {/* Profile photo — small, clean */}
+                        <motion.div {...fadeUp(0.1)} className="flex items-center gap-5">
+                            {/* Profile photo */}
                             <div
                                 className="shrink-0 rounded-full overflow-hidden"
                                 style={{
-                                    width: 56, height: 56,
+                                    width: 96, height: 96,
                                     border: '2px solid var(--border)',
                                 }}
                             >
                                 <img
                                     src={profilePic}
                                     alt="Neric Joel"
-                                    width={56} height={56}
+                                    width={96} height={96}
                                     fetchPriority="high"
                                     decoding="sync"
                                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}

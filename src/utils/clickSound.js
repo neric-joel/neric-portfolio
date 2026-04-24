@@ -27,5 +27,5 @@ export const playClick = () => {
 
         osc.start(now);
         osc.stop(now + 0.1);
-    } catch {}
+    } catch (_e) { /* AudioContext may be unavailable */ }
 };

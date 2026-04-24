@@ -143,7 +143,7 @@ const ScrollHint = ({ current, total }) => (
 );
 
 /* ── Mobile ── */
-const MobileCarousel = ({ activeIndex, setActiveIndex, paginate }) => {
+const MobileCarousel = ({ activeIndex, paginate }) => {
     const bind = useDrag(
         ({ swipe: [swipeX] }) => { if (swipeX !== 0) paginate(-swipeX); },
         { axis: 'x', filterTaps: true }

@@ -19,7 +19,7 @@ function fillPinkNoise(data) {
 }
 
 // Vinyl crackle — sparse random clicks
-function fillVinylCrackle(data, rate) {
+function fillVinylCrackle(data) {
     for (let i = 0; i < data.length; i++) {
         data[i] = Math.random() < 0.0008 ? (Math.random() * 2 - 1) * 0.35 : 0;
     }
@@ -52,23 +52,23 @@ const LofiPlayer = () => {
             }, 100);
         } else {
             clearInterval(animRef.current);
-            setBars(BASE_HEIGHTS.map(() => 3));
+            setBars(BASE_HEIGHTS.map(() => 3)); // eslint-disable-line react-hooks/set-state-in-effect
         }
         return () => clearInterval(animRef.current);
     }, [isPlaying]);
 
     const teardown = useCallback(() => {
         nodesRef.current.forEach(n => {
-            try { n.noise?.stop(); } catch {}
-            try { n.crackle?.stop(); } catch {}
-            try { n.osc?.stop(); } catch {}
-            try { n.lfo?.stop(); } catch {}
+            try { n.noise?.stop(); } catch (_e) { /* node already stopped */ }
+            try { n.crackle?.stop(); } catch (_e) { /* node already stopped */ }
+            try { n.osc?.stop(); } catch (_e) { /* node already stopped */ }
+            try { n.lfo?.stop(); } catch (_e) { /* node already stopped */ }
         });
         nodesRef.current = [];
     }, []);
 
     const buildAudio = useCallback((ctx, master, track) => {
-        try { teardown(); } catch {}
+        try { teardown(); } catch (_e) { /* ignore */ }
         try {
 
         // Pink noise (vinyl texture)
@@ -349,6 +349,7 @@ const LofiPlayer = () => {
                         <motion.button
                             key="collapsed"
                             onClick={() => setCollapsed(false)}
+                            aria-label="Expand music player"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}

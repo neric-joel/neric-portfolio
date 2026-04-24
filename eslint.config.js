@@ -23,7 +23,15 @@ export default defineConfig([
       },
     },
     rules: {
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      // varsIgnorePattern: uppercase components + motion (used as JSX namespace, ESLint flat-config false-positive)
+      'no-unused-vars': ['error', {
+        varsIgnorePattern: '^[A-Z_]|^motion$',
+        args: 'after-used',
+        argsIgnorePattern: '^_|^[A-Z]',
+        caughtErrors: 'all',
+        caughtErrorsIgnorePattern: '^_',
+      }],
+      'no-empty': ['error', { allowEmptyCatch: true }],
     },
   },
 ])

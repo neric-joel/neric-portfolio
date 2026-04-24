@@ -25,7 +25,7 @@ const proof = [
 const social = [
     { href: 'https://github.com/neric-joel',      label: 'GitHub',   Icon: Github   },
     { href: 'https://linkedin.com/in/neric-joel', label: 'LinkedIn', Icon: Linkedin },
-    { href: 'mailto:naruljoe@asu.edu',            label: 'Email',    Icon: Mail     },
+    { href: 'mailto:nericjoel07@gmail.com',            label: 'Email',    Icon: Mail     },
 ];
 
 /* ── Featured project ── */
@@ -95,14 +95,14 @@ const Hero = ({ toggleResume }) => {
                             <div
                                 className="shrink-0 rounded-full overflow-hidden"
                                 style={{
-                                    width: 96, height: 96,
+                                    width: 128, height: 128,
                                     border: '2px solid var(--border)',
                                 }}
                             >
                                 <img
                                     src={profilePic}
                                     alt="Neric Joel"
-                                    width={96} height={96}
+                                    width={128} height={128}
                                     fetchPriority="high"
                                     decoding="sync"
                                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
@@ -124,7 +124,7 @@ const Hero = ({ toggleResume }) => {
                                     className="mt-0.5 text-sm font-medium"
                                     style={{ color: 'var(--text-muted)', fontFamily: UI }}
                                 >
-                                    naruljoe@asu.edu
+                                    nericjoel07@gmail.com
                                 </p>
                             </div>
                         </motion.div>

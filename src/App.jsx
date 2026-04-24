@@ -59,8 +59,8 @@ function App() {
     >
       {/* Animated gradient background — reacts to theme CSS vars */}
       <WorldBackground />
-      {/* Cursor trail — hidden on touch devices */}
-      <CursorTrail />
+      {/* Cursor trail — disabled when resume iframe is open (iframe swallows mousemove) */}
+      {!showResume && <CursorTrail />}
 
       {/* Intro overlay — only shown once per session */}
       <IntroScreen visible={introVisible} onComplete={handleIntroComplete} />

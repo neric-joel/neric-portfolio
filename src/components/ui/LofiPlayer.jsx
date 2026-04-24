@@ -68,7 +68,8 @@ const LofiPlayer = () => {
     }, []);
 
     const buildAudio = useCallback((ctx, master, track) => {
-        teardown();
+        try { teardown(); } catch {}
+        try {
 
         // Pink noise (vinyl texture)
         const bufSize = 2 * ctx.sampleRate;
@@ -128,33 +129,44 @@ const LofiPlayer = () => {
         bass.start();
 
         nodesRef.current = [{ noise }, { crackle }, { osc: bass }, ...oscs];
+        } catch (err) { console.warn('[LofiPlayer] buildAudio error:', err); }
     }, [teardown]);
 
     const toggle = () => {
-        if (!isPlaying) {
-            if (!ctxRef.current) {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const master = ctx.createGain();
-                master.gain.value = volume;
-                master.connect(ctx.destination);
-                ctxRef.current = ctx;
-                masterRef.current = master;
-                buildAudio(ctx, master, TRACKS[trackIdx]);
-            } else if (ctxRef.current.state === 'suspended') {
-                ctxRef.current.resume();
+        try {
+            if (!isPlaying) {
+                if (!ctxRef.current) {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (!AudioCtx) return;
+                    const ctx = new AudioCtx();
+                    const master = ctx.createGain();
+                    master.gain.value = volume;
+                    master.connect(ctx.destination);
+                    ctxRef.current = ctx;
+                    masterRef.current = master;
+                    buildAudio(ctx, master, TRACKS[trackIdx]);
+                } else if (ctxRef.current.state === 'suspended') {
+                    ctxRef.current.resume();
+                }
+                setIsPlaying(true);
+            } else {
+                ctxRef.current?.suspend();
+                setIsPlaying(false);
             }
-            setIsPlaying(true);
-        } else {
-            ctxRef.current?.suspend();
-            setIsPlaying(false);
+        } catch (err) {
+            console.warn('[LofiPlayer] audio error:', err);
         }
     };
 
     const nextTrack = () => {
-        const next = (trackIdx + 1) % TRACKS.length;
-        setTrackIdx(next);
-        if (isPlaying && ctxRef.current) {
-            buildAudio(ctxRef.current, masterRef.current, TRACKS[next]);
+        try {
+            const next = (trackIdx + 1) % TRACKS.length;
+            setTrackIdx(next);
+            if (isPlaying && ctxRef.current) {
+                buildAudio(ctxRef.current, masterRef.current, TRACKS[next]);
+            }
+        } catch (err) {
+            console.warn('[LofiPlayer] nextTrack error:', err);
         }
     };
 
@@ -174,7 +186,7 @@ const LofiPlayer = () => {
 
     return (
         <motion.div
-            className="fixed bottom-6 left-6 z-50"
+            className="fixed bottom-6 left-6 md:left-44 z-50"
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 2.2, duration: 0.7, ease: [0.21, 0.47, 0.32, 0.98] }}

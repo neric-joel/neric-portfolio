@@ -211,7 +211,7 @@ const LofiPlayer = () => {
                         ? 'color-mix(in srgb, var(--accent-color) 45%, transparent)'
                         : 'rgba(255,255,255,0.12)',
                     boxShadow: isPlaying
-                        ? '0 0 32px color-mix(in srgb, var(--accent-color) 18%, transparent), 0 4px 24px rgba(0,0,0,0.6)'
+                        ? '0 0 12px color-mix(in srgb, var(--accent-color) 8%, transparent), 0 4px 24px rgba(0,0,0,0.6)'
                         : '0 4px 24px rgba(0,0,0,0.5)',
                     transition: 'border-color 0.4s, box-shadow 0.4s',
                 }}
@@ -221,9 +221,9 @@ const LofiPlayer = () => {
                     {isPlaying && (
                         <motion.div
                             className="absolute top-0 left-0 right-0 h-px"
-                            style={{ background: 'linear-gradient(90deg, transparent, var(--accent-color), var(--accent-secondary), transparent)' }}
+                            style={{ background: 'linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent-color) 60%, transparent), transparent)' }}
                             initial={{ scaleX: 0, opacity: 0 }}
-                            animate={{ scaleX: 1, opacity: 1 }}
+                            animate={{ scaleX: 1, opacity: 0.7 }}
                             exit={{ scaleX: 0, opacity: 0 }}
                             transition={{ duration: 0.5 }}
                         />

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-const TRAIL = 36;
+const TRAIL = 22;
 
 
 const parseHex = (hex) => {
@@ -66,16 +66,16 @@ const CursorTrail = ({ paused = false }) => {
         };
 
         const onClick = (e) => {
-            for (let i = 0; i < 14; i++) {
-                const angle = (i / 14) * Math.PI * 2 + Math.random() * 0.3;
-                const speed = 3 + Math.random() * 4;
-                if (sparks.length < 100) sparks.push({
+            for (let i = 0; i < 8; i++) {
+                const angle = (i / 8) * Math.PI * 2 + Math.random() * 0.4;
+                const speed = 2.5 + Math.random() * 3.5;
+                if (sparks.length < 40) sparks.push({
                     x: e.clientX, y: e.clientY,
                     vx: Math.cos(angle) * speed,
                     vy: Math.sin(angle) * speed,
                     life: 1,
                     r, g, b,
-                    size: 2.5 + Math.random() * 2.5,
+                    size: 2 + Math.random() * 2,
                 });
             }
         };
@@ -114,80 +114,62 @@ const CursorTrail = ({ paused = false }) => {
 
             if (hasMoved) {
                 // ── Glow trail ──
+                // Two plain filled arcs per point: a large faint outer circle
+                // simulates the glow, a small bright inner circle is the core.
+                // No createRadialGradient (high setup cost) and no shadowBlur
+                // (forces per-draw GPU shadow pass — kills frame rate on Windows).
                 for (let i = TRAIL - 1; i >= 1; i--) {
                     const t     = 1 - i / TRAIL;
-                    const alpha = t * 0.55 * t;
-                    const size  = 11 * t * t;
-                    if (size < 0.5) continue;
-
-                    // Soft outer glow
-                    const glow = ctx.createRadialGradient(pts[i].x, pts[i].y, 0, pts[i].x, pts[i].y, size * 2.8);
-                    glow.addColorStop(0, `rgba(${r},${g},${b},${alpha * 0.55})`);
-                    glow.addColorStop(1, `rgba(${r},${g},${b},0)`);
+                    const alpha = t * t * 0.7;
+                    const size  = Math.max(0.5, 9 * t * t);
+                    // Soft outer halo
                     ctx.beginPath();
-                    ctx.arc(pts[i].x, pts[i].y, size * 2.8, 0, Math.PI * 2);
-                    ctx.fillStyle = glow;
+                    ctx.arc(pts[i].x, pts[i].y, size * 2.4, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(${r},${g},${b},${alpha * 0.18})`;
                     ctx.fill();
-
-                    // Bright inner core (front 40% of trail)
-                    if (i < TRAIL * 0.4) {
-                        ctx.beginPath();
-                        ctx.arc(pts[i].x, pts[i].y, size * 0.6, 0, Math.PI * 2);
-                        ctx.fillStyle = `rgba(${r},${g},${b},${Math.min(1, alpha * 2.5)})`;
-                        ctx.fill();
-                    }
+                    // Bright inner core
+                    ctx.beginPath();
+                    ctx.arc(pts[i].x, pts[i].y, size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+                    ctx.fill();
                 }
 
-                // ── Custom cursor dot ──
-                // Outer ring
+                // ── Cursor dot ──
                 ctx.beginPath();
                 ctx.arc(mx, my, 10, 0, Math.PI * 2);
                 ctx.strokeStyle = `rgba(${r},${g},${b},0.5)`;
                 ctx.lineWidth = 1.5;
                 ctx.stroke();
-                // Inner fill
                 ctx.beginPath();
                 ctx.arc(mx, my, 3.5, 0, Math.PI * 2);
                 ctx.fillStyle = `rgba(${r},${g},${b},0.9)`;
-                ctx.fill();
-                // Outer glow ring
-                const cursorGlow = ctx.createRadialGradient(mx, my, 0, mx, my, 20);
-                cursorGlow.addColorStop(0, `rgba(${r},${g},${b},0.15)`);
-                cursorGlow.addColorStop(1, `rgba(${r},${g},${b},0)`);
-                ctx.beginPath();
-                ctx.arc(mx, my, 20, 0, Math.PI * 2);
-                ctx.fillStyle = cursorGlow;
                 ctx.fill();
             }
 
             // ── Click sparks ──
             for (const s of sparks) {
-                s.x  += s.vx;
-                s.y  += s.vy;
-                s.vy += 0.09;
-                s.vx *= 0.94;
-                s.vy *= 0.94;
-                s.life -= 0.04;
+                s.x   += s.vx;
+                s.y   += s.vy;
+                s.vy  += 0.09;
+                s.vx  *= 0.94;
+                s.vy  *= 0.94;
+                s.life -= 0.045;
             }
-            // Filter AFTER decrement so life can never go negative inside the render loop.
-            // Pre-decrement filter + negative life → ss < 0 → createRadialGradient throws
-            // a DOMException (negative radius), silently killing the entire RAF loop.
+            // Filter AFTER decrement — life is always ≥ 0 inside the render loop.
+            // (Pre-decrement filter caused negative life → negative arc radius → DOMException.)
             sparks = sparks.filter(s => s.life > 0);
             for (const s of sparks) {
-                const sa = Math.max(0, s.life * 0.9);
-                const ss = s.size * s.life;
-
-                const sg = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, ss * 3.5);
-                sg.addColorStop(0, `rgba(${s.r},${s.g},${s.b},${sa * 0.8})`);
-                sg.addColorStop(1, `rgba(${s.r},${s.g},${s.b},0)`);
+                const sa = s.life * 0.85;
+                const ss = Math.max(0.1, s.size * s.life);
+                // Outer coloured dot
                 ctx.beginPath();
-                ctx.arc(s.x, s.y, ss * 3.5, 0, Math.PI * 2);
-                ctx.fillStyle = sg;
+                ctx.arc(s.x, s.y, ss * 2.2, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${s.r},${s.g},${s.b},${sa * 0.5})`;
                 ctx.fill();
-
+                // Bright white core
                 ctx.beginPath();
-                ctx.arc(s.x, s.y, ss, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255,255,255,${sa})`;
+                ctx.arc(s.x, s.y, ss * 0.7, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255,255,255,${sa * 0.9})`;
                 ctx.fill();
             }
 

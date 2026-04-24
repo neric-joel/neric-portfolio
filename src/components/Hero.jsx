@@ -95,14 +95,14 @@ const Hero = ({ toggleResume }) => {
                             <div
                                 className="shrink-0 rounded-full overflow-hidden"
                                 style={{
-                                    width: 128, height: 128,
+                                    width: 144, height: 144,
                                     border: '2px solid var(--border)',
                                 }}
                             >
                                 <img
                                     src={profilePic}
                                     alt="Neric Joel"
-                                    width={128} height={128}
+                                    width={144} height={144}
                                     fetchPriority="high"
                                     decoding="sync"
                                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}

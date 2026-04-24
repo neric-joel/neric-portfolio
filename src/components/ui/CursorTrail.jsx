@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 
 const TRAIL = 36;
 
+
 const parseHex = (hex) => {
     const h = hex.trim().replace('#', '');
     if (h.length === 6)
@@ -14,8 +15,12 @@ const readAccent = () => {
     return raw.startsWith('#') ? parseHex(raw) : [34, 211, 238];
 };
 
-const CursorTrail = () => {
-    const canvasRef = useRef(null);
+const CursorTrail = ({ paused = false }) => {
+    const canvasRef  = useRef(null);
+    const pausedRef  = useRef(paused);
+
+    // Keep pausedRef in sync without restarting the effect
+    useEffect(() => { pausedRef.current = paused; }, [paused]);
 
     useEffect(() => {
         if (window.matchMedia('(hover: none)').matches) return;
@@ -63,6 +68,12 @@ const CursorTrail = () => {
         window.addEventListener('click', onClick, { passive: true });
 
         const draw = () => {
+            if (pausedRef.current) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                raf = requestAnimationFrame(draw);
+                return;
+            }
+
             // Smooth trailing chain
             pts[0].x += (mx - pts[0].x) * 0.28;
             pts[0].y += (my - pts[0].y) * 0.28;

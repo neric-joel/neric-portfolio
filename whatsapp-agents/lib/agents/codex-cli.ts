@@ -41,6 +41,15 @@ export function parseCodexStdout(raw: string): string {
     block.push(line);
   }
 
+  const midpoint = block.length / 2;
+  if (
+    Number.isInteger(midpoint) &&
+    midpoint > 0 &&
+    block.slice(0, midpoint).join('\n') === block.slice(midpoint).join('\n')
+  ) {
+    return block.slice(0, midpoint).join('\n').trim();
+  }
+
   return block.join('\n').trim();
 }
 

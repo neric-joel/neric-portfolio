@@ -1,14 +1,23 @@
 export const runtime = 'nodejs';
 
+import { isVercel } from '@/lib/runtime';
 import { deleteAgent, getAgent, updateAgentSystemPrompt } from '@/lib/db/queries';
 
 export async function GET(_request: Request, context: RouteContext<'/api/agents/[agentId]'>) {
+  if (isVercel) {
+    return Response.json({ error: 'This app requires a local runtime. Run npm run dev locally.' }, { status: 503 });
+  }
+
   const { agentId } = await context.params;
   const agent = getAgent(Number(agentId));
   return agent ? Response.json(agent) : Response.json({ error: 'Agent not found' }, { status: 404 });
 }
 
 export async function PATCH(request: Request, context: RouteContext<'/api/agents/[agentId]'>) {
+  if (isVercel) {
+    return Response.json({ error: 'This app requires a local runtime. Run npm run dev locally.' }, { status: 503 });
+  }
+
   const { agentId } = await context.params;
   const body = (await request.json()) as { systemPrompt?: string };
   updateAgentSystemPrompt(Number(agentId), body.systemPrompt ?? '');
@@ -17,6 +26,10 @@ export async function PATCH(request: Request, context: RouteContext<'/api/agents
 }
 
 export async function DELETE(_request: Request, context: RouteContext<'/api/agents/[agentId]'>) {
+  if (isVercel) {
+    return Response.json({ error: 'This app requires a local runtime. Run npm run dev locally.' }, { status: 503 });
+  }
+
   const { agentId } = await context.params;
   deleteAgent(Number(agentId));
   return new Response(null, { status: 204 });

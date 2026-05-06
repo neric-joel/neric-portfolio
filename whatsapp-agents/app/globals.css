@@ -1,26 +1,37 @@
 @import "tailwindcss";
 
 :root {
-  --bg-primary: #0a0a0f;
-  --bg-sidebar: #0d0d1a;
-  --bg-bubble: #12121f;
-  --accent-cyan: #00d4ff;
-  --accent-purple: #7b2fff;
-  --text-primary: #e2e8f0;
-  --text-muted: #64748b;
+  --wa-sidebar-bg: #111b21;
+  --wa-main-bg: #0b141a;
+  --wa-header-bg: #202c33;
+  --wa-input-bg: #2a3942;
+  --wa-bubble-out: #005c4b;
+  --wa-bubble-in: #202c33;
+  --wa-green: #00a884;
+  --wa-text-primary: #e9edef;
+  --wa-text-secondary: #8696a0;
+  --wa-text-timestamp: #8696a0;
+  --wa-separator: rgba(134, 150, 160, 0.15);
+  --wa-icon: #8696a0;
+  --wa-hover: rgba(255, 255, 255, 0.05);
 }
 
 @theme inline {
-  --color-background: var(--bg-primary);
-  --color-foreground: var(--text-primary);
-  --font-sans: var(--font-inter);
+  --color-background: var(--wa-main-bg);
+  --color-foreground: var(--wa-text-primary);
+  --font-sans: system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial,
+    sans-serif;
 }
 
 html,
 body {
-  min-height: 100%;
-  background: var(--bg-primary);
-  color: var(--text-primary);
+  height: 100%;
+  background: var(--wa-main-bg);
+  color: var(--wa-text-primary);
+  font-family: system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial,
+    sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
 }
 
 body {
@@ -28,41 +39,74 @@ body {
 }
 
 * {
+  box-sizing: border-box;
   scrollbar-width: thin;
-  scrollbar-color: var(--accent-cyan) #070711;
+  scrollbar-color: var(--wa-header-bg) var(--wa-sidebar-bg);
 }
 
 *::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 *::-webkit-scrollbar-track {
-  background: #070711;
+  background: var(--wa-sidebar-bg);
 }
 
 *::-webkit-scrollbar-thumb {
-  background: var(--accent-cyan);
+  background: var(--wa-header-bg);
   border-radius: 999px;
 }
 
-.neon-glow {
-  box-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
+textarea::placeholder,
+input::placeholder {
+  color: var(--wa-text-secondary);
 }
 
-.neon-glow-purple {
-  box-shadow: 0 0 12px rgba(123, 47, 255, 0.4);
+.wa-bubble-tail-out::before {
+  position: absolute;
+  top: 0;
+  right: -8px;
+  width: 0;
+  height: 0;
+  border-top: 0 solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 8px solid var(--wa-bubble-out);
+  content: "";
+}
+
+.wa-bubble-tail-in::before {
+  position: absolute;
+  top: 0;
+  left: -8px;
+  width: 0;
+  height: 0;
+  border-top: 0 solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 8px solid var(--wa-bubble-in);
+  content: "";
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 150ms ease-out both;
 }
 
 .animate-blink-cursor {
-  animation: blink-cursor 1s steps(2, start) infinite;
+  animation: blinkCursor 1s steps(2, start) infinite;
 }
 
-.animate-gradient-shift {
-  animation: gradient-shift 6s ease infinite;
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-@keyframes blink-cursor {
+@keyframes blinkCursor {
   0%,
   45% {
     opacity: 1;
@@ -70,17 +114,5 @@ body {
   46%,
   100% {
     opacity: 0;
-  }
-}
-
-@keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
   }
 }

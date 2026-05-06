@@ -1,8 +1,8 @@
-import { AnthropicAdapter } from './anthropic';
-import { GoogleAdapter } from './google';
-import { OpenAiAdapter } from './openai';
+import { ClaudeCliAdapter } from './claude-cli';
+import { CodexCliAdapter } from './codex-cli';
+import { GoogleStubAdapter } from './google-stub';
 import type { AgentAdapter } from './types';
-import type { AgentBackend } from '@/lib/db/queries';
+import type { Agent, AgentBackend } from '@/lib/db/queries';
 
 const defaultModels: Record<AgentBackend, string> = {
   anthropic: 'claude-sonnet-4-6',
@@ -10,14 +10,29 @@ const defaultModels: Record<AgentBackend, string> = {
   google: 'gemini-2.0-flash',
 };
 
-export function getAdapter(backend: AgentBackend): AgentAdapter;
+export function getAdapter(agent: Agent): AgentAdapter;
 export function getAdapter(backend: AgentBackend, model: string): AgentAdapter;
-export function getAdapter(backend: AgentBackend, model = defaultModels[backend]): AgentAdapter {
-  if (backend === 'anthropic') {
-    return new AnthropicAdapter(model);
+export function getAdapter(agentOrBackend: Agent | AgentBackend, model = defaultModels[agentOrBackend as AgentBackend]): AgentAdapter {
+  const agent =
+    typeof agentOrBackend === 'string'
+      ? {
+          id: 0,
+          slug: agentOrBackend,
+          displayName: agentOrBackend,
+          backend: agentOrBackend,
+          model,
+          systemPrompt: '',
+          enabled: true,
+          createdAt: '',
+          updatedAt: '',
+        }
+      : agentOrBackend;
+
+  if (agent.backend === 'anthropic') {
+    return new ClaudeCliAdapter(agent);
   }
-  if (backend === 'openai') {
-    return new OpenAiAdapter(model);
+  if (agent.backend === 'openai') {
+    return new CodexCliAdapter(agent);
   }
-  return new GoogleAdapter(model);
+  return new GoogleStubAdapter();
 }

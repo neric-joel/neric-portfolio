@@ -1,11 +1,7 @@
 "use client";
 
-import {
-  KeyboardEvent,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useMemo, useRef, useState } from "react";
+import type { KeyboardEvent } from "react";
 import { normalizeMessage, useChat } from "@/contexts/ChatContext";
 import type { Agent, Message } from "@/types";
 
@@ -59,6 +55,38 @@ function buildStreamingMessage(
   };
 }
 
+function SendIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-current">
+      <path d="M3.5 4.5a1 1 0 0 1 1.14-.16l16 7a1 1 0 0 1 0 1.83l-16 7A1 1 0 0 1 3.3 18l2.2-5.25h7a.75.75 0 0 0 0-1.5h-7L3.3 6a1 1 0 0 1 .2-1.5Z" />
+    </svg>
+  );
+}
+
+function EmojiIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6 fill-current">
+      <path d="M12 2.75a9.25 9.25 0 1 0 0 18.5 9.25 9.25 0 0 0 0-18.5ZM4.5 12a7.5 7.5 0 1 1 15 0 7.5 7.5 0 0 1-15 0Zm4.7-1.15a1.15 1.15 0 1 0 0-2.3 1.15 1.15 0 0 0 0 2.3Zm5.6 0a1.15 1.15 0 1 0 0-2.3 1.15 1.15 0 0 0 0 2.3Zm-5.8 2.2a.8.8 0 0 1 1.1.27A2.23 2.23 0 0 0 12 14.4c.82 0 1.55-.42 1.9-1.08a.8.8 0 1 1 1.39.79A3.83 3.83 0 0 1 12 16a3.83 3.83 0 0 1-3.29-1.89.8.8 0 0 1 .29-1.06Z" />
+    </svg>
+  );
+}
+
+function AttachmentIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6 fill-current">
+      <path d="M17.64 6.36a4.5 4.5 0 0 0-6.36 0l-5.3 5.3a3.25 3.25 0 0 0 4.6 4.6l5.48-5.48a1.9 1.9 0 1 0-2.69-2.69l-5.2 5.2a.75.75 0 0 1-1.06-1.06l5.2-5.2a3.4 3.4 0 0 1 4.8 4.81l-5.47 5.48a4.75 4.75 0 0 1-6.72-6.72l5.3-5.3a6 6 0 0 1 8.48 8.48l-5.04 5.04a.75.75 0 1 1-1.06-1.06l5.04-5.04a4.5 4.5 0 0 0 0-6.36Z" />
+    </svg>
+  );
+}
+
+function MicIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6 fill-current">
+      <path d="M12 3.5a3 3 0 0 0-3 3V12a3 3 0 1 0 6 0V6.5a3 3 0 0 0-3-3Zm-4.75 8.25a.75.75 0 0 1 .75.75 4 4 0 0 0 8 0 .75.75 0 0 1 1.5 0 5.5 5.5 0 0 1-4.75 5.45V20h2.25a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1 0-1.5h2.25v-2.05A5.5 5.5 0 0 1 6.5 12.5a.75.75 0 0 1 .75-.75Z" />
+    </svg>
+  );
+}
+
 export function ChatInput() {
   const {
     activeGroupId,
@@ -81,6 +109,7 @@ export function ChatInput() {
     if (!mentionState) {
       return [];
     }
+
     return agentsInGroup.filter((agent) =>
       agent.slug.toLowerCase().startsWith(mentionState.prefix),
     );
@@ -91,25 +120,20 @@ export function ChatInput() {
       ? 0
       : Math.min(activeMentionIndex, mentionOptions.length - 1);
   const isBusy = sending || streamingMessageIds.size > 0;
+  const hasText = content.trim().length > 0;
 
   function updateCaret() {
     const position = textareaRef.current?.selectionStart ?? content.length;
-    const nextPrefix = getMentionState(content, position)?.prefix ?? null;
-    const currentPrefix = mentionState?.prefix ?? null;
-
     setCaret(position);
-    if (nextPrefix !== currentPrefix) {
+    if (getMentionState(content, position)?.prefix !== mentionState?.prefix) {
       setActiveMentionIndex(0);
     }
   }
 
   function updateContent(nextContent: string, nextCaret: number) {
-    const nextPrefix = getMentionState(nextContent, nextCaret)?.prefix ?? null;
-    const currentPrefix = mentionState?.prefix ?? null;
-
     setContent(nextContent);
     setCaret(nextCaret);
-    if (nextPrefix !== currentPrefix) {
+    if (getMentionState(nextContent, nextCaret)?.prefix !== mentionState?.prefix) {
       setActiveMentionIndex(0);
     }
   }
@@ -142,9 +166,7 @@ export function ChatInput() {
     try {
       const response = await fetch(`/api/groups/${activeGroupId}/messages`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content: trimmed }),
       });
 
@@ -165,17 +187,10 @@ export function ChatInput() {
         const streamEvent = JSON.parse(event.data) as StreamEvent;
 
         if (streamEvent.type === "agent_start" && streamEvent.messageId) {
-          const agent = agentsInGroup.find(
-            (item) => item.slug === streamEvent.agent,
-          );
+          const agent = agentsInGroup.find((item) => item.slug === streamEvent.agent);
           appendMessage(
             activeGroupId,
-            buildStreamingMessage(
-              activeGroupId,
-              streamEvent.messageId,
-              userMessage.id,
-              agent,
-            ),
+            buildStreamingMessage(activeGroupId, streamEvent.messageId, userMessage.id, agent),
           );
           setMessageStreaming(streamEvent.messageId, true);
           return;
@@ -186,11 +201,7 @@ export function ChatInput() {
           streamEvent.messageId &&
           typeof streamEvent.token === "string"
         ) {
-          appendTokenToMessage(
-            activeGroupId,
-            streamEvent.messageId,
-            streamEvent.token,
-          );
+          appendTokenToMessage(activeGroupId, streamEvent.messageId, streamEvent.token);
           return;
         }
 
@@ -259,55 +270,80 @@ export function ChatInput() {
   }
 
   return (
-    <footer className="flex-shrink-0 border-t border-white/10 bg-[--bg-primary] px-6 py-4">
-      <div className="relative">
-        {showMentions ? (
-          <div className="absolute bottom-full left-0 mb-2 w-64 overflow-hidden rounded-md border border-[--accent-cyan]/30 bg-[--bg-sidebar] shadow-2xl">
-            {mentionOptions.map((agent, index) => (
-              <button
-                key={agent.id}
-                type="button"
-                onMouseDown={(event) => event.preventDefault()}
-                onClick={() => completeMention(agent)}
-                className={`flex w-full items-center justify-between px-3 py-2 text-left text-sm transition-all duration-150 ${
-                  index === selectedMentionIndex
-                    ? "bg-[--accent-cyan]/10 text-[--accent-cyan]"
-                    : "text-[--text-primary] hover:bg-white/5"
-                }`}
-              >
-                <span>@{agent.slug}</span>
-                <span className="text-xs text-[--text-muted]">
-                  {agent.backend}
-                </span>
-              </button>
-            ))}
-          </div>
-        ) : null}
-
-        <div className="flex items-end gap-3">
-          <textarea
-            ref={textareaRef}
-            value={content}
-            rows={rows}
-            placeholder="Message... use @claude, @codex, @antigravity"
-            onChange={(event) => {
-              updateContent(event.target.value, event.target.selectionStart);
-            }}
-            onClick={updateCaret}
-            onKeyUp={updateCaret}
-            onKeyDown={handleKeyDown}
-            className="max-h-40 min-h-11 flex-1 resize-none rounded-md border border-white/10 bg-[--bg-bubble] px-4 py-3 text-sm text-[--text-primary] outline-none transition-all duration-150 placeholder:text-[--text-muted] focus:border-[--accent-cyan]/60 focus:ring-2 focus:ring-[--accent-cyan]/20"
-          />
-          <button
-            type="button"
-            onClick={() => void submitMessage()}
-            disabled={isBusy || !content.trim()}
-            className="neon-glow rounded-lg bg-[--accent-cyan] px-5 py-3 text-sm font-semibold text-black transition-all duration-150 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            Send
-          </button>
+    <footer className="relative flex h-[62px] flex-shrink-0 items-center gap-2 bg-[--wa-sidebar-bg] px-4 py-2">
+      {showMentions ? (
+        <div className="absolute bottom-[62px] left-[104px] z-20 mb-2 w-72 overflow-hidden rounded-lg bg-[--wa-header-bg] py-1 shadow-[0_8px_24px_rgba(0,0,0,0.45)]">
+          {mentionOptions.map((agent, index) => (
+            <button
+              key={agent.id}
+              type="button"
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() => completeMention(agent)}
+              className={`flex w-full items-center justify-between gap-3 px-3 py-2 text-left text-[14px] transition-colors duration-150 ${
+                index === selectedMentionIndex
+                  ? "bg-[--wa-hover] text-[--wa-green]"
+                  : "text-[--wa-text-primary] hover:bg-[--wa-hover]"
+              }`}
+            >
+              <span className="truncate font-medium">@{agent.slug}</span>
+              <span className="rounded-full bg-[--wa-green] px-2 py-0.5 text-[11px] font-semibold capitalize text-[--wa-main-bg]">
+                {agent.backend}
+              </span>
+            </button>
+          ))}
         </div>
+      ) : null}
+
+      <button
+        type="button"
+        aria-label="Emoji"
+        className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-full text-[--wa-icon] transition-colors duration-150 hover:bg-[--wa-hover]"
+      >
+        <EmojiIcon />
+      </button>
+      <button
+        type="button"
+        aria-label="Attach"
+        className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-full text-[--wa-icon] transition-colors duration-150 hover:bg-[--wa-hover]"
+      >
+        <AttachmentIcon />
+      </button>
+
+      <div className="flex min-h-[42px] flex-1 items-center rounded-lg bg-[--wa-input-bg] px-3 py-[9px]">
+        <textarea
+          ref={textareaRef}
+          value={content}
+          rows={rows}
+          placeholder="Type a message"
+          onChange={(event) => {
+            updateContent(event.target.value, event.target.selectionStart);
+          }}
+          onClick={updateCaret}
+          onKeyUp={updateCaret}
+          onKeyDown={handleKeyDown}
+          className="max-h-[110px] min-h-5 w-full resize-none bg-transparent text-[15px] leading-5 text-[--wa-text-primary] outline-none placeholder:text-[--wa-text-secondary]"
+        />
       </div>
+
+      {hasText ? (
+        <button
+          type="button"
+          aria-label="Send"
+          onClick={() => void submitMessage()}
+          disabled={isBusy}
+          className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-full bg-[--wa-green] text-white transition-opacity duration-150 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <SendIcon />
+        </button>
+      ) : (
+        <button
+          type="button"
+          aria-label="Voice message"
+          className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-full text-[--wa-icon] transition-colors duration-150 hover:bg-[--wa-hover]"
+        >
+          <MicIcon />
+        </button>
+      )}
     </footer>
   );
 }

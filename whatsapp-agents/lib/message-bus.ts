@@ -55,11 +55,16 @@ export async function* routeMessage(groupId: number, userMessageId: number): Asy
 
       yield { type: 'agent_start', agent: agent.slug, messageId: responseMessage.id };
 
-      const adapter = getAdapter(agent.backend, agent.model);
+      const adapter = getAdapter(agent);
       const history = toHistory(groupId, responseMessage.id);
+      const systemPrompt =
+        `You are ${agent.displayName}, a friendly AI participating in a group chat. ` +
+        'Keep responses short and conversational like you are texting in a group. ' +
+        "Do not start with 'As an AI' or preamble." +
+        `\n\n${agent.systemPrompt}`;
       let content = '';
 
-      for await (const token of adapter.stream(agent.systemPrompt, history, userMessage.content)) {
+      for await (const token of adapter.stream(systemPrompt, history, userMessage.content)) {
         content += token;
         updateMessageContent(responseMessage.id, content);
         yield { type: 'token', agent: agent.slug, messageId: responseMessage.id, token };

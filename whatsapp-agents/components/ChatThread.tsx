@@ -57,24 +57,31 @@ export function ChatThread() {
 
   if (loading) {
     return (
-      <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-6 py-5">
-        <div className="h-20 w-2/3 animate-pulse rounded-xl border border-white/5 bg-white/5" />
-        <div className="ml-auto h-16 w-1/2 animate-pulse rounded-xl border border-white/5 bg-white/5" />
-        <div className="h-28 w-3/4 animate-pulse rounded-xl border border-white/5 bg-white/5" />
+      <div className="min-h-0 flex-1 overflow-y-auto bg-[--wa-main-bg] px-[6%] py-5">
+        <div className="flex flex-col gap-2">
+          <div className="h-16 w-[62%] animate-pulse rounded-[7.5px] bg-[--wa-bubble-in]" />
+          <div className="ml-auto h-14 w-[46%] animate-pulse rounded-[7.5px] bg-[--wa-bubble-out]" />
+          <div className="h-20 w-[68%] animate-pulse rounded-[7.5px] bg-[--wa-bubble-in]" />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
+    <div className="min-h-0 flex-1 overflow-y-auto bg-[--wa-main-bg] px-[6%] py-5">
       {(activeMessages ?? []).length === 0 ? (
         <div className="flex h-full items-center justify-center">
-          <p className="text-sm text-[--text-muted]">
+          <p className="rounded-lg bg-[--wa-header-bg] px-3 py-1 text-[12px] font-medium uppercase text-[--wa-text-secondary]">
             Send a message to get started
           </p>
         </div>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col">
+          <div className="mb-4 flex justify-center">
+            <span className="rounded-lg bg-[--wa-header-bg] px-3 py-1 text-[12px] font-medium text-[--wa-text-secondary] shadow-sm">
+              TODAY
+            </span>
+          </div>
           {(activeMessages ?? []).map((message) => (
             <MessageBubble
               key={message.id}

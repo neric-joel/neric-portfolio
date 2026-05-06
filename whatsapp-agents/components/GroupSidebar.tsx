@@ -9,10 +9,13 @@ function truncateText(text: string) {
   return text.length > 58 ? `${text.slice(0, 58)}...` : text;
 }
 
-function initials(name: string) {
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-  const letters = parts.length > 1 ? `${parts[0][0]}${parts[1][0]}` : name.slice(0, 2);
-  return letters.toUpperCase();
+function getInitials(name: string): string {
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() ?? '')
+    .join('');
 }
 
 function formatPreviewTime(value?: string) {
@@ -122,7 +125,7 @@ export function GroupSidebar() {
     });
 
     if (!response.ok) {
-      console.error("Failed to create group");
+      alert(`Failed to create group: ${response.status}`);
       return;
     }
 
@@ -177,7 +180,7 @@ export function GroupSidebar() {
               }`}
             >
               <div className="mr-4 grid h-10 w-10 flex-shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#00a884] to-[#02775f] text-[13px] font-semibold text-white">
-                {initials(group.name)}
+                {getInitials(group.name)}
               </div>
               <div className="flex h-full min-w-0 flex-1 flex-col justify-center border-b border-[--wa-separator]">
                 <div className="flex min-w-0 items-center gap-3">

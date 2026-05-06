@@ -1,8 +1,12 @@
 import Database from 'better-sqlite3';
 import fs from 'node:fs';
-import path from 'node:path';
+import { dirname, isAbsolute, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-let db: Database.Database | null = null;
+let _db: Database.Database | null = null;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const defaultAgents = [
   {
@@ -28,21 +32,8 @@ const defaultAgents = [
   },
 ] as const;
 
-export function getDb(): Database.Database {
-  if (db) {
-    return db;
-  }
-
-  const configuredDbPath = process.env.SQLITE_DB_PATH ?? './data/whatsapp-agents.sqlite';
-  const dbPath = path.isAbsolute(configuredDbPath)
-    ? configuredDbPath
-    : path.resolve(/* turbopackIgnore: true */ process.cwd(), configuredDbPath);
-  fs.mkdirSync(path.dirname(dbPath), { recursive: true });
-
-  db = new Database(dbPath);
-  db.pragma('foreign_keys = ON');
-
-  const schemaPath = path.join(process.cwd(), 'lib', 'db', 'schema.sql');
+function initDb(db: Database.Database): void {
+  const schemaPath = join(__dirname, 'schema.sql');
   db.exec(fs.readFileSync(schemaPath, 'utf8'));
 
   const agentCount = db.prepare('SELECT COUNT(*) AS count FROM agents').get() as { count: number };
@@ -59,6 +50,28 @@ export function getDb(): Database.Database {
     });
     seed();
   }
+}
 
-  return db;
+export function getDb(): Database.Database {
+  if (!_db) {
+    const configuredDbPath = process.env.SQLITE_DB_PATH ?? './data/whatsapp-agents.sqlite';
+    const dbPath = isAbsolute(configuredDbPath)
+      ? configuredDbPath
+      : resolve(/* turbopackIgnore: true */ process.cwd(), configuredDbPath);
+    fs.mkdirSync(dirname(dbPath), { recursive: true });
+
+    _db = new Database(dbPath);
+    _db.pragma('journal_mode = WAL');
+    _db.pragma('foreign_keys = ON');
+    initDb(_db);
+  }
+
+  return _db;
+}
+
+export function closeDb(): void {
+  if (_db) {
+    _db.close();
+    _db = null;
+  }
 }

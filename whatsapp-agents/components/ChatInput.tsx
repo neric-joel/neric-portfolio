@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { normalizeMessage, useChat } from "@/contexts/ChatContext";
 import type { Agent, Message } from "@/types";
@@ -98,6 +98,8 @@ export function ChatInput() {
     streamingMessageIds,
   } = useChat();
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const esRef = useRef<EventSource | null>(null);
+  const activeStreamingIdsRef = useRef<Set<number>>(new Set());
   const [content, setContent] = useState("");
   const [caret, setCaret] = useState(0);
   const [activeMentionIndex, setActiveMentionIndex] = useState(0);
@@ -121,6 +123,24 @@ export function ChatInput() {
       : Math.min(activeMentionIndex, mentionOptions.length - 1);
   const isBusy = sending || streamingMessageIds.size > 0;
   const hasText = content.trim().length > 0;
+
+  useEffect(() => {
+    return () => {
+      esRef.current?.close();
+      esRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    esRef.current?.close();
+    esRef.current = null;
+    activeStreamingIdsRef.current.forEach((messageId) => {
+      setMessageStreaming(messageId, false);
+    });
+    activeStreamingIdsRef.current.clear();
+    const resetSendingTimer = window.setTimeout(() => setSending(false), 0);
+    return () => window.clearTimeout(resetSendingTimer);
+  }, [activeGroupId, setMessageStreaming]);
 
   function updateCaret() {
     const position = textareaRef.current?.selectionStart ?? content.length;
@@ -179,12 +199,36 @@ export function ChatInput() {
       setContent("");
       setCaret(0);
 
-      const eventSource = new EventSource(
+      esRef.current?.close();
+      activeStreamingIdsRef.current.forEach((messageId) => {
+        setMessageStreaming(messageId, false);
+      });
+      activeStreamingIdsRef.current.clear();
+
+      const es = new EventSource(
         `/api/groups/${activeGroupId}/stream?messageId=${userMessage.id}`,
       );
+      esRef.current = es;
 
-      eventSource.onmessage = (event) => {
-        const streamEvent = JSON.parse(event.data) as StreamEvent;
+      es.onmessage = (event) => {
+        if (esRef.current !== es) {
+          return;
+        }
+
+        let data: unknown;
+        try {
+          data = JSON.parse(event.data as string);
+        } catch {
+          console.warn('SSE: non-JSON frame ignored', event.data);
+          return;
+        }
+
+        if (!data || typeof data !== "object" || typeof (data as StreamEvent).type !== "string") {
+          console.warn("SSE: malformed frame ignored", data);
+          return;
+        }
+
+        const streamEvent = data as StreamEvent;
 
         if (streamEvent.type === "agent_start" && streamEvent.messageId) {
           const agent = agentsInGroup.find((item) => item.slug === streamEvent.agent);
@@ -192,6 +236,7 @@ export function ChatInput() {
             activeGroupId,
             buildStreamingMessage(activeGroupId, streamEvent.messageId, userMessage.id, agent),
           );
+          activeStreamingIdsRef.current.add(streamEvent.messageId);
           setMessageStreaming(streamEvent.messageId, true);
           return;
         }
@@ -211,24 +256,37 @@ export function ChatInput() {
             status: "complete",
           }));
           setMessageStreaming(streamEvent.messageId, false);
+          activeStreamingIdsRef.current.delete(streamEvent.messageId);
           return;
         }
 
         if (streamEvent.type === "done" || streamEvent.type === "no_agents") {
-          eventSource.close();
+          es.close();
+          esRef.current = null;
+          activeStreamingIdsRef.current.clear();
           setSending(false);
           return;
         }
 
         if (streamEvent.type === "error") {
           console.error(streamEvent.message ?? "Streaming error");
-          eventSource.close();
+          es.close();
+          esRef.current = null;
+          activeStreamingIdsRef.current.forEach((messageId) => {
+            setMessageStreaming(messageId, false);
+          });
+          activeStreamingIdsRef.current.clear();
           setSending(false);
         }
       };
 
-      eventSource.onerror = () => {
-        eventSource.close();
+      es.onerror = () => {
+        es.close();
+        esRef.current = null;
+        activeStreamingIdsRef.current.forEach((messageId) => {
+          setMessageStreaming(messageId, false);
+        });
+        activeStreamingIdsRef.current.clear();
         setSending(false);
       };
     } catch (error) {
@@ -296,15 +354,17 @@ export function ChatInput() {
 
       <button
         type="button"
-        aria-label="Emoji"
-        className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-full text-[--wa-icon] transition-colors duration-150 hover:bg-[--wa-hover]"
+        aria-label="Emoji (coming soon)"
+        disabled
+        className="grid h-9 w-9 flex-shrink-0 cursor-not-allowed place-items-center rounded-full text-[--wa-icon] opacity-50"
       >
         <EmojiIcon />
       </button>
       <button
         type="button"
-        aria-label="Attach"
-        className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-full text-[--wa-icon] transition-colors duration-150 hover:bg-[--wa-hover]"
+        aria-label="Attachment (coming soon)"
+        disabled
+        className="grid h-9 w-9 flex-shrink-0 cursor-not-allowed place-items-center rounded-full text-[--wa-icon] opacity-50"
       >
         <AttachmentIcon />
       </button>

@@ -35,11 +35,6 @@ export function MessageBubble({
           <div className="wa-bubble-tail-out relative rounded-[7.5px_0_7.5px_7.5px] bg-[--wa-bubble-out] px-[7px] py-[6px] pb-2 pl-[9px] text-left shadow-sm">
             <p className="whitespace-pre-wrap break-words text-[15px] leading-[1.45] text-[--wa-text-primary]">
               {message.content}
-              {isStreaming ? (
-                <span className="animate-blink-cursor ml-0.5 inline-block text-[--wa-text-primary]">
-                  |
-                </span>
-              ) : null}
             </p>
             <div className="mt-1 text-right text-[11px] leading-3 text-[--wa-text-timestamp]">
               {formatTimestamp(message.created_at)}
@@ -59,11 +54,9 @@ export function MessageBubble({
         <div className="wa-bubble-tail-in relative rounded-[0_7.5px_7.5px_7.5px] bg-[--wa-bubble-in] px-[7px] py-[6px] pb-2 pl-[9px] shadow-sm">
           <p className="whitespace-pre-wrap break-words text-[15px] leading-[1.45] text-[--wa-text-primary]">
             {message.content}
-            {isStreaming ? (
-              <span className="animate-blink-cursor ml-0.5 inline-block text-[--wa-green]">
-                |
-              </span>
-            ) : null}
+            {isStreaming && message.sender_type === "agent" && (
+              <span className="inline-block w-0.5 h-4 bg-current animate-pulse ml-0.5 align-middle" />
+            )}
           </p>
           <div className="mt-1 text-right text-[11px] leading-3 text-[--wa-text-timestamp]">
             {formatTimestamp(message.created_at)}

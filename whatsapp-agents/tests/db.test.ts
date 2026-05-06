@@ -12,8 +12,8 @@ before(() => {
 });
 
 after(async () => {
-  const { getDb } = await import('../lib/db/connection.js');
-  getDb().close();
+  const { closeDb } = await import('../lib/db/connection.js');
+  closeDb();
   rmSync(tmpDir, { recursive: true, force: true });
 });
 
@@ -71,7 +71,7 @@ test('group-agent membership', async () => {
   );
   const group = createGroup('Agent Test');
   const agents = listAgents();
-  if (agents.length === 0) return;
+  assert.ok(agents.length > 0, 'DB should have seeded agents');
   const agent = agents[0];
   addAgentToGroup(group.id, agent.id);
   const members = listAgentsForGroup(group.id);

@@ -39,6 +39,7 @@ export class ClaudeCliAdapter implements AgentAdapter {
     const prompt = buildPrompt(this.agent.displayName, systemPrompt, history, userContent);
     let stderr = '';
 
+    child.stdout.setEncoding('utf8');
     child.stderr.setEncoding('utf8');
     child.stderr.on('data', (chunk: string) => {
       stderr += chunk;
@@ -55,7 +56,7 @@ export class ClaudeCliAdapter implements AgentAdapter {
     child.stdin.end(prompt);
 
     for await (const chunk of child.stdout) {
-      yield chunk.toString();
+      yield chunk as string;
     }
 
     const code = await closePromise;

@@ -47,6 +47,14 @@ export function AgentRegistry({ open, onClose }: AgentRegistryProps) {
     return allAgents.filter((agent) => !activeIds.has(agent.id));
   }, [agentsInGroup, allAgents]);
 
+  if (!activeGroupId) {
+    return (
+      <div className="p-4 text-[var(--wa-text-secondary)] text-sm">
+        Select a group to manage agents.
+      </div>
+    );
+  }
+
   async function addAgent() {
     if (activeGroupId === null || !selectedAgentId) {
       return;

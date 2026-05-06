@@ -53,6 +53,17 @@ export function parseCodexStdout(raw: string): string {
   return block.join('\n').trim();
 }
 
+export function buildCodexArgs(model: string, env: NodeJS.ProcessEnv = process.env): string[] {
+  const bypassSandbox = !env.VERCEL && env.NODE_ENV !== 'production';
+  const args = ['e', '-', '--skip-git-repo-check', '--model', model];
+
+  if (bypassSandbox) {
+    args.push('--dangerously-bypass-approvals-and-sandbox');
+  }
+
+  return args;
+}
+
 export class CodexCliAdapter implements AgentAdapter {
   constructor(agent: Agent) {
     void agent;
@@ -61,18 +72,7 @@ export class CodexCliAdapter implements AgentAdapter {
   async *stream(systemPrompt: string, history: ChatMessage[], userContent: string): AsyncGenerator<string> {
     const prompt = buildPrompt(systemPrompt, history, userContent);
     const model = 'gpt-5.5';
-    const child = spawn(
-      'codex',
-      [
-        'e',
-        '-',
-        '--dangerously-bypass-approvals-and-sandbox',
-        '--skip-git-repo-check',
-        '--model',
-        model,
-      ],
-      { shell: false, env: { ...process.env } },
-    );
+    const child = spawn('codex', buildCodexArgs(model), { shell: false, env: { ...process.env } });
     let stdout = '';
     let stderr = '';
 

@@ -72,7 +72,7 @@ export async function* routeMessage(groupId: number, userMessageId: number): Asy
 
       markMessageComplete(responseMessage.id);
       activeMessageId = undefined;
-      notifyAgentDone(agent.displayName, content);
+      notifyAgentDone(agent.displayName, content || '');
       yield { type: 'agent_done', agent: agent.slug, messageId: responseMessage.id };
     }
 

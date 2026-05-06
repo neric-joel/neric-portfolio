@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-sidebar: #0d0d1a;
+  --bg-bubble: #12121f;
+  --accent-cyan: #00d4ff;
+  --accent-purple: #7b2fff;
+  --text-primary: #e2e8f0;
+  --text-muted: #64748b;
+}
+
+@theme inline {
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--text-primary);
+  --font-sans: var(--font-inter);
+}
+
+html,
+body {
+  min-height: 100%;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+body {
+  overflow: hidden;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-cyan) #070711;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #070711;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--accent-cyan);
+  border-radius: 999px;
+}
+
+.neon-glow {
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
+}
+
+.neon-glow-purple {
+  box-shadow: 0 0 12px rgba(123, 47, 255, 0.4);
+}
+
+.animate-blink-cursor {
+  animation: blink-cursor 1s steps(2, start) infinite;
+}
+
+.animate-gradient-shift {
+  animation: gradient-shift 6s ease infinite;
+}
+
+@keyframes blink-cursor {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  46%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

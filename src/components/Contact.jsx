@@ -13,6 +13,7 @@ const Contact = () => (
     <section id="contact" className="flex min-h-[60vh] flex-col justify-center py-24 pb-32 md:py-32">
         <div className="mx-auto w-full max-w-5xl px-6 text-center">
             <RevealOnScroll>
+                <span className="section-index">06</span>
                 <h2 className="section-title">Let's Connect</h2>
                 <p className="mx-auto mt-4 mb-12 max-w-md text-sm text-muted">
                     Open to internships, new-grad roles, and research opportunities. Feel free to reach out.

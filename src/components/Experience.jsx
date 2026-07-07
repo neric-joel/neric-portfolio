@@ -15,6 +15,15 @@ const experiences = [
         ],
     },
     {
+        role: "Member",
+        org: "AI Club, Arizona State University",
+        date: "Aug 2025 – Present",
+        kind: "Volunteer",
+        details: [
+            "Collaborate on applied AI/ML and computer-vision research initiatives, and mentored 15+ students in Python, SQL, and machine-learning fundamentals.",
+        ],
+    },
+    {
         role: "Research Assistant",
         org: "PV Systems Lab, Amrita University",
         orgUrl: "https://www.amrita.edu",
@@ -26,12 +35,22 @@ const experiences = [
             "Developed Tableau visualizations and regression models to surface reliability and field-failure patterns, improving operational efficiency 15%.",
         ],
     },
+    {
+        role: "Volunteer & Co-Author",
+        org: "IEEE Student Branch, Coimbatore",
+        date: "Sep 2022 – May 2025",
+        kind: "Volunteer",
+        details: [
+            "Organized technical workshops and stakeholder-facing sessions; co-authored two IEEE papers on PV parameter estimation and low-power CMOS design (2025).",
+        ],
+    },
 ];
 
 const Experience = () => (
     <section id="experience" className="py-24 md:py-32">
         <div className="mx-auto max-w-5xl px-6">
             <RevealOnScroll>
+                <span className="section-index">02</span>
                 <h2 className="section-title">Experience</h2>
                 <div className="section-rule" />
             </RevealOnScroll>
@@ -66,7 +85,10 @@ const Experience = () => (
                                                 ) : exp.org}
                                             </p>
                                         </div>
-                                        <span className="tag shrink-0 self-start">{exp.date}</span>
+                                        <span className="flex shrink-0 items-center gap-1.5 self-start">
+                                            {exp.kind && <span className="tag tag-accent">{exp.kind}</span>}
+                                            <span className="tag">{exp.date}</span>
+                                        </span>
                                     </div>
                                     <ul className="space-y-2.5">
                                         {exp.details.map((detail) => (

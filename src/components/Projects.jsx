@@ -2,13 +2,13 @@ import React from 'react';
 import { ExternalLink, Github, Play } from 'lucide-react';
 import RevealOnScroll from './RevealOnScroll';
 
-/* Copy sourced from each repo's README and the resume — no invented claims. */
+/* Copy sourced from each repo's README and the resume; no invented claims. */
 const projects = [
     {
-        title: "CareBase — Nonprofit Case Management",
+        title: "CareBase: Nonprofit Case Management",
         event: "WiCS × Opportunity Hack @ ASU 2026",
         problem: "Automate client intake, case management, and routing for ICM Food & Clothing Bank's social services.",
-        approach: "AI-native platform on Next.js 14 + Supabase with Claude-powered agentic workflows — tool-calling and structured outputs keep intake and routing reliable across varied inputs.",
+        approach: "AI-native platform on Next.js 14 + Supabase with Claude-powered agentic workflows, where tool-calling and structured outputs keep intake and routing reliable across varied inputs.",
         result: "Shipped live on Vercel with a demo login and video walkthrough, built end-to-end in a weekend.",
         stack: ["Next.js 14", "TypeScript", "Supabase", "Claude API", "Tailwind"],
         category: "Agentic AI · Full-Stack",
@@ -21,7 +21,7 @@ const projects = [
     {
         title: "Path Forward",
         event: "HackASU 2026",
-        problem: "15,000+ foster youth age out of care every year and under 3% earn a college degree — the funding exists, but the system is too fragmented to navigate.",
+        problem: "15,000+ foster youth age out of care every year and under 3% earn a college degree. The funding exists, but the system is too fragmented to navigate.",
         approach: "Six questions generate a personalized plan via the Claude API: matched funding (up to $24,790/yr in Arizona), school recommendations, a sequenced action plan, and a downloadable PDF roadmap.",
         result: "Live on Vercel with a demo video; built for the Economic Empowerment & Education track.",
         stack: ["React 18", "TypeScript", "Claude API", "Tailwind"],
@@ -35,7 +35,7 @@ const projects = [
     {
         title: "AgentRoom",
         problem: "Multi-agent tools hide the agents behind one answer, or demand hosted services and pasted API keys.",
-        approach: "A local chat room that turns installed agent CLIs (Claude Code, Codex, Gemini) into named participants — /discuss splits a problem into sub-tasks on a shared blackboard and converges on one answer with attribution.",
+        approach: "A local chat room that turns installed agent CLIs (Claude Code, Codex, Gemini) into named participants. The /discuss mode splits a problem into sub-tasks on a shared blackboard and converges on one answer with attribution.",
         result: "Runs fully local with no accounts or keys; MIT-licensed with CI and versioned releases.",
         stack: ["TypeScript", "Multi-Agent Orchestration", "CLI Tooling"],
         category: "Agentic AI · Dev Tools",
@@ -44,10 +44,10 @@ const projects = [
         ],
     },
     {
-        title: "NotaryGuard — ID Verify AI",
+        title: "NotaryGuard: ID Verify AI",
         event: "VillageHacks 2026",
         problem: "Real-estate fraud slips through Remote Online Notarization via fake IDs, name mismatches, and lapsed notary commissions.",
-        approach: "A fraud-aware verification rail that runs identity documents through four progressive verification levels — PaddleOCR extraction with fuzzy name matching — before a notarization can proceed.",
+        approach: "A fraud-aware verification rail that runs identity documents through four progressive verification levels, using PaddleOCR extraction and fuzzy name matching, before a notarization can proceed.",
         result: "Working verification pipeline on free, open-source tooling with a FastAPI backend and React front end.",
         stack: ["Python", "FastAPI", "PaddleOCR", "React", "TypeScript"],
         category: "Applied AI · Security",
@@ -58,7 +58,7 @@ const projects = [
     {
         title: "Building Footprint Segmentation",
         problem: "Extract building footprints from aerial imagery on the Massachusetts Buildings Dataset.",
-        approach: "Deep-learning pipeline in PyTorch — U-Net with a ResNet-50 encoder — tuned against IoU and precision-recall.",
+        approach: "Deep-learning pipeline in PyTorch, a U-Net with a ResNet-50 encoder, tuned against IoU and precision-recall.",
         result: "30% lower inference latency after profiling and tuning the model.",
         stack: ["Python", "PyTorch", "U-Net", "ResNet-50"],
         category: "Computer Vision",
@@ -67,7 +67,7 @@ const projects = [
     {
         title: "Hybrid Movie Recommender",
         event: "CSE 573 @ ASU",
-        problem: "Single-strategy recommenders miss patterns — collaborative filtering ignores content signals, and content-based filtering ignores user behavior.",
+        problem: "Single-strategy recommenders miss patterns: collaborative filtering ignores content signals, and content-based filtering ignores user behavior.",
         approach: "Hybrid system combining collaborative filtering, content-based filtering, and Neural Collaborative Filtering (NeuMF) to capture non-linear user–movie relationships.",
         result: "Hybrid ensemble outperformed the individual models on accuracy and ranking metrics.",
         stack: ["Python", "NeuMF", "Collaborative Filtering"],
@@ -78,7 +78,7 @@ const projects = [
     },
     {
         title: "Hand Gesture Recognition",
-        problem: "Recognize hand signs in real time from a webcam — without training a custom model.",
+        problem: "Recognize hand signs in real time from a webcam, without training a custom model.",
         approach: "OpenCV + MediaPipe pipeline with two-hand tracking and rule-based landmark classification.",
         result: "Recognizes A–Z ASL fingerspelling, 0–10 finger counting, and 7 common gestures in real time.",
         stack: ["Python", "OpenCV", "MediaPipe"],
@@ -154,6 +154,7 @@ const Projects = () => (
     <section id="projects" className="py-24 md:py-32">
         <div className="mx-auto max-w-5xl px-6">
             <RevealOnScroll>
+                <span className="section-index">04</span>
                 <h2 className="section-title">Projects</h2>
                 <div className="section-rule" />
                 <p className="mt-4 text-sm text-muted">

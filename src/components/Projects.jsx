@@ -1,11 +1,13 @@
 import React from 'react';
 import { ExternalLink, Github, Play } from 'lucide-react';
 import RevealOnScroll from './RevealOnScroll';
+import GitHubActivity from './GitHubActivity';
 
 /* Copy sourced from each repo's README and the resume; no invented claims. */
 const projects = [
     {
         title: "CareBase: Nonprofit Case Management",
+        status: "Shipped",
         event: "WiCS × Opportunity Hack @ ASU 2026",
         problem: "Automate client intake, case management, and routing for ICM Food & Clothing Bank's social services.",
         approach: "AI-native platform on Next.js 14 + Supabase with Claude-powered agentic workflows, where tool-calling and structured outputs keep intake and routing reliable across varied inputs.",
@@ -20,6 +22,7 @@ const projects = [
     },
     {
         title: "Path Forward",
+        status: "Shipped",
         event: "HackASU 2026",
         problem: "15,000+ foster youth age out of care every year and under 3% earn a college degree. The funding exists, but the system is too fragmented to navigate.",
         approach: "Six questions generate a personalized plan via the Claude API: matched funding (up to $24,790/yr in Arizona), school recommendations, a sequenced action plan, and a downloadable PDF roadmap.",
@@ -34,6 +37,7 @@ const projects = [
     },
     {
         title: "AgentRoom",
+        status: "Active",
         problem: "Multi-agent tools hide the agents behind one answer, or demand hosted services and pasted API keys.",
         approach: "A local chat room that turns installed agent CLIs (Claude Code, Codex, Gemini) into named participants. The /discuss mode splits a problem into sub-tasks on a shared blackboard and converges on one answer with attribution.",
         result: "Runs fully local with no accounts or keys; MIT-licensed with CI and versioned releases.",
@@ -45,6 +49,7 @@ const projects = [
     },
     {
         title: "NotaryGuard: ID Verify AI",
+        status: "Open Source",
         event: "VillageHacks 2026",
         problem: "Real-estate fraud slips through Remote Online Notarization via fake IDs, name mismatches, and lapsed notary commissions.",
         approach: "A fraud-aware verification rail that runs identity documents through four progressive verification levels, using PaddleOCR extraction and fuzzy name matching, before a notarization can proceed.",
@@ -57,6 +62,7 @@ const projects = [
     },
     {
         title: "Building Footprint Segmentation",
+        status: "Research",
         problem: "Extract building footprints from aerial imagery on the Massachusetts Buildings Dataset.",
         approach: "Deep-learning pipeline in PyTorch, a U-Net with a ResNet-50 encoder, tuned against IoU and precision-recall.",
         result: "30% lower inference latency after profiling and tuning the model.",
@@ -66,6 +72,7 @@ const projects = [
     },
     {
         title: "Hybrid Movie Recommender",
+        status: "Open Source",
         event: "CSE 573 @ ASU",
         problem: "Single-strategy recommenders miss patterns: collaborative filtering ignores content signals, and content-based filtering ignores user behavior.",
         approach: "Hybrid system combining collaborative filtering, content-based filtering, and Neural Collaborative Filtering (NeuMF) to capture non-linear user–movie relationships.",
@@ -78,6 +85,7 @@ const projects = [
     },
     {
         title: "Hand Gesture Recognition",
+        status: "Open Source",
         problem: "Recognize hand signs in real time from a webcam, without training a custom model.",
         approach: "OpenCV + MediaPipe pipeline with two-hand tracking and rule-based landmark classification.",
         result: "Recognizes A–Z ASL fingerspelling, 0–10 finger counting, and 7 common gestures in real time.",
@@ -89,6 +97,7 @@ const projects = [
     },
     {
         title: "AI-Driven Solar PV Emulator",
+        status: "Research",
         problem: "Predict solar PV behavior from large-scale telemetry to improve performance forecasting.",
         approach: "Processed and transformed 120,000+ time-series records for supervised learning; trained neural-network and regression models with numerical optimization.",
         result: "18% reduction in prediction error (RMSE, MAE) versus the baseline.",
@@ -98,11 +107,20 @@ const projects = [
     },
 ];
 
-const ProjectCard = ({ project }) => (
-    <div className="card card-hover flex h-full flex-col p-6">
-        <div className="mb-4 flex items-center justify-between gap-2">
+const ProjectCard = ({ project, index }) => (
+    <div className="card card-hover group relative flex h-full flex-col overflow-hidden p-6">
+        <span
+            aria-hidden="true"
+            className="font-display pointer-events-none absolute top-3 right-4 text-[3.5rem] leading-none font-bold text-heading opacity-[0.07] transition-all duration-200 select-none group-hover:text-accent group-hover:opacity-25"
+        >
+            {String(index + 1).padStart(2, '0')}
+        </span>
+        <div className="relative z-10 mb-4 flex flex-wrap items-center gap-2">
             <span className="tag tag-accent px-2.5 py-1">{project.category}</span>
-            {project.event && <span className="eyebrow text-right">{project.event}</span>}
+            <span className={`tag tag-mono ${['Shipped', 'Active'].includes(project.status) ? 'border-accent-line text-accent' : ''}`}>
+                {project.status}
+            </span>
+            {project.event && <span className="eyebrow ml-auto text-right">{project.event}</span>}
         </div>
 
         <h3 className="font-display mb-5 text-lg leading-tight font-semibold text-heading">
@@ -165,10 +183,12 @@ const Projects = () => (
             <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2">
                 {projects.map((project, i) => (
                     <RevealOnScroll key={project.title} delay={(i % 2) * 0.06}>
-                        <ProjectCard project={project} />
+                        <ProjectCard project={project} index={i} />
                     </RevealOnScroll>
                 ))}
             </div>
+
+            <GitHubActivity />
 
             <div className="mt-10 flex justify-center">
                 <a

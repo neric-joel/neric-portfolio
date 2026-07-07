@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Lenis from 'lenis';
 import IntroScreen from './components/IntroScreen';
+import CommandPalette from './components/CommandPalette';
 import Sidebar from './components/Sidebar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -14,6 +15,18 @@ import ChatMail from './components/ChatMail';
 
 function App() {
   const [showResume, setShowResume] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setPaletteOpen(v => !v);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   // Intro splash: once per session, only when the document is visible
   // (background tabs / embedded previews suspend animations) and never
@@ -60,7 +73,18 @@ function App() {
 
       {introVisible && <IntroScreen onComplete={handleIntroComplete} />}
 
-      <Sidebar toggleResume={() => setShowResume(v => !v)} showResume={showResume} />
+      <CommandPalette
+        open={paletteOpen}
+        onClose={() => setPaletteOpen(false)}
+        toggleResume={() => setShowResume(v => !v)}
+        showResume={showResume}
+      />
+
+      <Sidebar
+        toggleResume={() => setShowResume(v => !v)}
+        showResume={showResume}
+        openPalette={() => setPaletteOpen(true)}
+      />
 
       {showResume ? (
         <Resume onClose={() => setShowResume(false)} />

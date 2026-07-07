@@ -1,6 +1,7 @@
 import React from 'react';
 import { Github, Linkedin, Mail, ArrowRight, FileText } from 'lucide-react';
 import RevealOnScroll from './RevealOnScroll';
+import CopyEmail from './CopyEmail';
 import { scrollToId } from '../utils/scrollTo';
 import profilePic from '../assets/profile.jpg';
 
@@ -47,9 +48,7 @@ const Hero = ({ toggleResume }) => {
                             <h1 className="font-display text-[clamp(2.5rem,6vw,4rem)] leading-none font-bold tracking-tight text-heading">
                                 Neric Joel
                             </h1>
-                            <p className="mt-2 text-sm font-medium text-muted">
-                                nericjoel07@gmail.com
-                            </p>
+                            <CopyEmail className="mx-auto mt-2 block text-sm font-medium text-muted md:mx-0" />
                         </RevealOnScroll>
 
                         {/* Role */}

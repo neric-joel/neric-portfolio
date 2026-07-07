@@ -2,7 +2,7 @@ import React from 'react';
 import { Github, Linkedin, Mail, ArrowRight, FileText } from 'lucide-react';
 import RevealOnScroll from './RevealOnScroll';
 import { scrollToId } from '../utils/scrollTo';
-import profilePic from '../assets/profile.png';
+import profilePic from '../assets/profile.jpg';
 
 /* ── Proof items ── */
 const proof = [
@@ -16,7 +16,7 @@ const proof = [
 const social = [
     { href: 'https://github.com/neric-joel',      label: 'GitHub',   Icon: Github   },
     { href: 'https://linkedin.com/in/neric-joel', label: 'LinkedIn', Icon: Linkedin },
-    { href: 'mailto:nericjoel07@gmail.com',       label: 'Email',    Icon: Mail     },
+    { href: 'mailto:naruljoe@asu.edu',       label: 'Email',    Icon: Mail     },
 ];
 
 /* ── Featured project ── */
@@ -42,7 +42,7 @@ const Hero = ({ toggleResume }) => {
                         <RevealOnScroll delay={0.05}>
                             <span className="tag-accent tag inline-flex items-center gap-1.5 px-2.5 py-1">
                                 <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
-                                Open to Summer 2026 internships
+                                Open to Fall 2026 internships
                             </span>
                         </RevealOnScroll>
 
@@ -63,7 +63,7 @@ const Hero = ({ toggleResume }) => {
                                     Neric Joel
                                 </h1>
                                 <p className="mt-1.5 text-sm font-medium text-muted">
-                                    nericjoel07@gmail.com
+                                    naruljoe@asu.edu
                                 </p>
                             </div>
                         </RevealOnScroll>
@@ -71,7 +71,7 @@ const Hero = ({ toggleResume }) => {
                         {/* Role */}
                         <RevealOnScroll delay={0.15}>
                             <p className="text-xl font-semibold text-accent md:text-2xl">
-                                Computer Vision Engineer
+                                Software &amp; AI/ML Engineer
                             </p>
                         </RevealOnScroll>
 

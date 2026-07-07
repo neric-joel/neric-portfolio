@@ -4,7 +4,7 @@ import RevealOnScroll from './RevealOnScroll';
 import signatureImg from '../assets/final_signature.png';
 
 const links = [
-    { href: 'mailto:nericjoel07@gmail.com',       label: 'Email',    Icon: Mail     },
+    { href: 'mailto:naruljoe@asu.edu',       label: 'Email',    Icon: Mail     },
     { href: 'https://linkedin.com/in/neric-joel', label: 'LinkedIn', Icon: Linkedin },
     { href: 'https://github.com/neric-joel',      label: 'GitHub',   Icon: Github   },
 ];
@@ -48,7 +48,7 @@ const Contact = () => (
                         }}
                     />
                     <p className="mt-4 text-[10px] tracking-widest text-muted uppercase">
-                        Thanks for visiting · nericjoel07@gmail.com
+                        Thanks for visiting · naruljoe@asu.edu
                     </p>
                 </div>
             </RevealOnScroll>

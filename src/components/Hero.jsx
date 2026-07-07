@@ -26,7 +26,7 @@ const Hero = ({ toggleResume }) => {
             {/* Single static glow behind the photo side; no animation */}
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_55%_45%_at_72%_38%,rgba(155,229,100,0.06),transparent_70%)]"
+                className="hero-glow pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_55%_45%_at_72%_38%,rgba(155,229,100,0.07),transparent_70%)]"
             />
 
             <div className="relative mx-auto w-full max-w-5xl px-6 py-20">
@@ -119,7 +119,7 @@ const Hero = ({ toggleResume }) => {
 
                     {/* ── RIGHT: photo ── */}
                     <RevealOnScroll delay={0.15} className="order-1 flex justify-center md:order-2 md:col-span-2">
-                        <div className="rounded-2xl border border-line bg-surface p-2 shadow-card">
+                        <div className="hero-photo overflow-hidden rounded-2xl border border-line bg-surface p-2 shadow-card">
                             <img
                                 src={profilePic}
                                 alt="Neric Joel"

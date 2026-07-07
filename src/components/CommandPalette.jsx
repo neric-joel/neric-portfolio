@@ -3,11 +3,16 @@ import { Home, User, Briefcase, Code, Award, BookOpen, Mail, FileText, Download,
 import { scrollToId } from '../utils/scrollTo';
 
 /* Keyboard-first navigation. Appears instantly (no entrance animation) so it
-   can never be stuck invisible in hidden-flagged webviews. */
-const CommandPalette = ({ open, onClose, toggleResume, showResume }) => {
+   can never be stuck invisible in hidden-flagged webviews. The inner panel
+   mounts fresh on every open, so query/selection state resets for free. */
+const PalettePanel = ({ onClose, toggleResume, showResume }) => {
     const [query, setQuery] = useState('');
     const [selected, setSelected] = useState(0);
     const inputRef = useRef(null);
+
+    useEffect(() => {
+        inputRef.current?.focus();
+    }, []);
 
     const items = useMemo(() => [
         { label: 'Home',                Icon: Home,      run: () => scrollToId('hero') },
@@ -29,32 +34,28 @@ const CommandPalette = ({ open, onClose, toggleResume, showResume }) => {
         return q ? items.filter(i => i.label.toLowerCase().includes(q)) : items;
     }, [items, query]);
 
-    useEffect(() => { setSelected(0); }, [query, open]);
-
-    useEffect(() => {
-        if (open) {
-            setQuery('');
-            inputRef.current?.focus();
-        }
-    }, [open]);
-
-    if (!open) return null;
+    const clampedSelected = Math.min(selected, Math.max(filtered.length - 1, 0));
 
     const activate = (item) => {
         onClose();
         item.run();
     };
 
+    const onChange = (e) => {
+        setQuery(e.target.value);
+        setSelected(0);
+    };
+
     const onKeyDown = (e) => {
         if (e.key === 'ArrowDown') {
             e.preventDefault();
-            setSelected(s => Math.min(s + 1, filtered.length - 1));
+            setSelected(Math.min(clampedSelected + 1, filtered.length - 1));
         } else if (e.key === 'ArrowUp') {
             e.preventDefault();
-            setSelected(s => Math.max(s - 1, 0));
-        } else if (e.key === 'Enter' && filtered[selected]) {
+            setSelected(Math.max(clampedSelected - 1, 0));
+        } else if (e.key === 'Enter' && filtered[clampedSelected]) {
             e.preventDefault();
-            activate(filtered[selected]);
+            activate(filtered[clampedSelected]);
         } else if (e.key === 'Escape') {
             e.preventDefault();
             onClose();
@@ -69,7 +70,7 @@ const CommandPalette = ({ open, onClose, toggleResume, showResume }) => {
                     <input
                         ref={inputRef}
                         value={query}
-                        onChange={e => setQuery(e.target.value)}
+                        onChange={onChange}
                         onKeyDown={onKeyDown}
                         placeholder="Where to?"
                         className="min-h-12 w-full bg-transparent text-sm text-text outline-none placeholder:text-muted"
@@ -84,12 +85,12 @@ const CommandPalette = ({ open, onClose, toggleResume, showResume }) => {
                         <li className="px-3 py-2 text-sm text-muted">No matches</li>
                     )}
                     {filtered.map((item, i) => (
-                        <li key={item.label} role="option" aria-selected={i === selected}>
+                        <li key={item.label} role="option" aria-selected={i === clampedSelected}>
                             <button
                                 onClick={() => activate(item)}
                                 onMouseEnter={() => setSelected(i)}
                                 className={`flex w-full min-h-10 cursor-pointer items-center gap-2.5 rounded-md px-3 py-2 text-left text-sm transition-colors duration-100 ${
-                                    i === selected ? 'bg-accent-soft text-accent' : 'text-text'
+                                    i === clampedSelected ? 'bg-accent-soft text-accent' : 'text-text'
                                 }`}
                             >
                                 <item.Icon size={14} aria-hidden="true" />
@@ -101,6 +102,11 @@ const CommandPalette = ({ open, onClose, toggleResume, showResume }) => {
             </div>
         </div>
     );
+};
+
+const CommandPalette = ({ open, onClose, toggleResume, showResume }) => {
+    if (!open) return null;
+    return <PalettePanel onClose={onClose} toggleResume={toggleResume} showResume={showResume} />;
 };
 
 export default CommandPalette;

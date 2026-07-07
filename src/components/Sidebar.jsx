@@ -28,7 +28,7 @@ const NavButton = ({ icon: Icon, label, isActive, onClick }) => (
     </button>
 );
 
-const Sidebar = ({ toggleResume, showResume }) => {
+const Sidebar = ({ toggleResume, showResume, openPalette }) => {
     const [activeId, setActiveId]     = useState('hero');
     const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -83,6 +83,15 @@ const Sidebar = ({ toggleResume, showResume }) => {
                         <FileText size={14} className="shrink-0" aria-hidden="true" />
                         <span>{showResume ? 'Back' : 'Resume'}</span>
                     </button>
+
+                    <button
+                        onClick={openPalette}
+                        aria-label="Open command palette"
+                        className="mt-1 flex w-full min-h-11 cursor-pointer items-center gap-2.5 rounded-md border-l-2 border-transparent px-3 py-2 text-left text-xs font-medium text-muted transition-colors duration-150 hover:bg-white/[0.04] hover:text-text"
+                    >
+                        <kbd className="font-mono rounded border border-line px-1.5 py-0.5 text-[10px]">Ctrl K</kbd>
+                        <span>Navigate</span>
+                    </button>
                 </div>
             </nav>
 
@@ -123,6 +132,14 @@ const Sidebar = ({ toggleResume, showResume }) => {
                             >
                                 <FileText size={14} className="shrink-0" aria-hidden="true" />
                                 <span>{showResume ? 'Back' : 'Resume'}</span>
+                            </button>
+                            <button
+                                onClick={() => { setMobileOpen(false); openPalette(); }}
+                                aria-label="Open command palette"
+                                className="flex w-full min-h-11 cursor-pointer items-center gap-2.5 rounded-md px-3 py-2 text-left text-xs font-medium text-muted transition-colors duration-150 hover:bg-white/[0.04] hover:text-text"
+                            >
+                                <kbd className="font-mono rounded border border-line px-1.5 py-0.5 text-[10px]">Ctrl K</kbd>
+                                <span>Navigate</span>
                             </button>
                         </nav>
                     </div>

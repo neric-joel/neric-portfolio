@@ -1,6 +1,7 @@
 import React from 'react';
 import { ExternalLink, Github, Play } from 'lucide-react';
 import RevealOnScroll from './RevealOnScroll';
+import GitHubActivity from './GitHubActivity';
 
 /* Copy sourced from each repo's README and the resume; no invented claims. */
 const projects = [
@@ -186,6 +187,8 @@ const Projects = () => (
                     </RevealOnScroll>
                 ))}
             </div>
+
+            <GitHubActivity />
 
             <div className="mt-10 flex justify-center">
                 <a

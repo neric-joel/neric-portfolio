@@ -30,7 +30,17 @@ const RevealOnScroll = ({ children, className = '', delay = 0 }) => {
             { rootMargin: '-40px 0px' }
         );
         io.observe(el);
-        return () => io.disconnect();
+        // Belt over suspenders: environments where IO fires late or never
+        // (prerenderers, screenshot bots) must still end up with visible
+        // content. Those renderers fast-forward timers via virtual time, so
+        // a long delay reaches them instantly while real visitors keep the
+        // scroll-driven reveal. The fallback drops the transition so the
+        // final state needs no rendered frames.
+        const fallback = setTimeout(() => {
+            el.style.transition = 'none';
+            setVisible(true);
+        }, 10000);
+        return () => { io.disconnect(); clearTimeout(fallback); };
     }, [animate]);
 
     if (!animate) {

@@ -28,6 +28,15 @@ function App() {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
+  // Deep links: the SPA mounts after the browser's native anchor pass,
+  // so honor #section hashes ourselves once the sections exist.
+  useEffect(() => {
+    const id = window.location.hash.slice(1);
+    if (id && document.getElementById(id)) {
+      document.getElementById(id).scrollIntoView({ behavior: 'instant', block: 'start' });
+    }
+  }, []);
+
   // Intro splash: once per session, only when the document is visible
   // (background tabs / embedded previews suspend animations) and never
   // for users who prefer reduced motion.

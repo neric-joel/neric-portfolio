@@ -50,6 +50,17 @@ const Contact = () => (
                     <p className="mt-4 text-[10px] tracking-widest text-muted uppercase">
                         Thanks for visiting · nericjoel07@gmail.com
                     </p>
+                    <p className="mt-3 text-xs text-muted">
+                        Designed &amp; built by Neric Joel with React &amp; Tailwind ·{' '}
+                        <a
+                            href="https://github.com/neric-joel/neric-portfolio"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-muted underline decoration-line underline-offset-4 transition-colors duration-200 hover:text-accent"
+                        >
+                            view source
+                        </a>
+                    </p>
                 </div>
             </RevealOnScroll>
         </div>

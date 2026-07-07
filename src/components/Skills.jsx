@@ -6,22 +6,22 @@ const categories = [
     {
         icon: Brain,
         label: 'AI & ML',
-        skills: ['Machine Learning', 'Deep Learning', 'PyTorch', 'TensorFlow', 'scikit-learn', 'Hugging Face', 'Model Evaluation (RMSE/MAE, IoU)'],
+        skills: ['Machine Learning', 'Deep Learning', 'Computer Vision', 'PyTorch', 'TensorFlow', 'scikit-learn', 'Hugging Face', 'OpenCV', 'Model Evaluation (RMSE/MAE, IoU)'],
     },
     {
         icon: Bot,
         label: 'Agentic AI',
-        skills: ['Tool-Calling', 'RAG Pipelines', 'Prompt Engineering', 'System Prompt Design', 'Claude/OpenAI API', 'n8n'],
+        skills: ['Tool-Calling', 'Structured Outputs', 'RAG Pipelines', 'Prompt Engineering', 'System Prompt Design', 'Multi-Agent Orchestration', 'Claude/OpenAI API', 'n8n'],
     },
     {
         icon: Code2,
-        label: 'Languages',
-        skills: ['Python', 'SQL', 'C++'],
+        label: 'Languages & Web',
+        skills: ['Python', 'SQL', 'C++', 'TypeScript', 'JavaScript', 'React', 'Next.js', 'Tailwind CSS'],
     },
     {
         icon: Database,
-        label: 'Data & Tools',
-        skills: ['ETL / Data Pipelines', 'Statistical Analysis', 'PostgreSQL', 'FastAPI', 'Tableau', 'Git'],
+        label: 'Data & Infra',
+        skills: ['ETL / Data Pipelines', 'Statistical Analysis', 'PostgreSQL', 'Supabase', 'FastAPI', 'Tableau', 'Git', 'Vercel'],
     },
 ];
 

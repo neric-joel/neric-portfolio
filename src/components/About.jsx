@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import RevealOnScroll from './RevealOnScroll';
 
 const cards = [
@@ -8,86 +7,58 @@ const cards = [
         degree: 'M.S. Computer Science',
         school: 'Arizona State University',
         year: 'Aug 2025 – Present',
-        borderColor: 'var(--accent-color)',
     },
     {
         label: 'Undergraduate',
         degree: 'B.Tech Electrical Engineering',
         school: 'Amrita Vishwa Vidyapeetham',
         year: 'Sep 2021 – May 2025',
-        borderColor: 'color-mix(in srgb, var(--accent-color) 65%, transparent)',
     },
     {
         label: 'Research',
         degree: '2 IEEE Publications',
         school: 'ML · VLSI · Energy Systems',
         year: '2024 – 2025',
-        borderColor: 'color-mix(in srgb, var(--accent-secondary) 70%, transparent)',
     },
 ];
 
 const About = () => (
-    <section id="about" className="py-16 relative">
-        <div className="container mx-auto px-6">
+    <section id="about" className="py-24 md:py-32">
+        <div className="mx-auto max-w-5xl px-6">
             <RevealOnScroll>
-                <h2
-                    className="text-[2rem] font-bold mb-14 text-center"
-                    style={{ color: 'var(--text-heading)', fontFamily: 'Space Grotesk, sans-serif' }}
-                >
-                    About
-                </h2>
+                <h2 className="section-title">About</h2>
+                <div className="section-rule" />
             </RevealOnScroll>
 
-            <div
-                className="max-w-4xl mx-auto rounded-2xl p-8 md:p-12 gradient-border"
-                style={{
-                    background: 'var(--glass-bg)',
-                    backdropFilter: 'blur(20px)',
-                    border: '1px solid var(--glass-border)',
-                    boxShadow: '0 0 60px color-mix(in srgb, var(--accent-color) 5%, transparent)',
-                }}
-            >
-                <RevealOnScroll delay={0.1}>
-                    <p className="text-lg md:text-xl leading-relaxed mb-6" style={{ color: 'var(--text-primary)' }}>
+            <div className="mt-12">
+                <RevealOnScroll delay={0.05}>
+                    <p className="max-w-3xl text-lg leading-relaxed text-text md:text-xl">
                         I'm a graduate student in Computer Science at Arizona State University, with a background
                         in electrical engineering and a focus on applied AI and software systems. I work across
                         the full spectrum: from training ML models to building production applications to
                         optimizing systems closer to the hardware.
                     </p>
-                    <p className="text-base leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                    <p className="mt-6 max-w-3xl text-base leading-relaxed text-muted">
                         I've published research in IEEE on{' '}
-                        <span style={{ color: 'var(--text-primary)' }}>low-power VLSI design</span> and{' '}
-                        <span style={{ color: 'var(--text-primary)' }}>solar energy optimization</span>, built ML
+                        <span className="text-text">low-power VLSI design</span> and{' '}
+                        <span className="text-text">solar energy optimization</span>, built ML
                         projects across computer vision, NLP, and signal processing, and contributed to research
                         labs and technical leadership roles.
                     </p>
                 </RevealOnScroll>
 
-                <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-3">
                     {cards.map((card, i) => (
-                        <motion.div
-                            key={card.label}
-                            initial={{ opacity: 0, x: -20, filter: 'blur(6px)' }}
-                            whileInView={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-                            viewport={{ once: true, margin: '-30px' }}
-                            transition={{ duration: 0.5, delay: i * 0.12, ease: [0.21, 0.47, 0.32, 0.98] }}
-                            whileHover={{ x: 5 }}
-                            className="p-4 rounded-xl cursor-default"
-                            style={{
-                                background: 'color-mix(in srgb, var(--bg-primary) 50%, transparent)',
-                                borderLeft: `3px solid ${card.borderColor}`,
-                            }}
-                        >
-                            <h3
-                                className="font-semibold mb-2 text-xs uppercase tracking-widest"
-                                style={{ color: 'var(--accent-color)' }}
-                            >
-                                {card.label}
-                            </h3>
-                            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{card.degree}</p>
-                            <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{card.school}</p>
-                            <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>{card.year}</p>
-                        </motion.div>
+                        <RevealOnScroll key={card.label} delay={0.05 + i * 0.06}>
+                            <div className="card card-hover h-full p-5">
+                                <h3 className="mb-3 text-xs font-semibold tracking-widest text-accent uppercase">
+                                    {card.label}
+                                </h3>
+                                <p className="text-sm text-muted">{card.degree}</p>
+                                <p className="text-sm font-medium text-text">{card.school}</p>
+                                <p className="mt-1 text-xs text-muted">{card.year}</p>
+                            </div>
+                        </RevealOnScroll>
                     ))}
                 </div>
             </div>

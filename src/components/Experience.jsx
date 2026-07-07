@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import RevealOnScroll from './RevealOnScroll';
 
 const experiences = [
@@ -35,96 +34,47 @@ const experiences = [
 ];
 
 const Experience = () => (
-    <section id="experience" className="py-16 relative transition-colors duration-400" >
-        <div className="container mx-auto px-6 md:px-20">
+    <section id="experience" className="py-24 md:py-32">
+        <div className="mx-auto max-w-5xl px-6">
             <RevealOnScroll>
-                <h2
-                    className="text-[2rem] font-bold mb-14 text-center md:text-left"
-                    style={{ color: 'var(--text-heading)', fontFamily: 'Space Grotesk, sans-serif' }}
-                >
-                    Experience
-                </h2>
+                <h2 className="section-title">Experience</h2>
+                <div className="section-rule" />
             </RevealOnScroll>
 
-            <div className="relative pl-5 md:pl-8">
-                {/* Animated timeline line */}
-                <motion.div
-                    className="absolute left-0 top-0 bottom-0 w-px"
-                    style={{ background: 'linear-gradient(to bottom, var(--accent-color), var(--accent-secondary), transparent)' }}
-                    initial={{ scaleY: 0, originY: 0 }}
-                    whileInView={{ scaleY: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1.2, ease: [0.21, 0.47, 0.32, 0.98] }}
-                />
-
+            <div className="relative mt-12 border-l border-line pl-6 md:pl-10">
                 <div className="space-y-8">
                     {experiences.map((exp, idx) => (
-                        <motion.div
-                            key={idx}
-                            initial={{ opacity: 0, x: -24, filter: 'blur(8px)' }}
-                            whileInView={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-                            viewport={{ once: true, margin: '-40px' }}
-                            transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.21, 0.47, 0.32, 0.98] }}
-                            className="relative pl-8 md:pl-12 group"
-                        >
-                            {/* Timeline dot */}
-                            <motion.div
-                                className="absolute left-[-5px] top-5 w-2.5 h-2.5 rounded-full"
-                                style={{ backgroundColor: 'var(--accent-color)', boxShadow: '0 0 10px var(--accent-color)' }}
-                                whileHover={{ scale: 1.6 }}
-                                transition={{ type: 'spring', stiffness: 400 }}
-                            />
+                        <RevealOnScroll key={exp.role} delay={idx * 0.06}>
+                            <div className="relative">
+                                {/* Timeline dot */}
+                                <span
+                                    className="absolute top-7 -left-6 h-2 w-2 -translate-x-[calc(50%+0.5px)] rounded-full bg-accent md:-left-10"
+                                    aria-hidden="true"
+                                />
 
-                            <motion.div
-                                className="rounded-2xl p-6 gradient-border"
-                                style={{
-                                    background: 'var(--glass-bg)',
-                                    border: '1px solid var(--card-border)',
-                                    backdropFilter: 'blur(12px)',
-                                }}
-                                whileHover={{
-                                    borderColor: 'var(--card-hover-border)',
-                                    boxShadow: '0 8px 32px color-mix(in srgb, var(--accent-color) 8%, transparent)',
-                                    y: -3,
-                                }}
-                                transition={{ duration: 0.25 }}
-                            >
-                                <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4 gap-2">
-                                    <div>
-                                        <h3
-                                            className="text-lg font-bold transition-colors duration-200"
-                                            style={{ color: 'var(--text-heading)', fontFamily: 'Space Grotesk, sans-serif' }}
-                                        >
-                                            {exp.role}
-                                        </h3>
-                                        <p className="text-sm font-medium mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                                            {exp.org}
-                                        </p>
+                                <div className="card card-hover p-6">
+                                    <div className="mb-4 flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+                                        <div>
+                                            <h3 className="font-display text-lg font-bold text-heading">
+                                                {exp.role}
+                                            </h3>
+                                            <p className="mt-0.5 text-sm font-medium text-muted">
+                                                {exp.org}
+                                            </p>
+                                        </div>
+                                        <span className="tag shrink-0 self-start">{exp.date}</span>
                                     </div>
-                                    <span
-                                        className="text-xs font-mono px-3 py-1.5 rounded-full shrink-0 inline-block"
-                                        style={{
-                                            color: 'var(--accent-color)',
-                                            background: 'color-mix(in srgb, var(--accent-color) 10%, transparent)',
-                                            border: '1px solid color-mix(in srgb, var(--accent-color) 20%, transparent)',
-                                        }}
-                                    >
-                                        {exp.date}
-                                    </span>
+                                    <ul className="space-y-2.5">
+                                        {exp.details.map((detail) => (
+                                            <li key={detail} className="flex items-start gap-3 text-sm leading-relaxed text-text">
+                                                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
+                                                {detail}
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
-                                <ul className="space-y-2.5">
-                                    {exp.details.map((detail, dIdx) => (
-                                        <li key={dIdx} className="text-sm leading-relaxed flex items-start gap-3" style={{ color: 'var(--text-primary)' }}>
-                                            <span
-                                                className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
-                                                style={{ backgroundColor: 'var(--accent-color)', boxShadow: '0 0 6px var(--accent-color)' }}
-                                            />
-                                            {detail}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </motion.div>
-                        </motion.div>
+                            </div>
+                        </RevealOnScroll>
                     ))}
                 </div>
             </div>

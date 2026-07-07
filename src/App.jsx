@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import Lenis from 'lenis';
 import Sidebar from './components/Sidebar';
 import Hero from './components/Hero';
@@ -11,35 +11,22 @@ import Publications from './components/Publications';
 import Contact from './components/Contact';
 import Resume from './components/Resume';
 import ChatMail from './components/ChatMail';
-import TryMe from './components/TryMe';
-import IntroScreen from './components/IntroScreen';
-import LofiPlayer from './components/ui/LofiPlayer';
-import CursorTrail from './components/ui/CursorTrail';
-import WorldBackground from './components/ui/WorldBackground';
 
 function App() {
   const [showResume, setShowResume] = useState(false);
 
-  // Only show intro once per session
-  const [introVisible, setIntroVisible] = useState(
-    () => sessionStorage.getItem('nj-intro') !== 'done'
-  );
-
-  const handleIntroComplete = useCallback(() => {
-    setIntroVisible(false);
-    sessionStorage.setItem('nj-intro', 'done');
-  }, []);
-
   useEffect(() => {
+    // Lenis virtualizes wheel scrolling through requestAnimationFrame; skip it
+    // when motion is reduced or the document is hidden (background tabs and
+    // embedded previews suspend rAF, which would leave scrolling dead).
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (document.visibilityState !== 'visible') return;
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      direction: 'vertical',
-      gestureDirection: 'vertical',
       smooth: true,
-      mouseMultiplier: 1,
       smoothTouch: false,
-      touchMultiplier: 2,
     });
     window._lenis = lenis;
 
@@ -53,19 +40,7 @@ function App() {
   }, []);
 
   return (
-    <div
-      className="min-h-screen transition-colors duration-700"
-      style={{ color: 'var(--text-primary)' }}
-    >
-      {/* Animated gradient background — reacts to theme CSS vars */}
-      <WorldBackground />
-      {/* Cursor trail — always mounted so hasMoved state persists across resume open/close */}
-      <CursorTrail paused={showResume} />
-
-      {/* Intro overlay — only shown once per session */}
-      <IntroScreen visible={introVisible} onComplete={handleIntroComplete} />
-
-      <TryMe />
+    <div className="min-h-screen text-text">
       <Sidebar toggleResume={() => setShowResume(v => !v)} showResume={showResume} />
 
       {showResume ? (
@@ -85,9 +60,6 @@ function App() {
           <ChatMail />
         </>
       )}
-
-      {/* Lofi music player — always visible */}
-      <LofiPlayer />
     </div>
   );
 }

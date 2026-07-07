@@ -7,7 +7,7 @@ const Resume = ({ onClose }) => {
             {/* Toolbar */}
             <div className="flex shrink-0 items-center justify-between border-b border-line bg-bg px-6 py-3">
                 <span className="font-display text-sm font-semibold tracking-wide text-heading">
-                    Neric Joel — Résumé
+                    Neric Joel · Résumé
                 </span>
                 <div className="flex items-center gap-2">
                     <a

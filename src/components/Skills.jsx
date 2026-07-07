@@ -29,6 +29,7 @@ const Skills = () => (
     <section id="skills" className="py-24 md:py-32">
         <div className="mx-auto max-w-5xl px-6">
             <RevealOnScroll>
+                <span className="section-index">03</span>
                 <h2 className="section-title">Technical Stack</h2>
                 <div className="section-rule" />
             </RevealOnScroll>

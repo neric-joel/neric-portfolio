@@ -26,6 +26,7 @@ const About = () => (
     <section id="about" className="py-24 md:py-32">
         <div className="mx-auto max-w-5xl px-6">
             <RevealOnScroll>
+                <span className="section-index">01</span>
                 <h2 className="section-title">About</h2>
                 <div className="section-rule" />
             </RevealOnScroll>
@@ -35,8 +36,8 @@ const About = () => (
                     <p className="max-w-3xl text-lg leading-relaxed text-text md:text-xl">
                         I'm a graduate student in Computer Science at Arizona State University, with a background
                         in electrical engineering and a focus on applied AI and software systems. I work across
-                        the full spectrum: from training ML models to building agentic AI workflows — tool-calling,
-                        RAG pipelines, and prompt design — to shipping production applications.
+                        the full spectrum: from training ML models to building agentic AI workflows
+                        (tool-calling, RAG pipelines, and prompt design) to shipping production applications.
                     </p>
                     <p className="mt-6 max-w-3xl text-base leading-relaxed text-muted">
                         I've published research in IEEE on{' '}

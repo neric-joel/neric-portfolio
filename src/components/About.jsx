@@ -10,7 +10,7 @@ const cards = [
     },
     {
         label: 'Undergraduate',
-        degree: 'B.Tech Electrical Engineering',
+        degree: 'B.Tech Electrical & Electronics Engineering',
         school: 'Amrita Vishwa Vidyapeetham',
         year: 'Sep 2021 – May 2025',
     },
@@ -35,15 +35,15 @@ const About = () => (
                     <p className="max-w-3xl text-lg leading-relaxed text-text md:text-xl">
                         I'm a graduate student in Computer Science at Arizona State University, with a background
                         in electrical engineering and a focus on applied AI and software systems. I work across
-                        the full spectrum: from training ML models to building production applications to
-                        optimizing systems closer to the hardware.
+                        the full spectrum: from training ML models to building agentic AI workflows — tool-calling,
+                        RAG pipelines, and prompt design — to shipping production applications.
                     </p>
                     <p className="mt-6 max-w-3xl text-base leading-relaxed text-muted">
                         I've published research in IEEE on{' '}
                         <span className="text-text">low-power VLSI design</span> and{' '}
-                        <span className="text-text">solar energy optimization</span>, built ML
-                        projects across computer vision, NLP, and signal processing, and contributed to research
-                        labs and technical leadership roles.
+                        <span className="text-text">solar energy optimization</span>, built ML and
+                        agentic AI projects across computer vision, NLP, and predictive modeling, and mentored
+                        120+ students across AI and programming.
                     </p>
                 </RevealOnScroll>
 

@@ -24,7 +24,7 @@ const ChatMail = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!message.trim()) return;
-    window.location.href = `mailto:naruljoe@asu.edu?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+    window.location.href = `mailto:nericjoel07@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
     setIsOpen(false);
     setMessage('');
     setSubject('Portfolio Contact');

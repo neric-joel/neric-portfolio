@@ -1,27 +1,27 @@
 import React from 'react';
-import { Brain, Code2, Globe, Cpu } from 'lucide-react';
+import { Brain, Bot, Code2, Database } from 'lucide-react';
 import RevealOnScroll from './RevealOnScroll';
 
 const categories = [
     {
         icon: Brain,
         label: 'AI & ML',
-        skills: ['TensorFlow', 'PyTorch', 'scikit-learn', 'OpenCV', 'Keras', 'Transformers', 'HuggingFace', 'YOLO'],
+        skills: ['Machine Learning', 'Deep Learning', 'PyTorch', 'TensorFlow', 'scikit-learn', 'Hugging Face', 'Model Evaluation (RMSE/MAE, IoU)'],
+    },
+    {
+        icon: Bot,
+        label: 'Agentic AI',
+        skills: ['Tool-Calling', 'RAG Pipelines', 'Prompt Engineering', 'System Prompt Design', 'Claude/OpenAI API', 'n8n'],
     },
     {
         icon: Code2,
         label: 'Languages',
-        skills: ['Python', 'C++', 'JavaScript', 'TypeScript', 'MATLAB', 'C', 'SQL', 'Verilog'],
+        skills: ['Python', 'SQL', 'C++'],
     },
     {
-        icon: Globe,
-        label: 'Web & Cloud',
-        skills: ['React', 'FastAPI', 'Node.js', 'Docker', 'AWS', 'Git', 'MongoDB', 'Linux'],
-    },
-    {
-        icon: Cpu,
-        label: 'Embedded',
-        skills: ['Embedded C', 'RTOS', 'Arduino', 'Raspberry Pi', 'ESP32', 'STM32', 'FPGA', 'Altium'],
+        icon: Database,
+        label: 'Data & Tools',
+        skills: ['ETL / Data Pipelines', 'Statistical Analysis', 'PostgreSQL', 'FastAPI', 'Tableau', 'Git'],
     },
 ];
 
@@ -31,9 +31,6 @@ const Skills = () => (
             <RevealOnScroll>
                 <h2 className="section-title">Technical Stack</h2>
                 <div className="section-rule" />
-                <p className="mt-4 text-sm text-muted">
-                    32+ technologies across 4 domains
-                </p>
             </RevealOnScroll>
 
             <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2">

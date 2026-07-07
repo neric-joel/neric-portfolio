@@ -310,9 +310,13 @@ select:focus-visible,
     transform: scale(1.03);
   }
 
-  /* Intro splash — pure CSS timeline, auto-dismissed by JS timers */
+  /* Intro splash — pure CSS timeline, auto-dismissed by JS timers.
+     The delayed autohide animation is a CSS-only guarantee that the
+     overlay can never cover content forever in renderers where JS
+     timers misbehave; normal flow unmounts it long before 6s. */
   .intro-overlay {
     transition: opacity 0.45s var(--ease-standard);
+    animation: intro-autohide 0.4s var(--ease-standard) 6s forwards;
   }
   .intro-overlay.is-leaving {
     opacity: 0;
@@ -333,6 +337,10 @@ select:focus-visible,
 @keyframes glow-breathe {
   from { opacity: 0.55; }
   to   { opacity: 1; }
+}
+
+@keyframes intro-autohide {
+  to { opacity: 0; visibility: hidden; }
 }
 
 /* ── Reduced motion — disable all non-essential motion ── */

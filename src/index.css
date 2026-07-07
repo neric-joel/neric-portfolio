@@ -7,6 +7,7 @@
   /* Type — two families only */
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-display: 'Space Grotesk', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'Segoe UI Mono', Consolas, monospace;
 
   /* Neutral ramp */
   --color-bg:      #0B0D10;
@@ -195,12 +196,16 @@ select:focus-visible,
   /* Section header */
   .section-index {
     display: block;
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     font-size: 0.75rem;
     font-weight: 600;
-    letter-spacing: 0.18em;
-    color: var(--color-accent);
+    letter-spacing: 0.14em;
+    color: var(--color-muted);
     margin-bottom: 0.625rem;
+  }
+  .section-index::after {
+    content: ' //';
+    color: var(--color-accent);
   }
   .section-title {
     font-size: clamp(1.5rem, 2.5vw, 2rem);

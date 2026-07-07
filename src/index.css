@@ -171,7 +171,7 @@ select:focus-visible,
 
   /* Project card media */
   .card-media {
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 2 / 1;
     overflow: hidden;
     border-bottom: 1px solid var(--color-line);
     background: var(--color-bg);
@@ -185,13 +185,6 @@ select:focus-visible,
   }
   .card-hover:hover .card-media img {
     transform: scale(1.04);
-  }
-  .card-media-contain {
-    background: #ffffff;
-  }
-  .card-media-contain img {
-    object-fit: contain;
-    padding: 0.5rem;
   }
 
   /* Tag / pill */

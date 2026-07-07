@@ -1,0 +1,46 @@
+<svg viewBox="0 0 960 480" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace, Consolas, monospace">
+  <rect width="960" height="480" fill="#12151A"/>
+  <g stroke="#1A1E24" stroke-width="1">
+    <path d="M0 120H960M0 240H960M0 360H960M240 0V480M480 0V480M720 0V480"/>
+  </g>
+  <text x="60" y="70" fill="#9CA6B0" font-size="15" letter-spacing="3">BLINK-TO-COMMAND CONTROL LOOP</text>
+  <text x="60" y="96" fill="#5A646E" font-size="13">Embedded C · real-time control</text>
+
+  <!-- main chain -->
+  <g>
+    <rect x="60" y="160" width="180" height="100" rx="10" fill="#0B0D10" stroke="#22272E" stroke-width="1.5"/>
+    <text x="150" y="204" fill="#F8FAFB" font-size="16" text-anchor="middle">IR Blink</text>
+    <text x="150" y="228" fill="#9CA6B0" font-size="13" text-anchor="middle">sensor</text>
+  </g>
+  <g>
+    <rect x="390" y="160" width="180" height="100" rx="10" fill="#0B0D10" stroke="#9BE564" stroke-width="1.5"/>
+    <text x="480" y="204" fill="#9BE564" font-size="16" text-anchor="middle">Arduino</text>
+    <text x="480" y="228" fill="#9CA6B0" font-size="13" text-anchor="middle">command mapping</text>
+  </g>
+  <g>
+    <rect x="720" y="160" width="180" height="100" rx="10" fill="#0B0D10" stroke="#22272E" stroke-width="1.5"/>
+    <text x="810" y="204" fill="#F8FAFB" font-size="16" text-anchor="middle">L298N</text>
+    <text x="810" y="228" fill="#9CA6B0" font-size="13" text-anchor="middle">motor control</text>
+  </g>
+
+  <!-- ultrasonic input -->
+  <g>
+    <rect x="390" y="330" width="180" height="90" rx="10" fill="#0B0D10" stroke="#22272E" stroke-width="1.5"/>
+    <text x="480" y="370" fill="#F8FAFB" font-size="15" text-anchor="middle">Ultrasonic</text>
+    <text x="480" y="394" fill="#9CA6B0" font-size="13" text-anchor="middle">obstacle sensing</text>
+  </g>
+
+  <g stroke="#5A646E" stroke-width="2" fill="none">
+    <path d="M240 210H382"/>
+    <path d="M570 210H712"/>
+    <path d="M480 330V268"/>
+  </g>
+  <g fill="#5A646E">
+    <path d="M382 204l10 6-10 6z"/>
+    <path d="M712 204l10 6-10 6z"/>
+    <path d="M474 268l6-10 6 10z"/>
+  </g>
+
+  <text x="60" y="404" fill="#5A646E" font-size="13">blink sequence fail-safe · automated parking</text>
+  <rect x="60" y="420" width="44" height="4" rx="2" fill="#9BE564"/>
+</svg>

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Lenis from 'lenis';
+import IntroScreen from './components/IntroScreen';
 import Sidebar from './components/Sidebar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -14,6 +15,21 @@ import ChatMail from './components/ChatMail';
 
 function App() {
   const [showResume, setShowResume] = useState(false);
+
+  // Intro splash: once per session, only when the document is visible
+  // (background tabs / embedded previews suspend animations) and never
+  // for users who prefer reduced motion.
+  const [introVisible, setIntroVisible] = useState(
+    () =>
+      sessionStorage.getItem('nj-intro') !== 'done' &&
+      document.visibilityState === 'visible' &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
+
+  const handleIntroComplete = useCallback(() => {
+    setIntroVisible(false);
+    sessionStorage.setItem('nj-intro', 'done');
+  }, []);
 
   useEffect(() => {
     // Lenis virtualizes wheel scrolling through requestAnimationFrame; skip it
@@ -41,6 +57,8 @@ function App() {
 
   return (
     <div className="min-h-screen text-text">
+      {introVisible && <IntroScreen onComplete={handleIntroComplete} />}
+
       <Sidebar toggleResume={() => setShowResume(v => !v)} showResume={showResume} />
 
       {showResume ? (

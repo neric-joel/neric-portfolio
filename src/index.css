@@ -222,6 +222,25 @@ select:focus-visible,
     opacity: 1;
     transform: none;
   }
+
+  /* Intro splash — pure CSS timeline, auto-dismissed by JS timers */
+  .intro-overlay {
+    transition: opacity 0.45s var(--ease-standard);
+  }
+  .intro-overlay.is-leaving {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .intro-letter {
+    animation: intro-rise 0.55s var(--ease-standard) backwards;
+  }
+  .intro-tagline {
+    animation: intro-rise 0.5s var(--ease-standard) 0.9s backwards;
+  }
+}
+
+@keyframes intro-rise {
+  from { opacity: 0; transform: translateY(0.5em); }
 }
 
 /* ── Reduced motion — disable all non-essential motion ── */

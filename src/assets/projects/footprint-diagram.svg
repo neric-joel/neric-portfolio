@@ -1,0 +1,44 @@
+<svg viewBox="0 0 960 480" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace, Consolas, monospace">
+  <rect width="960" height="480" fill="#12151A"/>
+  <!-- grid texture -->
+  <g stroke="#1A1E24" stroke-width="1">
+    <path d="M0 120H960M0 240H960M0 360H960M240 0V480M480 0V480M720 0V480"/>
+  </g>
+  <text x="60" y="70" fill="#9CA6B0" font-size="15" letter-spacing="3">SEGMENTATION PIPELINE</text>
+  <text x="60" y="96" fill="#5A646E" font-size="13">U-Net with ResNet-50 encoder · PyTorch</text>
+
+  <!-- stage boxes -->
+  <g>
+    <rect x="60" y="180" width="180" height="120" rx="10" fill="#0B0D10" stroke="#22272E" stroke-width="1.5"/>
+    <text x="150" y="230" fill="#F8FAFB" font-size="16" text-anchor="middle">Aerial Tile</text>
+    <text x="150" y="256" fill="#9CA6B0" font-size="13" text-anchor="middle">Mass. Buildings</text>
+  </g>
+  <g>
+    <rect x="290" y="180" width="180" height="120" rx="10" fill="#0B0D10" stroke="#22272E" stroke-width="1.5"/>
+    <text x="380" y="230" fill="#F8FAFB" font-size="16" text-anchor="middle">ResNet-50</text>
+    <text x="380" y="256" fill="#9CA6B0" font-size="13" text-anchor="middle">encoder</text>
+  </g>
+  <g>
+    <rect x="520" y="180" width="180" height="120" rx="10" fill="#0B0D10" stroke="#22272E" stroke-width="1.5"/>
+    <text x="610" y="230" fill="#F8FAFB" font-size="16" text-anchor="middle">U-Net</text>
+    <text x="610" y="256" fill="#9CA6B0" font-size="13" text-anchor="middle">decoder + skips</text>
+  </g>
+  <g>
+    <rect x="750" y="180" width="150" height="120" rx="10" fill="#0B0D10" stroke="#9BE564" stroke-width="1.5"/>
+    <text x="825" y="230" fill="#9BE564" font-size="16" text-anchor="middle">Building</text>
+    <text x="825" y="256" fill="#9BE564" font-size="16" text-anchor="middle">Mask</text>
+  </g>
+
+  <!-- arrows -->
+  <g stroke="#5A646E" stroke-width="2" fill="none">
+    <path d="M240 240H282M470 240H512M700 240H742"/>
+  </g>
+  <g fill="#5A646E">
+    <path d="M282 234l10 6-10 6z"/>
+    <path d="M512 234l10 6-10 6z"/>
+    <path d="M742 234l10 6-10 6z"/>
+  </g>
+
+  <text x="60" y="404" fill="#5A646E" font-size="13">tuned against IoU + precision-recall</text>
+  <rect x="60" y="420" width="44" height="4" rx="2" fill="#9BE564"/>
+</svg>

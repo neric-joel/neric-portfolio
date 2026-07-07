@@ -1,0 +1,16 @@
+<svg viewBox="0 0 960 480" xmlns="http://www.w3.org/2000/svg">
+  <rect width="960" height="480" fill="#12151A"/>
+  <g stroke="#1A1E24" stroke-width="1">
+    <path d="M0 120H960M0 240H960M0 360H960M240 0V480M480 0V480M720 0V480"/>
+  </g>
+  <text x="60" y="86" fill="#9BE564" font-size="15" letter-spacing="3" font-family="ui-monospace, Consolas, monospace">PEER-REVIEWED · IEEE XPLORE · 2025</text>
+
+  <text x="60" y="180" fill="#F8FAFB" font-size="34" font-weight="600" font-family="'Segoe UI', Arial, sans-serif">Optimal Parameter Estimation</text>
+  <text x="60" y="228" fill="#F8FAFB" font-size="34" font-weight="600" font-family="'Segoe UI', Arial, sans-serif">Techniques for Enhanced</text>
+  <text x="60" y="276" fill="#F8FAFB" font-size="34" font-weight="600" font-family="'Segoe UI', Arial, sans-serif">Performance of Solar PV Cell</text>
+
+  <rect x="60" y="316" width="44" height="4" rx="2" fill="#9BE564"/>
+
+  <text x="60" y="386" fill="#9CA6B0" font-size="15" font-family="ui-monospace, Consolas, monospace">ieeexplore.ieee.org/document/11048280</text>
+  <text x="60" y="416" fill="#5A646E" font-size="13" font-family="ui-monospace, Consolas, monospace">Co-authored · published in IEEE Xplore</text>
+</svg>

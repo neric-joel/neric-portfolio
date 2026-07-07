@@ -193,6 +193,14 @@ select:focus-visible,
     font-size: 0.625rem;
   }
 
+  .tag-mono {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.625rem;
+    font-weight: 600;
+  }
+
   /* Section header */
   .section-index {
     display: block;

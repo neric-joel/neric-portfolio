@@ -46,6 +46,12 @@ const About = () => (
                         agentic AI projects across computer vision, NLP, and predictive modeling, and mentored
                         120+ students across AI and programming.
                     </p>
+                    <div className="mt-8 max-w-3xl rounded-md border border-line border-l-2 border-l-accent bg-surface px-5 py-4">
+                        <p className="font-mono text-[10px] font-semibold tracking-widest text-muted uppercase">Now · Jul 2026</p>
+                        <p className="mt-2 text-sm leading-relaxed text-text">
+                            TA'ing agentic AI at W. P. Carey, building AgentRoom, and applying for Fall 2026 internships.
+                        </p>
+                    </div>
                 </RevealOnScroll>
 
                 <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-3">

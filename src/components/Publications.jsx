@@ -1,5 +1,4 @@
 import React from 'react';
-import { FileText, ExternalLink } from 'lucide-react';
 import RevealOnScroll from './RevealOnScroll';
 
 const papers = [
@@ -26,35 +25,21 @@ const Publications = () => (
                 <div className="section-rule" />
             </RevealOnScroll>
 
-            <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="mt-12 divide-y divide-line border-y border-line">
                 {papers.map((paper, idx) => (
                     <RevealOnScroll key={paper.link} delay={idx * 0.06}>
                         <a
                             href={paper.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="card card-hover group flex h-full items-start justify-between gap-4 p-6 no-underline"
+                            className="group flex min-h-11 flex-col gap-1 py-5 no-underline md:flex-row md:items-baseline md:justify-between md:gap-6"
                         >
-                            <div className="flex items-start gap-4">
-                                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-accent-line bg-accent-soft text-accent">
-                                    <FileText size={20} aria-hidden="true" />
-                                </div>
-                                <div>
-                                    <h3 className="font-display mb-2 text-base leading-snug font-semibold text-heading">
-                                        {paper.title}
-                                    </h3>
-                                    <div className="flex items-center gap-2 text-xs text-muted">
-                                        <span className="font-semibold text-accent">{paper.venue}</span>
-                                        <span className="h-1 w-1 rounded-full bg-line" aria-hidden="true" />
-                                        <span>{paper.date}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <ExternalLink
-                                size={16}
-                                aria-hidden="true"
-                                className="mt-0.5 shrink-0 text-muted transition-colors duration-200 group-hover:text-accent"
-                            />
+                            <span className="font-display text-base leading-snug font-semibold text-heading transition-colors duration-200 group-hover:text-accent">
+                                {paper.title}
+                            </span>
+                            <span className="font-mono shrink-0 text-xs text-muted tabular-nums">
+                                {paper.venue} · {paper.date}
+                            </span>
                         </a>
                     </RevealOnScroll>
                 ))}

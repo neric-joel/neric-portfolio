@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send, Terminal } from 'lucide-react';
 
 const CHIPS = [
@@ -7,42 +6,6 @@ const CHIPS = [
   { label: 'Open to collaborate?', subject: 'Collaboration Request', body: "Hey Neric, I came across your portfolio and would love to explore a collaboration. Here's what I have in mind:" },
   { label: 'Just saying hi', subject: 'Hey from your portfolio', body: "Hey Neric, just dropped by your portfolio and wanted to say hi!" },
 ];
-
-const panelVariants = {
-  hidden: {
-    opacity: 0,
-    y: 20,
-    scale: 0.95,
-    transformOrigin: 'bottom right',
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { type: 'spring', stiffness: 380, damping: 28 },
-  },
-  exit: {
-    opacity: 0,
-    y: 16,
-    scale: 0.94,
-    transition: { duration: 0.18, ease: 'easeIn' },
-  },
-};
-
-const orbVariants = {
-  idle: {
-    boxShadow: [
-      '0 0 0px 0px color-mix(in srgb, var(--accent-color) 0%, transparent)',
-      '0 0 18px 6px color-mix(in srgb, var(--accent-color) 35%, transparent)',
-      '0 0 0px 0px color-mix(in srgb, var(--accent-color) 0%, transparent)',
-    ],
-    transition: {
-      duration: 2.4,
-      repeat: Infinity,
-      ease: 'easeInOut',
-    },
-  },
-};
 
 const ChatMail = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -76,112 +39,46 @@ const ChatMail = () => {
   };
 
   return (
-    <div
-      style={{ position: 'fixed', bottom: '1.5rem', right: '1.5rem', zIndex: 50 }}
-      aria-label="Contact widget"
-    >
-      <AnimatePresence mode="wait">
-        {isOpen ? (
-          <motion.div
-            key="panel"
-            variants={panelVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            style={{
-              width: '300px',
-              background: 'var(--glass-bg)',
-              backdropFilter: 'blur(24px)',
-              WebkitBackdropFilter: 'blur(24px)',
-              border: '1px solid color-mix(in srgb, var(--accent-color) 25%, transparent)',
-              borderRadius: '1rem',
-              padding: '1.25rem',
-              boxShadow: '0 24px 64px rgba(0,0,0,0.55)',
-              cursor: 'none',
-            }}
-          >
+    <div className="fixed right-6 bottom-6 z-50">
+      {isOpen ? (
+          <div className="card w-75 p-5 shadow-card">
             {/* Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span
-                  style={{
-                    display: 'inline-block',
-                    width: '7px',
-                    height: '7px',
-                    borderRadius: '50%',
-                    background: 'var(--accent-color)',
-                    boxShadow: '0 0 6px var(--accent-color)',
-                  }}
-                />
-                <span
-                  style={{
-                    color: 'var(--text-heading)',
-                    fontSize: '0.8rem',
-                    fontWeight: 600,
-                    letterSpacing: '0.04em',
-                    textTransform: 'uppercase',
-                  }}
-                >
+            <div className="mb-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
+                <span className="text-xs font-semibold tracking-wider text-heading uppercase">
                   Drop a message
                 </span>
               </div>
-              <motion.button
+              <button
                 onClick={handleClose}
-                whileHover={{ scale: 1.15, rotate: 90 }}
-                whileTap={{ scale: 0.9 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 20 }}
                 aria-label="Close contact panel"
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'var(--text-muted)',
-                  cursor: 'none',
-                  padding: '2px',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
+                className="flex cursor-pointer items-center p-1 text-muted transition-colors duration-150 hover:text-heading"
               >
                 <X size={16} />
-              </motion.button>
+              </button>
             </div>
 
             {/* Quick reply chips */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', marginBottom: '0.9rem' }}>
+            <div className="mb-4 flex flex-col gap-1.5">
               {CHIPS.map((chip, idx) => (
-                <motion.button
-                  key={idx}
+                <button
+                  key={chip.label}
                   onClick={() => handleChip(chip, idx)}
-                  whileHover={{ x: 3 }}
-                  whileTap={{ scale: 0.97 }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 22 }}
-                  style={{
-                    textAlign: 'left',
-                    background: activeChip === idx
-                      ? 'color-mix(in srgb, var(--accent-color) 12%, transparent)'
-                      : 'color-mix(in srgb, var(--text-muted) 5%, transparent)',
-                    border: `1px solid ${activeChip === idx
-                      ? 'color-mix(in srgb, var(--accent-color) 40%, transparent)'
-                      : 'color-mix(in srgb, var(--text-muted) 12%, transparent)'}`,
-                    borderRadius: '0.5rem',
-                    padding: '0.45rem 0.75rem',
-                    color: activeChip === idx ? 'var(--accent-color)' : 'var(--text-muted)',
-                    fontSize: '0.72rem',
-                    cursor: 'none',
-                    transition: 'background 0.2s, border-color 0.2s, color 0.2s',
-                    letterSpacing: '0.01em',
-                  }}
+                  className={`cursor-pointer rounded-md border px-3 py-2 text-left text-xs transition-colors duration-150 ${
+                    activeChip === idx
+                      ? 'border-accent-line bg-accent-soft text-accent'
+                      : 'border-line bg-transparent text-muted hover:border-accent-line hover:text-text'
+                  }`}
                 >
                   {chip.label}
-                </motion.button>
+                </button>
               ))}
             </div>
 
-            {/* Textarea */}
+            {/* Message form */}
             <form onSubmit={handleSubmit}>
-              <label
-                htmlFor="chatmail-message"
-                style={{ display: 'block', fontSize: '0.68rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: '0.35rem' }}
-              >
+              <label htmlFor="chatmail-message" className="eyebrow mb-1.5 block">
                 Your message
               </label>
               <textarea
@@ -192,116 +89,28 @@ const ChatMail = () => {
                 placeholder="Your message..."
                 required
                 rows={4}
-                style={{
-                  width: '100%',
-                  boxSizing: 'border-box',
-                  background: 'color-mix(in srgb, var(--text-muted) 5%, transparent)',
-                  border: '1px solid color-mix(in srgb, var(--text-muted) 12%, transparent)',
-                  borderRadius: '0.6rem',
-                  padding: '0.65rem 0.75rem',
-                  color: 'var(--text-heading)',
-                  fontSize: '0.78rem',
-                  resize: 'none',
-                  outline: 'none',
-                  cursor: 'none',
-                  transition: 'border-color 0.2s',
-                  fontFamily: 'inherit',
-                  lineHeight: '1.5',
-                  marginBottom: '0.75rem',
-                  display: 'block',
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = 'color-mix(in srgb, var(--accent-color) 55%, transparent)';
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = 'color-mix(in srgb, var(--text-muted) 12%, transparent)';
-                }}
+                className="mb-3 block w-full resize-none rounded-md border border-line bg-bg px-3 py-2.5 text-sm leading-relaxed text-text transition-colors duration-150 placeholder:text-muted focus:border-accent-line"
               />
-
-              <motion.button
-                type="submit"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ type: 'spring', stiffness: 420, damping: 22 }}
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.45rem',
-                  padding: '0.6rem',
-                  background: 'color-mix(in srgb, var(--accent-color) 18%, transparent)',
-                  border: '1px solid color-mix(in srgb, var(--accent-color) 40%, transparent)',
-                  borderRadius: '0.6rem',
-                  color: 'var(--accent-color)',
-                  fontWeight: 600,
-                  fontSize: '0.78rem',
-                  letterSpacing: '0.04em',
-                  cursor: 'none',
-                  textTransform: 'uppercase',
-                }}
-              >
-                <Send size={13} />
+              <button type="submit" className="btn btn-primary w-full justify-center text-xs">
+                <Send size={13} aria-hidden="true" />
                 Send via email
-              </motion.button>
+              </button>
             </form>
-          </motion.div>
+          </div>
         ) : (
-          <motion.button
-            key="trigger"
+          <button
             onClick={() => setIsOpen(true)}
-            variants={orbVariants}
-            animate="idle"
-            whileHover={{
-              scale: 1.12,
-              boxShadow: '0 0 28px 10px color-mix(in srgb, var(--accent-color) 45%, transparent)',
-            }}
-            whileTap={{ scale: 0.93 }}
-            transition={{ type: 'spring', stiffness: 380, damping: 20 }}
             aria-label="Open contact widget"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.55rem',
-              padding: '0.65rem 1.1rem 0.65rem 0.85rem',
-              background: 'var(--glass-bg)',
-              backdropFilter: 'blur(16px)',
-              WebkitBackdropFilter: 'blur(16px)',
-              border: '1px solid color-mix(in srgb, var(--accent-color) 30%, transparent)',
-              borderRadius: '9999px',
-              cursor: 'none',
-              color: 'var(--accent-color)',
-            }}
+            className="card card-hover flex min-h-11 cursor-pointer items-center gap-2.5 rounded-full py-2.5 pr-4 pl-3"
           >
-            <span
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '26px',
-                height: '26px',
-                borderRadius: '50%',
-                background: 'color-mix(in srgb, var(--accent-color) 14%, transparent)',
-                border: '1px solid color-mix(in srgb, var(--accent-color) 30%, transparent)',
-              }}
-            >
-              <Terminal size={13} strokeWidth={2.2} />
+            <span className="flex h-6.5 w-6.5 items-center justify-center rounded-full border border-accent-line bg-accent-soft text-accent">
+              <Terminal size={13} strokeWidth={2.2} aria-hidden="true" />
             </span>
-            <span
-              style={{
-                fontSize: '0.78rem',
-                fontWeight: 600,
-                letterSpacing: '0.04em',
-                color: 'var(--text-heading)',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              say hello{' '}
-              <span style={{ color: 'var(--accent-color)' }}>→</span>
+            <span className="text-sm font-semibold whitespace-nowrap text-heading">
+              say hello <span className="text-accent">→</span>
             </span>
-          </motion.button>
+          </button>
         )}
-      </AnimatePresence>
     </div>
   );
 };

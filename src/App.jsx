@@ -57,6 +57,8 @@ function App() {
 
   return (
     <div className="min-h-screen text-text">
+      <a href="#main-content" className="skip-link">Skip to content</a>
+
       {introVisible && <IntroScreen onComplete={handleIntroComplete} />}
 
       <Sidebar toggleResume={() => setShowResume(v => !v)} showResume={showResume} />
@@ -65,7 +67,7 @@ function App() {
         <Resume onClose={() => setShowResume(false)} />
       ) : (
         <>
-          <main className="md:pl-40">
+          <main id="main-content" className="md:pl-40">
             <Hero toggleResume={() => setShowResume(v => !v)} />
             <About />
             <Experience />

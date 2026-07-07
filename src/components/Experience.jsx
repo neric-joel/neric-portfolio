@@ -5,7 +5,9 @@ const experiences = [
     {
         role: "Teaching Assistant",
         org: "W. P. Carey School of Business, Arizona State University",
+        orgUrl: "https://wpcarey.asu.edu",
         date: "May 2026 – Jul 2026",
+        tech: ["n8n", "System Prompts", "Tool-Calling", "REST APIs"],
         details: [
             "Debugged system prompts, tool-calling routines, and REST API integrations for AI agents on the n8n automation platform, supporting 106 graduate students and resolving most issues within the same session.",
             "Explained agentic AI concepts (chat completions, function calling, prompt design) to students from non-technical business backgrounds, both one-on-one and in small groups.",
@@ -15,7 +17,9 @@ const experiences = [
     {
         role: "Research Assistant",
         org: "PV Systems Lab, Amrita University",
+        orgUrl: "https://www.amrita.edu",
         date: "Jan 2024 – May 2025",
+        tech: ["Python", "SQL", "ETL Pipelines", "Tableau"],
         details: [
             "Built and benchmarked predictive models in Python and SQL (RMSE/MAE against experimental data), raising degradation-forecast accuracy 18% over the baseline.",
             "Cleaned and analyzed 100,000+ records of bench and field telemetry, then built automated ETL pipelines that cut manual data prep 40%.",
@@ -50,7 +54,16 @@ const Experience = () => (
                                                 {exp.role}
                                             </h3>
                                             <p className="mt-0.5 text-sm font-medium text-muted">
-                                                {exp.org}
+                                                {exp.orgUrl ? (
+                                                    <a
+                                                        href={exp.orgUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="transition-colors duration-200 hover:text-accent"
+                                                    >
+                                                        {exp.org}
+                                                    </a>
+                                                ) : exp.org}
                                             </p>
                                         </div>
                                         <span className="tag shrink-0 self-start">{exp.date}</span>
@@ -63,6 +76,13 @@ const Experience = () => (
                                             </li>
                                         ))}
                                     </ul>
+                                    {exp.tech && (
+                                        <div className="mt-4 flex flex-wrap gap-1.5">
+                                            {exp.tech.map((t) => (
+                                                <span key={t} className="tag">{t}</span>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </RevealOnScroll>

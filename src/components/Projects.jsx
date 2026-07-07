@@ -4,12 +4,28 @@ import RevealOnScroll from './RevealOnScroll';
 
 const projects = [
     {
-        title: "Satellite Image Segmentation",
-        problem: "Classify land-use regions from multispectral satellite imagery at scale.",
-        approach: "Multi-scale ResNet-50 + U-Net with Grad-CAM explainability and automated augmentation pipelines.",
-        stack: ["Python", "TensorFlow", "OpenCV", "ResNet-50", "U-Net", "Grad-CAM"],
-        result: "91% precision on terrain classification; city growth heatmaps from raw satellite feeds.",
+        title: "Agentic AI Case Management System",
+        problem: "Automate case intake and routing for a nonprofit during the WiCS × Opportunity Hack weekend hackathon.",
+        approach: "Agentic AI workflows using tool-calling and structured outputs; iterated on system prompts and API integrations to keep the agent reliable across varied user inputs.",
+        stack: ["Python", "Tool-Calling", "Structured Outputs", "Prompt Design"],
+        result: "Working case-management tool that automates intake and routing, built end-to-end in a weekend.",
+        category: "Agentic AI"
+    },
+    {
+        title: "Building Footprint Segmentation",
+        problem: "Extract building footprints from aerial imagery on the Massachusetts Buildings Dataset.",
+        approach: "Deep-learning pipeline in PyTorch — U-Net with a ResNet-50 encoder — tuned against IoU and precision-recall.",
+        stack: ["Python", "PyTorch", "U-Net", "ResNet-50"],
+        result: "30% lower inference latency after profiling and tuning the model.",
         category: "Computer Vision"
+    },
+    {
+        title: "AI-Driven Solar PV Emulator",
+        problem: "Predict solar PV behavior from large-scale telemetry to improve performance forecasting.",
+        approach: "Processed and transformed 120,000+ time-series records for supervised learning; trained neural-network and regression models with numerical optimization.",
+        stack: ["Python", "Neural Networks", "Predictive Modeling"],
+        result: "18% reduction in prediction error (RMSE, MAE) versus the baseline.",
+        category: "ML · Energy"
     },
     {
         title: "AI-Powered Resume Analyzer",
@@ -19,38 +35,6 @@ const projects = [
         result: "70% reduction in review time; batch-processes 1000+ resumes with live analytics dashboard.",
         category: "NLP · Full-Stack"
     },
-    {
-        title: "Emotion Recognition from Speech",
-        problem: "Identify emotional states from raw audio for HCI and accessibility applications.",
-        approach: "CNN-LSTM models on mel-spectrogram features with multilingual dataset support.",
-        stack: ["Python", "PyTorch", "Librosa", "CNN-LSTM"],
-        result: "88% accuracy across 7 emotion classes on diverse audio datasets.",
-        category: "Deep Learning"
-    },
-    {
-        title: "AI-Driven Solar PV Emulator",
-        problem: "Optimize solar energy output under variable irradiance using adaptive control.",
-        approach: "MPPT algorithms with real-time irradiance learning, MATLAB modeling, and IoT monitoring.",
-        stack: ["Python", "MATLAB", "TensorFlow", "IoT", "Signal Processing"],
-        result: "15% improvement in panel efficiency; real-time remote monitoring deployed.",
-        category: "ML · Systems"
-    },
-    {
-        title: "Eye-Tracking Autonomous Car",
-        problem: "Enable hands-free vehicle control for users with limited motor mobility.",
-        approach: "IR blink-to-command mapping fused with ultrasonic obstacle detection.",
-        stack: ["C++", "Arduino", "IR Sensors", "Sensor Fusion"],
-        result: "100% successful auto-parking in controlled trials; blink-sequence fail-safe.",
-        category: "Robotics · Accessibility"
-    },
-    {
-        title: "Smart Doorbell with Live Feed",
-        problem: "Improve home security response time with intelligent motion detection and alerts.",
-        approach: "ESP8266 IoT gateway with PIR triggering, encrypted video streaming, and face recognition.",
-        stack: ["C++", "ESP8266", "Python", "OpenCV", "Blynk IoT"],
-        result: "50% reduction in security response time; face recognition for known visitors.",
-        category: "IoT · Computer Vision"
-    }
 ];
 
 const ProjectCard = ({ project }) => (

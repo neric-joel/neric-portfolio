@@ -4,18 +4,18 @@ import RevealOnScroll from './RevealOnScroll';
 
 const achievements = [
     {
-        title: "Volunteer, IEEE Student Branch",
-        desc: "Organized technical workshops on circuit design, software tools, and systems engineering for undergraduate students.",
-        Icon: Users,
-    },
-    {
         title: "Member, AI Club at ASU",
-        desc: "Collaborating on computer vision and ML pipeline projects with peers across CS and engineering programs.",
+        desc: "Collaborating on applied AI/ML and computer-vision research initiatives; mentored 15+ students in Python, SQL, and machine-learning fundamentals.",
         Icon: Lightbulb,
     },
     {
-        title: "Mentored 50+ Students",
-        desc: "Guided junior students through programming fundamentals, project architecture, and ML concepts.",
+        title: "Volunteer & Co-Author, IEEE Student Branch",
+        desc: "Organized technical workshops and stakeholder-facing sessions; co-authored two IEEE papers on PV parameter estimation and low-power CMOS design.",
+        Icon: Users,
+    },
+    {
+        title: "Mentored 120+ Students",
+        desc: "Guided students across AI and programming — from Python and machine-learning fundamentals to debugging agentic AI workflows for graduate cohorts.",
         Icon: Award,
     },
 ];

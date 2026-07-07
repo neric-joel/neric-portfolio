@@ -3,32 +3,23 @@ import RevealOnScroll from './RevealOnScroll';
 
 const experiences = [
     {
+        role: "Teaching Assistant",
+        org: "W. P. Carey School of Business, Arizona State University",
+        date: "May 2026 – Jul 2026",
+        details: [
+            "Debugged system prompts, tool-calling routines, and REST API integrations for AI agents on the n8n automation platform, supporting 106 graduate students and resolving most issues within the same session.",
+            "Explained agentic AI concepts (chat completions, function calling, prompt design) to students from non-technical business backgrounds, both one-on-one and in small groups.",
+            "Authored reference solutions and debugging guides that cut repeat questions and standardized how the cohort validated their agents.",
+        ],
+    },
+    {
         role: "Research Assistant",
         org: "PV Systems Lab, Amrita University",
         date: "Jan 2024 – May 2025",
         details: [
-            "Developed a solar PV emulator with AI-based MPPT algorithms to enhance solar cell efficiency.",
-            "Modeled PV characteristics using MATLAB and Python for real-time performance prediction.",
-            "Co-authored IEEE paper on optimization algorithms for PV performance enhancement.",
-        ],
-    },
-    {
-        role: "Student Lead",
-        org: "Amritavotav Technical Events",
-        date: "Sep 2024 – Oct 2024",
-        details: [
-            "Led university-wide technical competitions with 50+ teams.",
-            "Mentored undergraduates in embedded systems and IoT projects.",
-            "Oversaw event execution, judging criteria, and technical presentation management.",
-        ],
-    },
-    {
-        role: "Intern – Electrical Design",
-        org: "Ranga and Company, Chennai",
-        date: "May 2023 – Jun 2023",
-        details: [
-            "Designed and simulated electrical distribution systems adhering to safety standards.",
-            "Created documentation and assisted in schematic design and testing.",
+            "Built and benchmarked predictive models in Python and SQL (RMSE/MAE against experimental data), raising degradation-forecast accuracy 18% over the baseline.",
+            "Cleaned and analyzed 100,000+ records of bench and field telemetry, then built automated ETL pipelines that cut manual data prep 40%.",
+            "Developed Tableau visualizations and regression models to surface reliability and field-failure patterns, improving operational efficiency 15%.",
         ],
     },
 ];

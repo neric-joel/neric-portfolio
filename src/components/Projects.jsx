@@ -1,9 +1,14 @@
 import React from 'react';
-import { ExternalLink, Github, Play } from 'lucide-react';
+import { ExternalLink, Github, Play, FileText } from 'lucide-react';
 import RevealOnScroll from './RevealOnScroll';
 import GitHubActivity from './GitHubActivity';
+import carebaseImg from '../assets/projects/carebase.jpg';
+import pathforwardImg from '../assets/projects/pathforward.jpg';
+import agentroomGif from '../assets/projects/agentroom-demo.gif';
+import recommenderImg from '../assets/projects/recommender-eval.png';
 
-/* Copy sourced from each repo's README and the resume; no invented claims. */
+/* Copy sourced from each repo's README, its own evaluation artifacts, and the
+   resume; no invented claims. Images are real product captures and charts. */
 const projects = [
     {
         title: "CareBase: Nonprofit Case Management",
@@ -14,6 +19,7 @@ const projects = [
         result: "Shipped live on Vercel with a demo login and video walkthrough, built end-to-end in a weekend.",
         stack: ["Next.js 14", "TypeScript", "Supabase", "Claude API", "Tailwind"],
         category: "Agentic AI · Full-Stack",
+        image: { src: carebaseImg, alt: "CareBase landing page: AI-powered nonprofit case management" },
         links: [
             { label: "Code", href: "https://github.com/neric-joel/CareBase", Icon: Github },
             { label: "Live Demo", href: "https://carebase-murex.vercel.app", Icon: ExternalLink },
@@ -29,6 +35,7 @@ const projects = [
         result: "Live on Vercel with a demo video; built for the Economic Empowerment & Education track.",
         stack: ["React 18", "TypeScript", "Claude API", "Tailwind"],
         category: "AI for Social Impact",
+        image: { src: pathforwardImg, alt: "Path Forward app: college readiness planner for foster youth" },
         links: [
             { label: "Code", href: "https://github.com/neric-joel/path-forward", Icon: Github },
             { label: "Live Demo", href: "https://pathforward-az.vercel.app", Icon: ExternalLink },
@@ -43,6 +50,7 @@ const projects = [
         result: "Runs fully local with no accounts or keys; MIT-licensed with CI and versioned releases.",
         stack: ["TypeScript", "Multi-Agent Orchestration", "CLI Tooling"],
         category: "Agentic AI · Dev Tools",
+        image: { src: agentroomGif, alt: "AgentRoom demo: connecting Claude Code, Codex, and Gemini CLIs into one room" },
         links: [
             { label: "Code", href: "https://github.com/neric-joel/Whatsapp-Agents", Icon: Github },
         ],
@@ -61,24 +69,15 @@ const projects = [
         ],
     },
     {
-        title: "Building Footprint Segmentation",
-        status: "Research",
-        problem: "Extract building footprints from aerial imagery on the Massachusetts Buildings Dataset.",
-        approach: "Deep-learning pipeline in PyTorch, a U-Net with a ResNet-50 encoder, tuned against IoU and precision-recall.",
-        result: "30% lower inference latency after profiling and tuning the model.",
-        stack: ["Python", "PyTorch", "U-Net", "ResNet-50"],
-        category: "Computer Vision",
-        links: [],
-    },
-    {
         title: "Hybrid Movie Recommender",
         status: "Open Source",
         event: "CSE 573 @ ASU",
         problem: "Single-strategy recommenders miss patterns: collaborative filtering ignores content signals, and content-based filtering ignores user behavior.",
-        approach: "Hybrid system combining collaborative filtering, content-based filtering, and Neural Collaborative Filtering (NeuMF) to capture non-linear user–movie relationships.",
-        result: "Hybrid ensemble outperformed the individual models on accuracy and ranking metrics.",
+        approach: "Built and benchmarked four recommenders on MovieLens: collaborative filtering, content-based filtering, Neural Collaborative Filtering (NeuMF), and a hybrid ensemble, evaluated on RMSE/MAE and ranking@10.",
+        result: "NeuMF won the benchmark: lowest prediction error (RMSE and MAE) and the strongest Precision@10 and Recall@10 of the four models evaluated.",
         stack: ["Python", "NeuMF", "Collaborative Filtering"],
         category: "Machine Learning",
+        image: { src: recommenderImg, alt: "Model accuracy comparison chart: RMSE and MAE across CF, CBF, NeuMF, and hybrid", fit: "contain" },
         links: [
             { label: "Code", href: "https://github.com/neric-joel/movie-recommender-system", Icon: Github },
         ],
@@ -97,73 +96,87 @@ const projects = [
     },
     {
         title: "AI-Driven Solar PV Emulator",
-        status: "Research",
+        status: "Published",
         problem: "Predict solar PV behavior from large-scale telemetry to improve performance forecasting.",
         approach: "Processed and transformed 120,000+ time-series records for supervised learning; trained neural-network and regression models with numerical optimization.",
-        result: "18% reduction in prediction error (RMSE, MAE) versus the baseline.",
+        result: "18% reduction in prediction error (RMSE, MAE) versus the baseline; the underlying parameter-estimation research is peer-reviewed and published in IEEE.",
         stack: ["Python", "Neural Networks", "Predictive Modeling"],
         category: "ML · Energy",
-        links: [],
+        links: [
+            { label: "IEEE Paper", href: "https://ieeexplore.ieee.org/document/11048280", Icon: FileText },
+        ],
     },
 ];
 
 const ProjectCard = ({ project, index }) => (
-    <div className="card card-hover group relative flex h-full flex-col overflow-hidden p-6">
-        <span
-            aria-hidden="true"
-            className="font-display pointer-events-none absolute top-3 right-4 text-[3.5rem] leading-none font-bold text-heading opacity-[0.07] transition-all duration-200 select-none group-hover:text-accent group-hover:opacity-25"
-        >
-            {String(index + 1).padStart(2, '0')}
-        </span>
-        <div className="relative z-10 mb-4 flex flex-wrap items-center gap-2">
-            <span className="tag tag-accent px-2.5 py-1">{project.category}</span>
-            <span className={`tag tag-mono ${['Shipped', 'Active'].includes(project.status) ? 'border-accent-line text-accent' : ''}`}>
-                {project.status}
+    <div className="card card-hover group relative flex h-full flex-col overflow-hidden">
+        {project.image && (
+            <div className={`card-media ${project.image.fit === 'contain' ? 'card-media-contain' : ''}`}>
+                <img
+                    src={project.image.src}
+                    alt={project.image.alt}
+                    loading="lazy"
+                    decoding="async"
+                />
+            </div>
+        )}
+        <div className="relative flex flex-1 flex-col p-6">
+            <span
+                aria-hidden="true"
+                className="font-display pointer-events-none absolute top-3 right-4 text-[3.5rem] leading-none font-bold text-heading opacity-[0.07] transition-all duration-200 select-none group-hover:text-accent group-hover:opacity-25"
+            >
+                {String(index + 1).padStart(2, '0')}
             </span>
-            {project.event && <span className="eyebrow ml-auto text-right">{project.event}</span>}
-        </div>
+            <div className="relative z-10 mb-4 flex flex-wrap items-center gap-2">
+                <span className="tag tag-accent px-2.5 py-1">{project.category}</span>
+                <span className={`tag tag-mono ${['Shipped', 'Active', 'Published'].includes(project.status) ? 'border-accent-line text-accent' : ''}`}>
+                    {project.status}
+                </span>
+                {project.event && <span className="eyebrow ml-auto text-right">{project.event}</span>}
+            </div>
 
-        <h3 className="font-display mb-5 text-lg leading-tight font-semibold text-heading">
-            {project.title}
-        </h3>
+            <h3 className="font-display mb-5 text-lg leading-tight font-semibold text-heading">
+                {project.title}
+            </h3>
 
-        <div className="mb-5 flex-1 space-y-4">
-            {[
-                { label: 'Problem',  text: project.problem,  accent: false },
-                { label: 'Approach', text: project.approach, accent: false },
-                { label: 'Outcome',  text: project.result,   accent: true  },
-            ].map(({ label, text, accent }) => (
-                <div key={label}>
-                    <p className="eyebrow mb-1">{label}</p>
-                    <p className={`text-sm leading-relaxed ${accent ? 'font-medium text-accent' : 'text-text'}`}>
-                        {text}
-                    </p>
-                </div>
-            ))}
-        </div>
-
-        <div className="mt-auto">
-            <div className="flex flex-wrap gap-1.5">
-                {project.stack.map(tech => (
-                    <span key={tech} className="tag">{tech}</span>
+            <div className="mb-5 flex-1 space-y-4">
+                {[
+                    { label: 'Problem',  text: project.problem,  accent: false },
+                    { label: 'Approach', text: project.approach, accent: false },
+                    { label: 'Outcome',  text: project.result,   accent: true  },
+                ].map(({ label, text, accent }) => (
+                    <div key={label}>
+                        <p className="eyebrow mb-1">{label}</p>
+                        <p className={`text-sm leading-relaxed ${accent ? 'font-medium text-accent' : 'text-text'}`}>
+                            {text}
+                        </p>
+                    </div>
                 ))}
             </div>
-            {project.links.length > 0 && (
-                <div className="mt-4 flex flex-wrap gap-4 border-t border-line pt-4">
-                    {project.links.map(({ label, href, Icon }) => (
-                        <a
-                            key={label}
-                            href={href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="link-arrow text-xs"
-                        >
-                            <Icon size={13} aria-hidden="true" />
-                            {label}
-                        </a>
+
+            <div className="mt-auto">
+                <div className="flex flex-wrap gap-1.5">
+                    {project.stack.map(tech => (
+                        <span key={tech} className="tag">{tech}</span>
                     ))}
                 </div>
-            )}
+                {project.links.length > 0 && (
+                    <div className="mt-4 flex flex-wrap gap-4 border-t border-line pt-4">
+                        {project.links.map(({ label, href, Icon }) => (
+                            <a
+                                key={label}
+                                href={href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="link-arrow text-xs"
+                            >
+                                <Icon size={13} aria-hidden="true" />
+                                {label}
+                            </a>
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
     </div>
 );

@@ -169,6 +169,31 @@ select:focus-visible,
     transform: translateY(-2px);
   }
 
+  /* Project card media */
+  .card-media {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-bottom: 1px solid var(--color-line);
+    background: var(--color-bg);
+  }
+  .card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    transition: transform 0.5s var(--ease-standard);
+  }
+  .card-hover:hover .card-media img {
+    transform: scale(1.04);
+  }
+  .card-media-contain {
+    background: #ffffff;
+  }
+  .card-media-contain img {
+    object-fit: contain;
+    padding: 0.5rem;
+  }
+
   /* Tag / pill */
   .tag {
     display: inline-flex;
@@ -271,6 +296,20 @@ select:focus-visible,
     transform: none;
   }
 
+  /* Hero ambient glow: one slow breathe, frozen harmlessly when the
+     rendering timeline is suspended (base state is fully visible). */
+  .hero-glow {
+    animation: glow-breathe 7s var(--ease-standard) infinite alternate;
+  }
+
+  /* Hero photo micro-interaction */
+  .hero-photo img {
+    transition: transform 0.5s var(--ease-standard);
+  }
+  .hero-photo:hover img {
+    transform: scale(1.03);
+  }
+
   /* Intro splash — pure CSS timeline, auto-dismissed by JS timers */
   .intro-overlay {
     transition: opacity 0.45s var(--ease-standard);
@@ -289,6 +328,11 @@ select:focus-visible,
 
 @keyframes intro-rise {
   from { opacity: 0; transform: translateY(0.5em); }
+}
+
+@keyframes glow-breathe {
+  from { opacity: 0.55; }
+  to   { opacity: 1; }
 }
 
 /* ── Reduced motion — disable all non-essential motion ── */
